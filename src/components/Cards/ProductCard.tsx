@@ -1,27 +1,58 @@
-'use client'
+import { useState } from 'react';
 
-const ProductCard = ({ key }: { key: number }) => {
+const images = [
+    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2F274bfac8-9a91-482b-b582-dc09e1fd84a9.jpg&w=1080&q=75",
+    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2Fcee945a7-23fc-4d4d-9ac2-354b612cd86d.jpg&w=1080&q=75",
+    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2Fb6913a32-d647-4124-8cec-24173f39ab35.jpg&w=1080&q=75"
+];
+
+function CardWithCarousel({ key }: { key: number }) {
+    const [currentImage, setCurrentImage] = useState(0);
+
+    const handlePrevImage = () => {
+        setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
     return (
-        <div key={key} className="rounded-md border">
-            <img
-                src="https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NHwxMTM4MTU1NXx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Laptop"
-                className="aspect-[16/9] w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px]"
-            />
-            <div className="p-4">
-                <h1 className="inline-flex items-center text-lg font-semibold">Nike Airmax v2</h1>
-                <p className="mt-3 text-sm text-gray-600">
-                    { }
-                </p>
-                <button
-                    type="button"
-                    className="mt-4 w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                >
-                    Add to Cart
-                </button>
-            </div>
+        <div key={key} className="w-full max-w-screen-sm bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+    {/* Carousel Image with navigation */}
+    <div className="relative h-80">
+        <img className="w-full h-full object-cover" src={images[currentImage]} alt="venue image" />
+
+        {/* Left Button */}
+        <button onClick={handlePrevImage} className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none">
+            &#8249;
+        </button>
+
+        {/* Right Button */}
+        <button onClick={handleNextImage} className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none">
+            &#8250;
+        </button>
+    </div>
+
+    <div className="px-4 py-4">
+        {/* Venue name */}
+        <a href="#">
+            <h5 className="text-base font-semibold text-gray-900 dark:text-white truncate">Maxims Banquet & Events</h5>
+        </a>
+        {/* Location text */}
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">Kupandole Heights, Lalitpur</p>
+
+        {/* Price and Button */}
+        <div className="flex items-center justify-between mt-2">
+            <span className="text-sm font-medium text-gray-900 dark:text-white">Starting from Rs 2,300</span>
+            <a href="#" className="text-red-500 border border-red-500 hover:bg-red-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs text-center px-2 py-1 dark:border-red-400 dark:text-red-400 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-800">
+                Book Now
+            </a>
         </div>
-    )
+    </div>
+</div>
+
+    );
 }
 
-export default ProductCard;
+export default CardWithCarousel;

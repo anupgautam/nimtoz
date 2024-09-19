@@ -44,7 +44,7 @@ export default function RootLayout({
         {/* <BlogPage/> */}
         {/* <AboutUs/> */}
         {/* <Loader /> */}
-        <RegisterVenue/>
+        {/* <RegisterVenue/> */}
         {children}
       </body>
     </html>
