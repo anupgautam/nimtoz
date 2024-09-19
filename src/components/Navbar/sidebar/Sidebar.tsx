@@ -1,77 +1,86 @@
-import React from 'react'
-import { Home, BarChart, Copy, Bookmark, Users, Settings } from 'lucide-react'
-
+'use client'
+import { Hotel, Flower2, Utensils } from "lucide-react"
+import Link from "next/link"
 const Sidebar = () => {
     return (
-        <aside className="flex h-screen w-16 flex-col items-center overflow-y-auto border-r bg-white py-8">
-            <nav className="flex flex-1 flex-col items-center space-y-6">
-                <a href="#">
-                    <svg
-                        width="40"
-                        height="46"
-                        viewBox="0 0 50 56"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M23.2732 0.2528C20.8078 1.18964 2.12023 12.2346 1.08477 13.3686C0 14.552 0 14.7493 0 27.7665C0 39.6496 0.0986153 41.1289 0.83823 42.0164C2.12023 43.5449 23.2239 55.4774 24.6538 55.5267C25.9358 55.576 46.1027 44.3832 48.2229 42.4602C49.3077 41.474 49.3077 41.3261 49.3077 27.8158C49.3077 14.3055 49.3077 14.1576 48.2229 13.1714C46.6451 11.7415 27.1192 0.450027 25.64 0.104874C24.9497 -0.0923538 23.9142 0.00625992 23.2732 0.2528ZM20.2161 21.8989C20.2161 22.4906 18.9835 23.8219 17.0111 25.3997C15.2361 26.7803 13.8061 27.9637 13.8061 28.0623C13.8061 28.1116 15.2361 29.0978 16.9618 30.2319C18.6876 31.3659 20.2655 32.6479 20.4134 33.0917C20.8078 34.0286 19.871 35.2119 18.8355 35.2119C17.8001 35.2119 9.0233 29.3936 8.67815 28.5061C8.333 27.6186 9.36846 26.5338 14.3485 22.885C17.6521 20.4196 18.4904 20.0252 19.2793 20.4196C19.7724 20.7155 20.2161 21.3565 20.2161 21.8989ZM25.6893 27.6679C23.4211 34.9161 23.0267 35.7543 22.1391 34.8668C21.7447 34.4723 22.1391 32.6479 23.6677 27.9637C26.2317 20.321 26.5275 19.6307 27.2671 20.3703C27.6123 20.7155 27.1685 22.7864 25.6893 27.6679ZM36.0932 23.2302C40.6788 26.2379 41.3198 27.0269 40.3337 28.1609C39.1503 29.5909 31.6555 35.2119 30.9159 35.2119C29.9298 35.2119 28.9436 33.8806 29.2394 33.0424C29.3874 32.6479 30.9652 31.218 32.7403 29.8867L35.9946 27.4706L32.5431 25.1532C30.6201 23.9205 29.0915 22.7371 29.0915 22.5892C29.0915 21.7509 30.2256 20.4196 30.9159 20.4196C31.3597 20.4196 33.6771 21.7016 36.0932 23.2302Z"
-                            fill="black"
-                        />
-                    </svg>
-                </a>
-                <a
-                    href="#"
-                    className="rounded-lg p-1.5 text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none"
-                >
-                    <Home size={24} />
-                </a>
+        <>
+            <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 lg:hidden ">
+                <div className="flex items-center py-2">
+                    <button type="button" className="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none " aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-application-sidebar" aria-label="Toggle navigation" data-hs-overlay="#hs-application-sidebar">
+                        <span className="sr-only">Toggle Navigation</span>
+                        <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M15 3v18" /><path d="m8 9 3 3-3 3" /></svg>
+                    </button>
 
-                <a
-                    href="#"
-                    className="rounded-lg p-1.5 text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none"
-                >
-                    <BarChart size={24} />
-                </a>
+                    <ol className="ms-3 flex items-center whitespace-nowrap">
+                        <li className="flex items-center text-sm text-gray-800">
+                            Application Layout
+                            {/* <svg className="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg> */}
 
-                <a
-                    href="#"
-                    className="rounded-lg p-1.5 text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none"
-                >
-                    <Copy size={24} />
-                </a>
-
-                <a
-                    href="#"
-                    className="rounded-lg p-1.5 text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none"
-                >
-                    <Bookmark size={24} />
-                </a>
-
-                <a
-                    href="#"
-                    className="rounded-lg p-1.5 text-gray-700 transition-colors duration-200 hover:bg-gray-100 focus:outline-none"
-                >
-                    <Users size={24} />
-                </a>
-            </nav>
-
-            <div className="flex flex-col items-center space-y-6">
-                <a
-                    href="#"
-                    className="rounded-lg bg-gray-100 p-1.5 text-gray-700 transition-colors duration-200 focus:outline-none"
-                >
-                    <Settings size={24} />
-                </a>
-
-                <a href="#">
-                    <img
-                        className="h-8 w-8 rounded-full object-cover"
-                        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-                        alt="User avatar"
-                    />
-                </a>
+                        </li>
+                        {/* <li className="text-sm font-semibold  truncate" aria-current="page">
+                            Dashboard
+                        </li> */}
+                    </ol>
+                </div>
             </div>
-        </aside>
+
+            <div id="hs-application-sidebar" className="hs-overlay  [--auto-close:lg]
+  hs-overlay-open:translate-x-0
+  -translate-x-full transition-all duration-300 transform
+  w-[260px] h-full
+  hidden
+  fixed inset-y-0 start-0 z-[60]
+  bg-white border-e border-gray-200
+  lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
+  " role="dialog" tabIndex={-1} aria-label="Sidebar">
+                <div className="relative flex flex-col h-full max-h-full">
+                    <div className="px-6 pt-4">
+                        <a className="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80" href="#" aria-label="Preline">
+                        </a>
+                    </div>
+
+                    <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                        <nav className="hs-accordion-group p-3 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
+                            <ul className="flex flex-col space-y-1">
+
+                                <li><Link className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="/about">
+                                    <Hotel />
+                                    Hotels
+                                </Link></li>
+                                <li><Link className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="/venue">
+                                    <Hotel />
+                                    Banquet
+                                </Link></li>
+                                <li><a className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="#">
+                                    <Hotel />
+                                    Boutique Hotels
+                                </a></li>
+                                <li><a className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="#">
+                                    <Hotel />
+                                    Resorts
+                                </a></li>
+                                <li><a className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="#">
+                                    <Utensils />
+                                    Restaurants
+                                </a></li>
+                                <li><a className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100" href="#">
+                                    <Flower2 />
+                                    Garden View
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            {/* <!-- Content --> */}
+            <div className="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
+                {/* <!-- your content goes here ... --> */}
+                <h1>My content is here</h1>
+            </div>
+        </>
     )
 }
 export default Sidebar
