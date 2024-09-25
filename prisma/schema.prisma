@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Admin
+  User
+}
+
+//! User 
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  //? One to one
+  // postId         Int?
+}
+
+//! Category Table
+model Category {
+  id            Int       @id @default(autoincrement())
+  category_name String
+  category_icon String
+  products      Product[]
+}
+
+//! Ameneties
+model Amenities {
+  id           Int       @id @default(autoincrement())
+  amenity_name String
+  products     Product[]
+}
+
+//! Product 
+model Product {
+  id                Int         @id @default(autoincrement())
+  title             String
+  price             Int
+  description       String
+  address           String
+  short_description String
+  product_image     String
+  hall_capacity     Int
+  category          Category    @relation(fields: [category_id], references: [id])
+  category_id       Int
+  amenities         Amenities[]
+}
+
+//! Post 
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  content   String
+  published Boolean? @default(false)
+  //? One to Many Relations
+  // author    User?    @relation(fields: [authorId], references: [id])
+  // authorId  Int?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+
+  //* Many to Many
+  // authors User[]
+
+  //* One to One
+  // author    User?    @relation(fields: [authorId], references: [id]) 
+  // authorId Int    @unique
+
+  @@index(slug)
+}
+
+//! Blogs
+model Blog {
+  id                Int      @id @default(autoincrement())
+  title             String   @unique
+  short_description String
+  image             String
+  description       String
+  author            String
+  createdAt         DateTime @default(now()) @map("created_at")
+}
+
+//! Venue Table
+model Venue {
+  id             Int      @id @default(autoincrement())
+  venue_name     String
+  venue_address  String
+  contact_person String
+  phone_number   String?
+  email          String
+  createdAt      DateTime @default(now()) @map("created_at")
+}
+
+//! Event Table
+// model Event {
+//   id                     Int      @id @default(autoincrement())
+//   event_name             String
+//   no_of_guests           Int
+//   start_date             DateTime
+//   additional_description String
+//   is_approved            Boolean
+//   approved_by            Int
+//   hall_id                   Int
+//   product_id              Int
+//   createdAt              DateTime @default(now()) @map("created_at")
+// }
