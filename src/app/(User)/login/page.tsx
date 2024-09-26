@@ -15,8 +15,13 @@ const LoginPage = () => {
 
     const { data: session } = useSession();
 
-    console.log(session?.user.role)
     const router = useRouter();
+
+    useEffect(() => {
+        if (session?.user) {
+            router.push('/');
+        }
+    }, [session, router]);
 
     //! Validation
 

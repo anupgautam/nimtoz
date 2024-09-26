@@ -6,12 +6,9 @@ import { useState, useEffect, useRef } from "react";
 const Navbar = () => {
     const { data: session } = useSession();
 
-    console.log(session)
-
     const [toggle, setToggle] = useState(false);
-    const menuRef = useRef<HTMLDivElement | null>(null); // Explicitly type the ref
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
-    // Close the menu when clicking outside of it
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

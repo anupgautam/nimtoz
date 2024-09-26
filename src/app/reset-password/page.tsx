@@ -1,21 +1,24 @@
-'use client'
+'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link'
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation';
 
 interface ForgotPassword {
-    email: string;
+    password: string;
 }
 
-export default function ForgotPassword() {
-
-    const [message, setMessage] = useState('')
-    const { data: session, status } = useSession();
+export default function ResetPassword() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token');
+    const [message, setMessage] = useState('');
+
+    const { data: session } = useSession();
 
     useEffect(() => {
         if (session?.user) {
@@ -26,18 +29,18 @@ export default function ForgotPassword() {
     //! Validation
 
     const userSchema = object({
-        email: string().email("Invalid Email Address").required("Email is required"),
+        password: string().min(8, "Password must be at least 8 characters").matches(/[a-zA-Z]/, "Password must contain at least one letter").matches(/[0-9]/, "Password must contain at least one number").required("Password is required")
     });
 
     const formik = useFormik({
         validationSchema: userSchema,
         initialValues: {
-            email: '',
+            password: '',
         },
         onSubmit: (data, { resetForm }) => {
-            resetPasswordApiCall(data, resetForm);
-        },
-    });
+            resetPasswordApiCall(data, resetForm)
+        }
+    })
 
     const { errors, getFieldProps, touched } = formik
 
@@ -46,7 +49,7 @@ export default function ForgotPassword() {
 
     const resetPasswordApiCall = async (data: ForgotPassword, resetForm: () => void) => {
         try {
-            const res = await fetch('/api/forgot-password', {
+            const res = await fetch('/api/reset-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,10 +59,9 @@ export default function ForgotPassword() {
 
             const result = await res.json();
             if (result.success) {
-                setMessage('Check your email for a reset link.');
-                router.push('/reset-password');
+                router.push('/login');
             } else {
-                setMessage('Failed to send email.');
+                setMessage('');
             }
             resetForm();
         } catch (error) {
@@ -67,36 +69,34 @@ export default function ForgotPassword() {
         }
     };
 
-
-
     return (
         <div className="mt-36 bg-white border border-gray-200 rounded-xl shadow-sm max-w-md mx-auto">
             <div className="p-4 sm:p-7">
                 <div className="text-center">
-                    <h1 className="block text-2xl font-bold text-gray-800">Forgot password?</h1>
-                    <p className="mt-2 text-sm text-gray-600 ">
+                    <h1 className="block text-2xl font-bold text-gray-800">Reset password</h1>
+                    {/* <p className="mt-2 text-sm text-gray-600 ">
                         Remember your password?
                         <Link className="text-blue-600 decoration-2 hover:underline focus:outline-none font-" href="/login">
                             Sign in here
                         </Link>
-                    </p>
+                    </p> */}
                 </div>
 
                 <div className="mt-5">
                     <form noValidate onSubmit={formik.handleSubmit}>
                         <div className="grid gap-y-4">
                             <div>
-                                <label htmlFor="email" className="block text-sm mb-2">Email address</label>
+                                <label htmlFor="email" className="block text-sm mb-2">Password</label>
                                 <div className="relative">
                                     <input
-                                        type="email"
-                                        id="email"
+                                        type="password"
+                                        id="password"
                                         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                                        aria-describedby="email-error"
-                                        placeholder='Email'
-                                        {...getFieldProps('email')}
+                                        aria-describedby="password-error"
+                                        placeholder='Password'
+                                        {...getFieldProps('password')}
                                     />
-                                    {touched.email && errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+                                    {touched.password && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
                                 </div>
 
                                 <button
@@ -113,6 +113,5 @@ export default function ForgotPassword() {
                 </div>
             </div>
         </div>
-
     );
 }
