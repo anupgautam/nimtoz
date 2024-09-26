@@ -37,7 +37,6 @@ export const options: NextAuthOptions = {
                     where: { email: credentials?.email }
                 })
 
-                console.log("Existing User",existingUser?.role)
 
                 if (!existingUser) {
                     return NextResponse.json({

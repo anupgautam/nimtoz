@@ -57,7 +57,6 @@ const RegisterVenue = () => {
         },
         onSubmit: (data, { resetForm }) => {
             venueApiCall(data, resetForm)
-            console.log(data)
         }
     })
 
@@ -69,7 +68,6 @@ const RegisterVenue = () => {
     const venueApiCall = async (data: Venue, resetForm: () => void) => {
         try {
             const response = await axios.post('/api/venue', data);
-            console.log('Venue registered successfully:', response.data);
             resetForm();
         } catch (error) {
             console.error('Error registering venue:', error);

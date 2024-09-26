@@ -20,7 +20,6 @@ const PostsPage = async () => {
         }
     })
 
-    console.log(user)
     //! Filtering
     // const posts = await prisma.post.findMany({
     //     where: {

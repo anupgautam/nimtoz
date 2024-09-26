@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 interface User {
     username: string;
@@ -15,8 +15,15 @@ interface User {
 }
 
 const RegisterPage = () => {
+    const { data: session, status } = useSession();
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (session?.user) {
+            router.push('/');
+        }
+    }, [session, router]);
     //! Validation
 
     const userSchema = object({
