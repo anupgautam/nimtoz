@@ -12,6 +12,7 @@ interface User {
     email: string;
     password: string;
     role: string,
+    phone_number: string,
 }
 
 const RegisterPage = () => {
@@ -29,6 +30,10 @@ const RegisterPage = () => {
     const userSchema = object({
         username: string().required("Username is required"),
         email: string().email("Invalid Email Address").required("Email is required"),
+        phone_number: string()
+            .required('Phone number is required')
+            .matches(/^(?:\+?(\d{1,3}))?[-. ]?(\d{1,4})[-. ]?(\d{1,4})[-. ]?(\d{1,9})$/,
+                'Invalid phone number format. Please enter a valid phone number.'),
         password: string().min(8, "Password must be at least 8 characters").matches(/[a-zA-Z]/, "Password must contain at least one letter").matches(/[0-9]/, "Password must contain at least one number").required("Password is required")
     });
 
@@ -38,6 +43,7 @@ const RegisterPage = () => {
             username: '',
             email: '',
             password: '',
+            phone_number: '',
             role: 'User'
         },
         onSubmit: (data, { resetForm }) => {
@@ -139,6 +145,22 @@ const RegisterPage = () => {
                                             {...getFieldProps('email')}
                                         />
                                         {touched.email && errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="phone_number" className="text-base font-medium text-gray-900">
+                                        {' '}
+                                        Phone Number{' '}
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type="text"
+                                            placeholder="Phone Number"
+                                            id="phone_number"
+                                            {...getFieldProps('phone_number')}
+                                        />
+                                        {touched.phone_number && errors.phone_number && <span className="text-red-500 text-sm">{errors.phone_number}</span>}
                                     </div>
                                 </div>
                                 <div>

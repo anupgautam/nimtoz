@@ -1,9 +1,9 @@
-'use client'
 
 const BlogPage = () => {
 
     return (
-        <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <div className="max-w-[85rem] mt-4 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+            <button>Add blog</button>
             <div className="grid lg:grid-cols-2 gap-6">
                 <a className="group sm:flex rounded-xl focus:outline-none" href="#">
                     <div className="shrink-0 relative rounded-xl overflow-hidden h-[200px] sm:w-[250px] sm:h-[350px] w-full">

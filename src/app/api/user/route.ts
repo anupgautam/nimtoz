@@ -6,13 +6,16 @@ import { z } from "zod";
 const userSchema = z.object({
     username: z.string().min(1, 'Username is required').max(100),
     email: z.string().min(1, 'Email is required').email("Invalid email"),
-    password: z.string().min(1, 'Password is required').min(8, 'Password must have 8 characters')
+    password: z.string().min(1, 'Password is required').min(8, 'Password must have 8 characters'),
+    phone_number: z.string().regex(/^(?:\+?(\d{1,3}))?[-. ]?(\d{1,4})[-. ]?(\d{1,4})[-. ]?(\d{1,9})$/, {
+        message: "Invalid phone number format. Please enter a valid phone number."
+    }),
 })
 
-export async function POST(req: NextRequest,res:NextResponse) {
+export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const body = await req.json();
-        const { email, username, password } = userSchema.parse(body);
+        const { email, username, password, phone_number } = userSchema.parse(body);
 
         //! If email already exist
         const userExists = await prisma.user.findUnique({
@@ -28,7 +31,8 @@ export async function POST(req: NextRequest,res:NextResponse) {
                 username,
                 email,
                 password: hashedPassword,
-                role: 'User'
+                role: 'User',
+                phone_number,
             }
         })
 
