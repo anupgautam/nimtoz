@@ -20,18 +20,22 @@ enum Role {
 
 //! User 
 model User {
-  id                       Int       @id @default(autoincrement())
+  id                       Int        @id @default(autoincrement())
   username                 String
-  email                    String    @unique
+  email                    String     @unique
   password                 String
+  phone_number             String     @unique
   role                     Role
+  avatar                   String?
   resetPasswordToken       String?
   resetPasswordTokenExpiry DateTime?
-  createdAt                DateTime  @default(now()) @map("created_at")
-  updatedAt                DateTime  @default(now()) @map("updated_at")
-
-  //? One to one
-  // postId         Int?
+  createdAt                DateTime   @default(now()) @map("created_at")
+  updatedAt                DateTime   @updatedAt @map("updated_at")
+  Wishlist                 Wishlist[]
+  events_approved          Event[]    @relation("Approved Events")
+  events_booked            Event[]    @relation("Booked Events")
+  blogs_approved           Blog[]     @relation("ApprovedBlogs")
+  blogs_author             Blog[]     @relation("BlogAuthor")
 }
 
 //! Category Table
@@ -42,60 +46,90 @@ model Category {
   products      Product[]
 }
 
+//! Wishlist
+model Wishlist {
+  id      Int       @id @default(autoincrement())
+  userId  User?     @relation(fields: [user_id], references: [id])
+  user_id Int?      @unique
+  product Product[]
+}
+
 //! Ameneties
 model Amenities {
-  id           Int       @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   amenity_name String
-  products     Product[]
+
+  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
 }
 
 //! Product 
 model Product {
-  id                Int         @id @default(autoincrement())
+  id                Int            @id @default(autoincrement())
   title             String
   price             Int
   description       String
   address           String
   short_description String
-  product_image     String
-  hall_capacity     Int
-  category          Category    @relation(fields: [category_id], references: [id])
+  category          Category       @relation(fields: [category_id], references: [id])
   category_id       Int
   amenities         Amenities[]
+  product_image     ProductImage[]
+  rules             Rules[]
+  halls             Hall[]
+
+  Wishlist   Wishlist? @relation(fields: [wishlistId], references: [id])
+  wishlistId Int?
 }
 
-//! Post 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  slug      String   @unique
-  content   String
-  published Boolean? @default(false)
-  //? One to Many Relations
-  // author    User?    @relation(fields: [authorId], references: [id])
-  // authorId  Int?
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now()) @map("created_at")
+//! Hall
 
-  //* Many to Many
-  // authors User[]
+model Hall {
+  id            Int      @id @default(autoincrement())
+  hall_name     String
+  hall_capacity Int
+  is_booked     Boolean?
 
-  //* One to One
-  // author    User?    @relation(fields: [authorId], references: [id]) 
-  // authorId Int    @unique
+  //! Aauda event book garda multiple halls book garna paini 
+  Event   Event? @relation(fields: [eventId], references: [id])
+  eventId Int?
 
-  @@index(slug)
+  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+}
+
+//! Rules
+model Rules {
+  id          Int    @id @default(autoincrement())
+  description String
+
+  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+}
+
+//! Product Image
+model ProductImage {
+  id  Int    @id @default(autoincrement())
+  url String
+
+  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
 }
 
 //! Blogs
 model Blog {
   id                Int      @id @default(autoincrement())
   title             String   @unique
-  short_description String
+  short_description String?
   image             String
   description       String
-  author            String
+  is_approved       Boolean?
   createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  author            User?    @relation("BlogAuthor", fields: [authorId], references: [id])
+  authorId          Int
+  approved_by       User?    @relation("ApprovedBlogs", fields: [approved_by_id], references: [id])
+  approved_by_id    Int?
 }
 
 //! Venue Table
@@ -104,21 +138,32 @@ model Venue {
   venue_name     String
   venue_address  String
   contact_person String
-  phone_number   String?
+  phone_number   String
   email          String
   createdAt      DateTime @default(now()) @map("created_at")
 }
 
 //! Event Table
-// model Event {
-//   id                     Int      @id @default(autoincrement())
-//   event_name             String
-//   no_of_guests           Int
-//   start_date             DateTime
-//   additional_description String
-//   is_approved            Boolean
-//   approved_by            Int
-//   hall_id                   Int
-//   product_id              Int
-//   createdAt              DateTime @default(now()) @map("created_at")
-// }
+model Event {
+  id             Int         @id @default(autoincrement())
+  start_date     DateTime
+  end_date       DateTime
+  start_time     DateTime
+  end_time       DateTime
+  product_id     Int
+  createdAt      DateTime    @default(now()) @map("created_at")
+  halls          Hall[]
+  events         EventType[]
+  is_approved    Boolean
+  approved_by    User?       @relation("Approved Events", fields: [approved_by_id], references: [id])
+  approved_by_id Int?
+  User           User?       @relation("Booked Events", fields: [userId], references: [id])
+  userId         Int?
+}
+
+model EventType {
+  id      Int    @id @default(autoincrement())
+  title   String
+  Event   Event? @relation(fields: [eventId], references: [id])
+  eventId Int?
+}

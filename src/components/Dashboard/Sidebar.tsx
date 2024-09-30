@@ -13,15 +13,30 @@ const Sidebar = () => {
             icon: <LayoutDashboard />
         },
         {
+            title: "Users",
+            path: '/dashboard/users',
+            icon: <UsersRound />
+        },
+        {
+            title: "Categories",
+            path: '/dashboard/category',
+            icon: <Castle />
+        },
+        {
+            title: "Ameneties",
+            path: '/dashboard/ameneties',
+            icon: <Castle />
+        },
+        {
             title: "Products",
             path: '/dashboard/products',
             icon: <Castle />
         },
         {
-            title: "Users",
-            path: '/dashboard/users',
-            icon: <UsersRound />
-        }
+            title: "Venues",
+            path: '/dashboard/venue',
+            icon: <Castle />
+        },
     ]
 
     const pathName = usePathname()

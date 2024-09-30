@@ -77,12 +77,39 @@ const VenueNavbar = () => {
                     </Link>
 
                     {session?.user ? (
-                        <div ref={menuRef}>
-                            <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded={toggle} onClick={() => setToggle((prev) => !prev)}>
-                                <span className="sr-only">Open user menu</span>
-                                <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
-                            </button>
-                        </div>
+                        <>
+                            <div ref={menuRef}>
+                                <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded={toggle} onClick={() => setToggle((prev) => !prev)}>
+                                    <span className="sr-only">Open user menu</span>
+                                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+                                </button>
+                            </div>
+                            {toggle && (
+                                <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
+                                    <div className="px-4 py-3">
+                                        <p className="text-sm text-gray-900">{session?.user.username}</p>
+                                        <p className="text-sm font-medium text-gray-900 truncate">{session?.user.email}</p>
+                                    </div>
+
+                                    <ul className="py-1">
+                                        {session?.user.role === "Admin" &&
+                                            <li>
+                                                <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => signOut()}>Sign out</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <button
                             type="button"
@@ -93,29 +120,7 @@ const VenueNavbar = () => {
                         </button>
                     )}
 
-                    {toggle && (
-                        <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
-                            <div className="px-4 py-3">
-                                <p className="text-sm text-gray-900">{session?.user.username}</p>
-                                <p className="text-sm font-medium text-gray-900 truncate">{session?.user.email}</p>
-                            </div>
 
-                            <ul className="py-1">
-                                <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => signOut()}>Sign out</a>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
                     <section onClick={() => setSideMenu(!sideMenu)}>
                         {sideMenu === false ? (
                             <IoMenu className="text-[2.3rem] block lg:hidden" />

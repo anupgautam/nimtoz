@@ -12,6 +12,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@material-tailwind/react": "^2.1.10",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@next/font": "^14.2.13",
@@ -27,6 +28,9 @@
     "preline": "^2.4.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
+    "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
     "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
