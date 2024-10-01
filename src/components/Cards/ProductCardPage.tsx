@@ -1,21 +1,16 @@
-import ProductCard from "./ProductCard";
+import CardWithCarousel from "./CardWithCarousel";
+import ProductCard from "./CardWithCarousel";
 
 const ProductCardPage = () => {
     return (
-        <>
-            <div className="container mx-auto px-4">
-
-                <h1 className="text-4xl dark:text-white">Products</h1>
-            </div>
-            {/* <div className="mx-auto grid w-full max-w-7xl items-center space-y-4 px-2 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-4"> */}
-            
+        <div className="flex-shrink md:ml-20 lg:ml-24 px-4"> {/* Adjust margin-left based on sidebar width */}
             <div className="mx-auto grid w-full max-w-7xl items-center space-y-4 px-2 py-10 sm:grid-cols-1 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-3">
                 {Array.from({ length: 8 }).map((_, i) => (
-                    <ProductCard key={i} />
+                    <CardWithCarousel key={i} />
                 ))}
             </div>
-        </>
+        </div>
     );
-}
+};
 
 export default ProductCardPage;

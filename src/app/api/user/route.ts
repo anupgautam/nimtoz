@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod";
 
 const userSchema = z.object({
-    username: z.string().min(1, 'Username is required').max(100),
+    firstname: z.string().min(1, 'Firstname is required').max(100),
+    lastname: z.string().min(1, 'Lastname is required').max(100),
     email: z.string().min(1, 'Email is required').email("Invalid email"),
     password: z.string().min(1, 'Password is required').min(8, 'Password must have 8 characters'),
     phone_number: z.string().regex(/^(?:\+?(\d{1,3}))?[-. ]?(\d{1,4})[-. ]?(\d{1,4})[-. ]?(\d{1,9})$/, {
@@ -15,7 +16,7 @@ const userSchema = z.object({
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const body = await req.json();
-        const { email, username, password, phone_number } = userSchema.parse(body);
+        const { email, firstname, lastname, password, phone_number } = userSchema.parse(body);
 
         //! If email already exist
         const userExists = await prisma.user.findUnique({
@@ -28,7 +29,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const hashedPassword = await hash(password, 10);
         const newUser = await prisma.user.create({
             data: {
-                username,
+                firstname,
+                lastname,
                 email,
                 password: hashedPassword,
                 role: 'User',

@@ -21,7 +21,8 @@ enum Role {
 //! User 
 model User {
   id                       Int        @id @default(autoincrement())
-  username                 String
+  firstname                String
+  lastname                 String
   email                    String     @unique
   password                 String
   phone_number             String     @unique
@@ -70,7 +71,7 @@ model Product {
   price             Int
   description       String
   address           String
-  short_description String
+  short_description String?
   category          Category       @relation(fields: [category_id], references: [id])
   category_id       Int
   amenities         Amenities[]
@@ -80,6 +81,8 @@ model Product {
 
   Wishlist   Wishlist? @relation(fields: [wishlistId], references: [id])
   wishlistId Int?
+
+  event Event[]
 }
 
 //! Hall
@@ -90,12 +93,10 @@ model Hall {
   hall_capacity Int
   is_booked     Boolean?
 
-  //! Aauda event book garda multiple halls book garna paini 
-  Event   Event? @relation(fields: [eventId], references: [id])
-  eventId Int?
-
   Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int?
+  event     Event?   @relation(fields: [eventId], references: [id])
+  eventId   Int?
 }
 
 //! Rules
@@ -145,20 +146,22 @@ model Venue {
 
 //! Event Table
 model Event {
-  id             Int         @id @default(autoincrement())
-  start_date     DateTime
-  end_date       DateTime
-  start_time     DateTime
-  end_time       DateTime
-  product_id     Int
+  id         Int      @id @default(autoincrement())
+  start_date DateTime
+  end_date   DateTime
+  start_time DateTime
+  end_time   DateTime
+
   createdAt      DateTime    @default(now()) @map("created_at")
-  halls          Hall[]
   events         EventType[]
   is_approved    Boolean
   approved_by    User?       @relation("Approved Events", fields: [approved_by_id], references: [id])
   approved_by_id Int?
-  User           User?       @relation("Booked Events", fields: [userId], references: [id])
-  userId         Int?
+  User           User        @relation("Booked Events", fields: [userId], references: [id])
+  userId         Int
+  product        Product     @relation(fields: [productId], references: [id])
+  productId      Int         @unique
+  Hall           Hall[]
 }
 
 model EventType {

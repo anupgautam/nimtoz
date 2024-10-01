@@ -12,10 +12,15 @@ export const options: NextAuthOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: {
-                    label: "Username:",
+                firstname: {
+                    label: "Firstname:",
                     type: 'text',
-                    placeholder: 'Username'
+                    placeholder: 'Firstname'
+                },
+                lastname: {
+                    label: "Lastname:",
+                    type: 'text',
+                    placeholder: 'Lastname'
                 },
                 email: {
                     label: "Email",
@@ -51,7 +56,8 @@ export const options: NextAuthOptions = {
 
                 return {
                     id: existingUser.id,
-                    username: existingUser.username,
+                    firstname: existingUser.firstname,
+                    lastname: existingUser.lastname,
                     role: existingUser.role,
                     email: existingUser.email
                 }
@@ -75,7 +81,8 @@ export const options: NextAuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id.toString();
-                token.username = user.username
+                token.firstname = user.firstname
+                token.lastname= user.lastname
                 token.role = user.role
                 // return {
                 //     ...token,
@@ -87,7 +94,8 @@ export const options: NextAuthOptions = {
         async session({ session, token }) {
             if (session?.user) {
                 session.user.id = token.id as string;
-                session.user.username = token.username
+                session.user.firstname = token.firstname
+                session.user.lastname = token.lastname
                 session.user.role = token.role
             }
             return session;

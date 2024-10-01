@@ -6,7 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { role, teachersData } from "@/lib/data";
 import FormModal from "@/components/Lama/FormModal"
-import { User } from "@prisma/client"
+import { Prisma, User } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 
@@ -39,7 +39,7 @@ const renderRow = (item: UserList) => (
         <td className="flex items-center gap-4 p-4">
             {/* <Image src={item.photo} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
             <div className="flex flex-col">
-                <h3 className="font-semibold">{item.username}</h3>
+                <h3 className="font-semibold">{`${item.firstname} ${item.lastname}`}</h3>
                 <p className="text-xs text-gray-500">{item?.email}</p>
             </div>
         </td>
@@ -61,13 +61,42 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
+    //! URL Params Condition
+    const query: Prisma.UserWhereInput = {};
+    if (queryParams) {
+        const searchConditions: Prisma.UserWhereInput[] = [];
+
+        for (const [key, value] of Object.entries(queryParams)) {
+            if (value !== undefined) {
+                switch (key) {
+                    case "search":
+                        searchConditions.push(
+                            { firstname: { contains: value.toLowerCase() } },
+                            { lastname: { contains: value.toLowerCase() } },
+                            { email: { contains: value.toLowerCase() } },
+                            { phone_number: { contains: value.toLowerCase() } },
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (searchConditions.length > 0) {
+            query.OR = searchConditions;
+        }
+    }
+
+
     //! Multiple request in prisma
     const [data, count] = await prisma.$transaction([
         prisma.user.findMany({
+            where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
         }),
-        prisma.user.count()
+        prisma.user.count({ where: query })
     ])
 
     return (

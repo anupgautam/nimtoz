@@ -3,10 +3,14 @@ import { z } from 'zod'
 
 //! Validation 
 const schema = z.object({
-    username: z
+    firstname: z
         .string()
-        .min(3, { message: "Username must be atleast 3 characters long!" })
-        .max(50, { message: "Username cannot be more than 50 characters long!" }),
+        .min(3, { message: "Firstname must be atleast 3 characters long!" })
+        .max(50, { message: "Firstname cannot be more than 50 characters long!" }),
+    lastname: z
+        .string()
+        .min(3, { message: "Lastname must be atleast 3 characters long!" })
+        .max(50, { message: "Lastname cannot be more than 50 characters long!" }),
     email: z.string().email({ message: "Invalid email address!" }),
 
 })

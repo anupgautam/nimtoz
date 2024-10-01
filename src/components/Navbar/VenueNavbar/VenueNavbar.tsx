@@ -87,7 +87,7 @@ const VenueNavbar = () => {
                             {toggle && (
                                 <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
                                     <div className="px-4 py-3">
-                                        <p className="text-sm text-gray-900">{session?.user.username}</p>
+                                        <p className="text-sm text-gray-900">{session?.user.firstname}</p>
                                         <p className="text-sm font-medium text-gray-900 truncate">{session?.user.email}</p>
                                     </div>
 

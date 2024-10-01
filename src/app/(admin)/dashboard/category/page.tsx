@@ -4,7 +4,7 @@ import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import Link from "next/link"
 import FormModal from "@/components/Lama/FormModal"
-import { Category, Product } from "@prisma/client"
+import { Category, Prisma, Product } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 
@@ -50,13 +50,31 @@ const CategoryTable = async ({ searchParams }: { searchParams: { [key: string]: 
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
+    //! URL Params Condition
+    const query: Prisma.CategoryWhereInput = {};
+
+    if (queryParams) {
+        for (const [key, value] of Object.entries(queryParams)) {
+            if (value !== undefined) {
+                switch (key) {
+                    case "search":
+                        query.category_name = { contains: value.toLowerCase() }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     //! Multiple request in prisma
     const [data, count] = await prisma.$transaction([
         prisma.category.findMany({
+            where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
         }),
-        prisma.category.count()
+        prisma.category.count({ where: query })
     ])
 
     return (

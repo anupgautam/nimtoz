@@ -4,7 +4,7 @@ import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import Link from "next/link"
 import FormModal from "@/components/Lama/FormModal"
-import { Venue } from "@prisma/client"
+import { Prisma, Venue } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 
@@ -69,20 +69,43 @@ const VenueTable = async ({ searchParams }: { searchParams: { [key: string]: str
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
-    // const data = await prisma.venue.findMany({
-    //     take: ITEM_PER_PAGE,
-    //     skip: ITEM_PER_PAGE * (p - 1),
-    // })
+    //! URL Params Condition
+    const query: Prisma.VenueWhereInput = {};
 
-    // const count = await prisma.venue.count();
+    if (queryParams) {
+        const searchConditions = [];
+
+        for (const [key, value] of Object.entries(queryParams)) {
+            if (value !== undefined) {
+                switch (key) {
+                    case "search":
+                        searchConditions.push(
+                            { venue_name: { contains: value.toLowerCase() } },
+                            { contact_person: { contains: value.toLowerCase() } },
+                            { email: { contains: value.toLowerCase() } },
+                            { venue_address: { contains: value.toLowerCase() } },
+                            { phone_number: { contains: value.toLowerCase() } }
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (searchConditions.length > 0) {
+            query.OR = searchConditions;
+        }
+    }
 
     //! Multiple request in prisma
     const [data, count] = await prisma.$transaction([
         prisma.venue.findMany({
+            where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
         }),
-        prisma.venue.count()
+        prisma.venue.count({ where: query })
     ])
 
     return (
@@ -108,7 +131,7 @@ const VenueTable = async ({ searchParams }: { searchParams: { [key: string]: str
             {/*//* List  */}
             <Table columns={columns} renderRow={renderRow} data={data} />
             {/*//* Pagination  */}
-            <Pagination page={p} count={count}/>
+            <Pagination page={p} count={count} />
         </div>
     )
 }
