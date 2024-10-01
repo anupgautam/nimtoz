@@ -84,30 +84,32 @@ const RegisterPage = () => {
     }
 
     return (
-        <section className="min-h-screen">
+        <section className="h-screen">
             <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
                 {/* Hide image on smaller screens */}
-                <div className="relative hidden lg:flex items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+                {/* <div className="relative hidden lg:flex items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
                     <div className="absolute inset-0">
                         <Image
                             className="h-full w-full rounded-md object-cover object-top"
                             src="/register.svg"
                             alt="Register Illusratation"
-                            height={200}
-                            width={200}
+                            height={100}
+                            width={100}
 
                         />
                     </div>
-                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                    <div className="relative">
-                        <div className="w-full max-w-xl xl:mx-auto xl:w-full xl:max-w-xl xl:pr-24">
-                            <h3 className="text-4xl font-bold text-white">
-                                Now you don't have to rely on your designer to create a new page
-                            </h3>
-                        </div>
-                    </div> */}
+                </div> */}
+                <div className="relative hidden lg:flex items-end h-[900px] w-[700px] px-4 pb-5 pt-5 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+                    <Image
+                        className="h-full w-full rounded-md object-cover object-top"
+                        src="/register.svg"
+                        alt="Register Illustration"
+                        width={100}
+                        height={100}
+                    />
                 </div>
-                <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+
+                <div className="flex items-center justify-center px-4 py-5 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
                         <h2 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Sign up</h2>
                         <p className="mt-2 text-base text-gray-600">

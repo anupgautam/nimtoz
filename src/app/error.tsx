@@ -20,9 +20,9 @@ const ErrorPage = () => {
                         <div className="flex justify-center"> {/* Center the image container */}
                             <Image src="/404.svg" alt="401" height={500} width={500} /> {/* Increased size */}
                         </div>
-                        <p className="mt-3 text-gray-600">Access Denied</p>
+                        <p className="mt-3 text-gray-600">Page Not Found!</p>
                         <p className="text-gray-600">
-                            You are logged in, but you do not have the required access level to view this page..
+                            The page your are trying to access doesn't exist.
                         </p>
                         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
                             <Link

@@ -125,6 +125,8 @@ const RegisterVenue = () => {
                 </div>
             </div>
         </section>
+
+
     )
 }
 export default RegisterVenue
