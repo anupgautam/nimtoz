@@ -6,7 +6,8 @@ import FinanceChart from "@/components/Lama/FinanceChart";
 import UserCard from "@/components/Lama/UserCard";
 import { getServerSession } from "next-auth"
 
-const Dashboard = () => {
+const Dashboard = async () => {
+    const session = await getServerSession(options)
     return (
         <div className="p-4 flex gap-4 flex-col md:flex-row">
             {/* LEFT */}

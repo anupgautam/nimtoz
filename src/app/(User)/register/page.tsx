@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image';
 
 interface User {
     firstname: string;
@@ -88,30 +89,33 @@ const RegisterPage = () => {
                 {/* Hide image on smaller screens */}
                 <div className="relative hidden lg:flex items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
                     <div className="absolute inset-0">
-                        <img
+                        <Image
                             className="h-full w-full rounded-md object-cover object-top"
-                            src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c2lnbnVwfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60"
-                            alt="Signup illustration"
+                            src="/register.svg"
+                            alt="Register Illusratation"
+                            height={200}
+                            width={200}
+
                         />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
                     <div className="relative">
                         <div className="w-full max-w-xl xl:mx-auto xl:w-full xl:max-w-xl xl:pr-24">
                             <h3 className="text-4xl font-bold text-white">
                                 Now you don't have to rely on your designer to create a new page
                             </h3>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign up</h2>
+                        <h2 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Sign up</h2>
                         <p className="mt-2 text-base text-gray-600">
                             Already have an account?{' '}
                             <Link
                                 href="/login"
                                 title=""
-                                className="font-medium text-black transition-all duration-200 hover:underline"
+                                className="font-medium text-red-600 transition-all duration-200 hover:underline"
                             >
                                 Sign In
                             </Link>
@@ -204,7 +208,7 @@ const RegisterPage = () => {
                                     <button
                                         type="submit"
                                         disabled={!formik.isValid || !formik.dirty} // Disable button if form is invalid or untouched
-                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-black hover:bg-black/80' : 'bg-gray-300 cursor-not-allowed'}`}
+                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300 cursor-not-allowed'}`}
                                     >
                                         Get started <ArrowRight className="ml-2" size={16} />
                                     </button>

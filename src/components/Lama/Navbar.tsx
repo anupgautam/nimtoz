@@ -1,9 +1,11 @@
+import { options } from '@/app/api/auth/[...nextauth]/options'
 import { Search, MessageCircle, Bell, CircleUserRound } from 'lucide-react'
-import { Session } from 'next-auth'
+import { getServerSession } from 'next-auth/next'
 
-const Navbar = () => {
+const Navbar = async() => {
 
-    
+    const session = await getServerSession(options)
+
     return (
         <div className="flex items-center justify-between p-6">
 
@@ -32,8 +34,8 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex flex-col">
-                    <span className='text-xs leading-3 font-medium'>Lemon Gautam</span>
-                    <span className='text-[10px] text-gray-500 text-right'>Admin</span>
+                    <span className='text-xs leading-3 font-medium'>{session?.user.firstname+" "+session?.user.lastname}</span>
+                    <span className='text-[10px] text-gray-500 text-right'>{session?.user.role}</span>
                 </div>
 
                 <CircleUserRound height={36} width={36} />
