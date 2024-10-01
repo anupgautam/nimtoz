@@ -1,6 +1,6 @@
-'use client'
-
 const Footer = () => {
+    const date = new Date();
+    const year = date.getFullYear();
 
     return (
         <section className="relative overflow-hidden py-10">
@@ -21,12 +21,12 @@ const Footer = () => {
                                         fill="black"
                                     />
                                 </svg>
-                                <span className="ml-4 text-lg font-bold">DevUI</span>
+                                <span className="ml-4 text-lg font-bold">Nimtoz</span>
                             </div>
                             <div>
-                                <p className="mb-4  text-base font-medium">The Tailwind CSS Component library</p>
-                                <p className="text-sm text-gray-600">
-                                    &copy; Copyright 2022. All Rights Reserved by DevUI.
+                                {/* <p className="mb-4  text-base font-medium">The Tailwind CSS Component library</p> */}
+                                <p className="mb-4  text-base font-medium">
+                                    &copy; Copyright {year}. All Rights Reserved by Nimtoz.
                                 </p>
                             </div>
                         </div>

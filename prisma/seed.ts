@@ -5,10 +5,11 @@ async function main() {
     // Create some users
     const user1 = await prisma.user.create({
         data: {
-            username: 'john_doe',
+            firstname: 'John',
+            lastname: 'Doe',
             email: 'john@example.com',
             password: 'password123',
-            phone_number: "9861000213",
+            phone_number: "9841498419",
             role: 'Admin',
             avatar: 'https://example.com/avatar/john.png',
         },
@@ -16,7 +17,8 @@ async function main() {
 
     const user2 = await prisma.user.create({
         data: {
-            username: 'jane_doe',
+            firstname: 'Jane',
+            lastname: 'Doe',
             email: 'jane@example.com',
             password: 'password456',
             phone_number: "9849789299",
@@ -129,22 +131,22 @@ async function main() {
     });
 
     // Create an event
-    const event1 = await prisma.event.create({
-        data: {
-            start_date: new Date('2024-10-10'),
-            end_date: new Date('2024-10-12'),
-            start_time: new Date('2024-10-10T09:00:00'),
-            end_time: new Date('2024-10-12T18:00:00'),
-            product_id: product1.id,
-            is_approved: true,
-            approved_by: {
-                connect: { id: user1.id },
-            },
-            halls: {
-                connect: [{ id: hall1.id }],
-            },
-        },
-    });
+    // const event1 = await prisma.event.create({
+    //     data: {
+    //         start_date: new Date('2024-10-10'),
+    //         end_date: new Date('2024-10-12'),
+    //         start_time: new Date('2024-10-10T09:00:00'),
+    //         end_time: new Date('2024-10-12T18:00:00'),
+    //         product_id: product1.id,
+    //         is_approved: true,
+    //         approved_by: {
+    //             connect: { id: user1.id },
+    //         },
+    //         halls: {
+    //             connect: [{ id: hall1.id }],
+    //         },
+    //     },
+    // });
 
     // Create event types
     // await prisma.event.create({

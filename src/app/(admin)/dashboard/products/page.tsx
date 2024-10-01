@@ -6,10 +6,10 @@ import Image from "next/image"
 import Link from "next/link"
 import FormModal from "@/components/Lama/FormModal"
 import prisma from "@/lib/db"
-import { Amenities, Category, Hall, Product } from "@prisma/client"
+import { Amenities, Category, Hall, Prisma, Product, ProductImage } from "@prisma/client"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 
-type ProductList = Product & { categories: Category[] } & { amenities: Amenities[] } & { halls: Hall[] }
+type ProductList = Product & { category: Category } & { amenities: Amenities[] } & { halls: Hall[] } & { product_image: ProductImage }
 
 const columns = [
     {
@@ -57,7 +57,7 @@ const renderRow = (item: ProductList) => (
         </td>
         <td className="hidden md:table-cell">{item.price}</td>
         <td className="hidden md:table-cell">{item.address}</td>
-        <td className="hidden md:table-cell">{item.category?.category_name}</td>
+        <td className="hidden md:table-cell">{item.category.category_name}</td>
         <td className="hidden md:table-cell whitespace-normal break-words max-w-5">
             {item.amenities.map(amenity => amenity.amenity_name).join(", ")}
         </td>
@@ -79,14 +79,35 @@ const ProductsPage = async ({ searchParams }: { searchParams: { [key: string]: s
 
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
+    //! URL Params Condition
 
-    // const data = await prisma.product.findMany({
-    //     include: {
-    //         amenities: true,
-    //         halls: true,
-    //         category: true,
-    //     },
-    // });
+    const query: Prisma.ProductWhereInput = {};
+    if (queryParams) {
+        const searchConditions: Prisma.ProductWhereInput[] = [];
+
+        for (const [key, value] of Object.entries(queryParams)) {
+            if (value !== undefined) {
+                switch (key) {
+                    case "search":
+                        searchConditions.push(
+                            { title: { contains: value.toLowerCase() } },
+                            { address: { contains: value.toLowerCase() } },
+                            // For the Category relation (one-to-one), use a direct nested query
+                            { category: { category_name: { contains: value.toLowerCase() } } },
+                            // For the Hall relation (one-to-many), use the 'some' filter
+                            { halls: { some: { hall_name: { contains: value.toLowerCase() } } } }
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (searchConditions.length > 0) {
+            query.OR = searchConditions;
+        }
+    }
 
     const [data, count] = await prisma.$transaction([
         prisma.product.findMany({
@@ -95,12 +116,12 @@ const ProductsPage = async ({ searchParams }: { searchParams: { [key: string]: s
                 halls: true,
                 category: true,
             },
+            where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
         }),
-        prisma.product.count()
+        prisma.product.count({ where: query })
     ])
-
 
     return (
         <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -117,7 +138,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: { [key: string]: s
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
                         </button>
-                        <FormModal table="User" type="create" />
+                        <FormModal table="Product" type="create" />
                     </div>
                 </div>
             </div>

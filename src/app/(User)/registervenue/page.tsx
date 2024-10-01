@@ -79,8 +79,8 @@ const RegisterVenue = () => {
             <header className="z-50">
                 <VenueNavbar />
             </header>
-            <div className="max-w-2xl mt-20 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-                <div className="bg-white rounded-xl shadow p-4 sm:p-7 ">
+            <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+                <div className="bg-white mt-20 rounded-xl shadow p-4 sm:p-7 ">
                     <div className="text-center mb-8">
                         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 ">
                             Register your Venue

@@ -5,10 +5,12 @@ import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 const Blog = () => {
     return (
         <>
-            <header className="z-50">
-                <VenueNavbar />
-            </header>
-            <BlogPage />
+            {/* <header className="z-50"> */}
+            <VenueNavbar />
+            {/* </header> */}
+            <main className="pt-10">
+                <BlogPage />
+            </main>
             <Footer />
         </>
     )

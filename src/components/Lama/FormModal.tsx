@@ -5,7 +5,8 @@ import { useState } from "react";
 import ProductForm from "./forms/Productform";
 import UserForm from "./forms/UserForm";
 import CategoryForm from "./forms/CategoryForm";
-
+import BlogForm from "./forms/BlogForm";
+import VenueForm from "./forms/VenueForm";
 // const ProductForm = dynamic(() => import("./forms/Productform"), {
 //     loading: () => <h1>Loading...</h1>
 // })
@@ -19,11 +20,13 @@ import CategoryForm from "./forms/CategoryForm";
 const forms: { [key: string]: (type: "create" | "update", data?: any) => JSX.Element; } = {
     Product: (type, data) => <ProductForm type={type} data={data} />,
     User: (type, data) => <UserForm type={type} data={data} />,
-    Category: (type, data) => <CategoryForm type={type} data={data} />
+    Category: (type, data) => <CategoryForm type={type} data={data} />,
+    Blog: (type, data) => <BlogForm type={type} data={data} />,
+    Venue: (type, data) => <VenueForm type={type} data={data} />
 }
 
 const FormModal = ({ table, type, data, id }: {
-    table: "Product" | "Category" | "User" | "Venue" | "Blog" ;
+    table: "Product" | "Category" | "User" | "Venue" | "Blog" | "Booking";
     type: "create" | "update" | "delete"
     data?: any
     id?: number

@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link"
-import { LayoutDashboard, Castle, UsersRound, Network, Wrench, Theater } from 'lucide-react'
+import { LayoutDashboard, Castle, UsersRound, Network, Wrench, Theater, SquarePen, HousePlus } from 'lucide-react'
 import { usePathname } from "next/navigation"
 
 const menuItems = [
@@ -24,11 +24,11 @@ const menuItems = [
         path: '/dashboard/category',
         icon: <Network />
     },
-    // {
-    //     title: "Ameneties",
-    //     path: '/dashboard/ameneties',
-    //     icon: <Wrench />
-    // },
+    {
+        title: "Bookings",
+        path: '/dashboard/bookings',
+        icon: <HousePlus />
+    },
     {
         title: "Products",
         path: '/dashboard/products',
@@ -39,11 +39,11 @@ const menuItems = [
         path: '/dashboard/venue',
         icon: <Theater />
     },
-    // {
-    //     title: "Halls",
-    //     path: '/dashboard/hall',
-    //     icon: <Theater />
-    // },
+    {
+        title: "Blogs",
+        path: '/dashboard/blogs',
+        icon: <SquarePen />
+    },
 ]
 
 const Menu = () => {

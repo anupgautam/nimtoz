@@ -5,39 +5,40 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '../InputField';
 import { Image, X } from 'lucide-react'
 import { useState } from 'react';
+import TextField from '../TextField';
 
 //! Validation 
 const schema = z.object({
     title: z
         .string()
         .min(3, { message: "Product name must be at least 3 characters long!" }),
-    birthday: z
-        .date({ message: "Birthday is required!" }),
-    // description: z
-    //     .string()
-    //     .min(50, { message: "Description must be at least 50 characters long!" })
-    //     .max(200, { message: "Description cannot be more than 200 characters long!" }),
-    // address: z
-    //     .string()
-    //     .min(5, { message: "Address cannot be less than 5 characters long!" })
-    //     .max(50, { message: "Address cannot be more than 50 characters long!" }),
-    // email: z
-    //     .string()
-    //     .email({ message: "Invalid email address!" }),
+    address: z
+        .string()
+        .min(3, { message: "Address must be at least 3 characters long!" }),
+    // birthday: z
+    //     .date({ message: "Birthday is required!" }),
+
     price: z
         .number({
-            message: "Price must be a number", // if the type is incorrect
+            message: "Price must be a number",
         })
-        .positive("Price must be greater than 0") // price should be a positive number
-        .max(1000000, "Price cannot exceed 1 million"), // set a maximum price limit
-
+        .positive("Price must be greater than 0")
+        .max(1000000, "Price cannot exceed 1 million"),
+    description: z
+        .string()
+        .min(50, { message: "Description must be at least 50 characters long!" })
+        .max(200, { message: "Description cannot be more than 200 characters long!" }),
     category: z
         .number(),
     product_image: z
         .array(z.instanceof(File, { message: "Product Image is required" }))
         .min(1, "At least one image is required"),
-    // hall: z
-    //     .array(z.number())
+    halls: z
+        .array(z.number()),
+    amenities: z
+        .array(z.number()),
+    rules: z
+        .array(z.number()),
 });
 
 type Inputs = z.infer<typeof schema>
@@ -125,7 +126,7 @@ const ProductForm = ({ type, data }: { type: "create" | "update"; data?: any; })
                             ))}
                         </div>
                     </div>
-                    
+
                     {/* //! InputField component */}
                     <InputField
                         name="title"
@@ -139,27 +140,47 @@ const ProductForm = ({ type, data }: { type: "create" | "update"; data?: any; })
                     <InputField
                         name="price"
                         label='Price'
-                        type="number"
+                        type="string"
                         defaultValue={data?.price}
                         register={register}
                         error={errors?.price}
                         placeholder='Price'
                     />
                     <InputField
+                        name="address"
+                        label='Address'
+                        type="string"
+                        defaultValue={data?.address}
+                        register={register}
+                        error={errors?.address}
+                        placeholder='Address'
+                    />
+                    <InputField
+                        name="price"
+                        label='Price'
+                        type="number"
+                        defaultValue={data?.price}
+                        register={register}
+                        error={errors?.price}
+                        placeholder='Price'
+                    />
+                    {/* <InputField
                         name="Birthday"
                         label='birthday'
                         type="date"
                         defaultValue={data?.birthday}
                         register={register}
                         error={errors?.birthday}
-                    />
-                    <div className="sm:col-span-3">
+                    /> */}
+
+                    {/*//! Select the category  */}
+                    {/* <div className="sm:col-span-3">
                         <label htmlFor="af-account-full-name" className="inline-block text-sm text-gray-800 mt-2.5 ">
                             Select the Category
                         </label>
-                    </div>
+                    </div> */}
 
-                    <div className="sm:col-span-9">
+                    {/* <div className="sm:col-span-9">
 
                         <select
                             {...register("category")}
@@ -177,18 +198,17 @@ const ProductForm = ({ type, data }: { type: "create" | "update"; data?: any; })
                         {errors.category?.message && (
                             <p className="text-xs text-red-600">{errors?.category.message.toString()}</p>
                         )}
-                    </div>
+                    </div> */}
 
-                    <div className="sm:col-span-3">
-                        <label htmlFor="af-account-bio" className="inline-block text-sm text-gray-800 mt-2.5 ">
-                            BIO
-                        </label>
-                    </div>
-
-                    <div className="sm:col-span-9">
-                        <textarea id="af-account-bio" className="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none  " rows={6} placeholder="Type your message..."></textarea>
-                    </div>
-
+                    <TextField
+                        name="description"
+                        label="Description"
+                        type="string"
+                        defaultValue={data?.description}
+                        register={register}
+                        error={errors?.description}
+                        placeholder='Product Description.'
+                    />
                 </div>
 
                 <div className="mt-5 flex justify-end gap-x-2">
