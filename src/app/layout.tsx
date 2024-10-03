@@ -4,7 +4,8 @@ import "./globals.css";
 import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar";
 import Footer from "@/components/Footer/Footer";
 import Provider from "@/components/Provider";
-import Toast from "@/components/Dashboard/Toast";
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({
         <ProductDetailPage/> */}
           <main>
             {children}
+            <ToastContainer position="bottom-right"/>
           </main>
           {/* <Toast /> */}
           {/* <Footer /> */}

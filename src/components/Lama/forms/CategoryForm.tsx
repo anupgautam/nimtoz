@@ -1,162 +1,156 @@
 'use client'
 import { useForm } from 'react-hook-form';
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '../InputField';
-import { Image, X, Hotel, Store, Utensils, Clover } from 'lucide-react'
-import { useState } from 'react';
+import { categorySchema, CategorySchema } from '@/lib/formValidationSchemas';
+import { useFormState } from 'react-dom';
+import { createBlog, createCategory, updateBlog, updateCategory } from '@/lib/actions';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { CldUploadWidget } from 'next-cloudinary';
+import Image from 'next/image';
+import { Upload } from 'lucide-react'
 
-//! Validation 
-const schema = z.object({
-    category_name: z
-        .string()
-        .min(3, { message: "Category name must be at least 3 characters long!" }),
+const BlogForm = ({
+    type,
+    data,
+    setOpen
+}: {
+    type: "create" | "update";
+    data?: any;
+    setOpen: Dispatch<SetStateAction<boolean>>
+}) => {
 
-    category: z
-        .number(),
-    category_icon: z
-        .array(z.instanceof(File, { message: "Product Image is required" }))
-        .min(1, "At least one image is required"),
-});
-
-type Inputs = z.infer<typeof schema>
-
-const CategoryForm = ({ type, data }: { type: "create" | "update"; data?: any; }) => {
-
-    const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid }
-    } = useForm<Inputs>({
-        resolver: zodResolver(schema),
+        formState: { errors, isValid },
+    } = useForm<CategorySchema>({
+        resolver: zodResolver(categorySchema),
         mode: "onChange",
         criteriaMode: "all",
     })
 
-    const onSubmit = handleSubmit(data => {
-        console.log(data)
+    const [img, setImg] = useState<any>(data?.image || null);
+    const [state, formAction] = useFormState(type === "create" ? createCategory : updateCategory, {
+        success: false,
+        error: false
     })
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (files) {
-            setSelectedImages([...selectedImages, ...Array.from(files)]);
-        }
-    }
+    const onSubmit = handleSubmit((formData) => {
+        formAction({
+            ...formData,
+            category_icon: img?.secure_url || img, // Use uploaded image or existing one
+        });
+    });
 
-    const removeImage = (index: number) => {
-        setSelectedImages(selectedImages.filter((_, i) => i !== index));
-    };
+    const router = useRouter()
+
+    useEffect(() => {
+        if (state.success) {
+            toast.success(`Category ${type === "create" ? "created" : "updated"}`)
+            setOpen(false)
+            router.refresh()
+        }
+    }, [state])
 
     return (
         <>
             <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 ">
-                    Product
+                    Category
                 </h2>
                 <p className="text-sm text-gray-600 ">
-                    Add your product name, description, price and address.
+                    Differentiate your products based on different categories.
                 </p>
             </div>
-            {/*//! Form  */}
-            <form className='h-[50vh]' onSubmit={onSubmit}>
+            <form className='overflow-y-auto' onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-12 gap-2 sm:gap-6">
-
-                    {/*//* Product Image  */}
-                    <div className="sm:col-span-3">
-                        <label className="inline-block text-sm text-gray-800 mt-2.5">Product Images</label>
-                    </div>
-                    <div className="sm:col-span-9">
-                        <label className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer" htmlFor='product_images'>
-                            <Image />
-                        </label>
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            {...register("category_icon")}
-                            className="hidden"
-                            id="category_icons"
-                            onChange={handleImageUpload}
+                    <CldUploadWidget uploadPreset="NextJS_Nimtoz" onSuccess={(result, { widget }) => {
+                        setImg(result.info)
+                        widget.close()
+                    }}>
+                        {({ open }) => {
+                            return (
+                                <>
+                                    <div className="sm:col-span-3">
+                                        <label className="inline-block text-sm text-gray-800 mt-2.5 ">
+                                            Blog Image
+                                        </label>
+                                    </div>
+                                    <div className="sm:col-span-9">
+                                        <div className="flex items-center gap-5">
+                                            {(img || data?.image) && (
+                                                <div
+                                                    style={{
+                                                        width: '100px',
+                                                        height: '100px',
+                                                        borderRadius: '50%',
+                                                        overflow: 'hidden',
+                                                    }}
+                                                >
+                                                    <Image
+                                                        src={
+                                                            img?.secure_url || data?.image
+                                                        } // Use uploaded image or existing image in edit mode
+                                                        alt="Uploaded Image"
+                                                        width={100}
+                                                        height={100}
+                                                        objectFit="cover"
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="flex gap-x-2 cursor-pointer" onClick={() => open()}>
+                                                <Upload width={25} height={25} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        }}
+                    </CldUploadWidget>
+                    {data && (
+                        <InputField
+                            name="id"
+                            label='Product Name'
+                            // type="string"
+                            defaultValue={data?.id}
+                            register={register}
+                            error={errors?.id}
+                            // placeholder='My Product'
+                            hidden
                         />
-                        {errors.category_icon?.message && (
-                            <p className="text-xs text-red-600">{errors.category_icon.message.toString()}</p>
-                        )}
+                    )}
 
-                        {/* Display selected images */}
-                        <div className="flex gap-4 mt-2 overflow-x-auto">
-                            {selectedImages.map((image: any, index: any) => (
-                                <div key={index} className="relative">
-                                    <img
-                                        src={URL.createObjectURL(image)}
-                                        alt={`Selected ${index}`}
-                                        className="w-16 h-16 object-cover rounded-md"
-                                    />
-                                    <button
-                                        type="button"
-                                        className="absolute top-0 right-0 bg-white rounded-full p-1"
-                                        onClick={() => removeImage(index)}
-                                    >
-                                        <X className="w-4 h-4 text-red-600" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* //! InputField component */}
                     <InputField
                         name="category_name"
-                        label='Category Name'
+                        label="Category Name"
                         type="string"
                         defaultValue={data?.category_name}
                         register={register}
                         error={errors?.category_name}
-                        placeholder='Category'
                     />
-                    <div className="sm:col-span-3">
-                        <label htmlFor="af-account-full-name" className="inline-block text-sm text-gray-800 mt-2.5 ">
-                            Select the Category
-                        </label>
-                    </div>
+                </div>
 
-                    <div className="sm:col-span-9">
-
-                        <select
-                            {...register("category")}
-                            className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0
-                                text-sm relative rounded-lg ring-1 ring-gray-300
-                                focus:ring-2 focus:ring-blue-500 focus:outline-none 
-                                focus:border-blue-500 disabled:opacity-50 disabled:pointer-events-none`}
-                            defaultValue={data?.category}
-
-                        >
-                            <option><Clover /></option>
-                            <option><Utensils /></option>
-                            <option>Fax</option>
-                        </select>
-                        {errors.category?.message && (
-                            <p className="text-xs text-red-600">{errors?.category.message.toString()}</p>
-                        )}
-                    </div>
-
-                    <div className="mt-5 flex justify-end gap-x-2">
-                        <button type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 ">
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={!isValid}
-                            className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-blue-600 text-white"
-                                }`}
-                        >
-                            {type === "create" ? "Add" : "Update"}
-                        </button>
-                    </div>
+                {state.error && <span className="text-red-600">Something went wrong!</span>}
+                <div className="mt-5 flex justify-end gap-x-2">
+                    <button
+                        type="button"
+                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 ">
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={!isValid}
+                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
+                            }`}
+                    >
+                        {type === "create" ? "Add" : "Update"}
+                    </button>
                 </div>
             </form>
         </>
     )
 }
-export default CategoryForm
+export default BlogForm

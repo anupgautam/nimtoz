@@ -8,6 +8,7 @@ type InputFieldProps = {
     name: string;
     defaultValue?: string;
     error?: FieldError;
+    hidden?: boolean
     inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 };
 
@@ -18,21 +19,21 @@ const InputField = ({
     name,
     defaultValue,
     error,
-    inputProps,
+    hidden,
     placeholder,
+    inputProps
 }: InputFieldProps) => {
     return (
         // <div className="flex flex-col gap-2 w-full md:w-1/4">
         <>
             {/* <label className="text-xs text-gray-500">{label}</label> */}
-            <div className="sm:col-span-3">
+            <div className={hidden ? "hidden" : "sm:col-span-3"}>
                 <label htmlFor="af-account-full-name" className="inline-block text-sm text-gray-800 mt-2.5 ">
                     {label}
                 </label>
             </div>
 
-            <div className="sm:col-span-9">
-
+            <div className={hidden ? "hidden" : "sm:col-span-9"}>
                 <input
                     type={type}
                     {...register(name)}

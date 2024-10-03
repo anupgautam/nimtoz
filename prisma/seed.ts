@@ -5,25 +5,23 @@ async function main() {
     // Create some users
     const user1 = await prisma.user.create({
         data: {
-            firstname: 'John',
-            lastname: 'Doe',
-            email: 'john@example.com',
-            password: 'password123',
-            phone_number: "9841498419",
+            firstname: 'Lemon',
+            lastname: 'Gautam',
+            email: 'lemongautam79@gmail.com',
+            password: '12345678l',
+            phone_number: "9861000213",
             role: 'Admin',
-            avatar: 'https://example.com/avatar/john.png',
         },
     });
 
     const user2 = await prisma.user.create({
         data: {
-            firstname: 'Jane',
+            firstname: 'John',
             lastname: 'Doe',
-            email: 'jane@example.com',
-            password: 'password456',
+            email: 'john@example.com',
+            password: '12345678j',
             phone_number: "9849789299",
             role: 'User',
-            avatar: 'https://example.com/avatar/jane.png',
         },
     });
 

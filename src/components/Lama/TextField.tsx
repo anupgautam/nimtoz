@@ -36,6 +36,7 @@ const TextField = ({
                 <textarea
                     type={type}
                     {...register(name)}
+                    rows={4}
                     className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0
                                 text-sm relative rounded-lg ring-1 ring-gray-300
                                 focus:ring-2 focus:ring-blue-500 focus:outline-none 

@@ -8,6 +8,7 @@ import FormModal from "@/components/Lama/FormModal"
 import prisma from "@/lib/db"
 import { Amenities, Category, Hall, Prisma, Product, ProductImage } from "@prisma/client"
 import { ITEM_PER_PAGE } from "@/lib/settings"
+import FormContainer from "@/components/Lama/FormContainer"
 
 type ProductList = Product & { category: Category } & { amenities: Amenities[] } & { halls: Hall[] } & { product_image: ProductImage }
 
@@ -57,6 +58,7 @@ const renderRow = (item: ProductList) => (
         </td>
         <td className="hidden md:table-cell">{item.price}</td>
         <td className="hidden md:table-cell">{item.address}</td>
+        
         <td className="hidden md:table-cell">{item.category.category_name}</td>
         <td className="hidden md:table-cell whitespace-normal break-words max-w-5">
             {item.amenities.map(amenity => amenity.amenity_name).join(", ")}
@@ -67,9 +69,9 @@ const renderRow = (item: ProductList) => (
         <td>
             <div className="flex items-center gap-2">
                 <Link href={`/dashboard/products/${item.id}`}>
-                    <FormModal type="update" table="Product" />
+                    <FormContainer type="update" table="Product"/>
                 </Link>
-                <FormModal table="Product" type="delete" id={item.id} />
+                <FormContainer table="Product" type="delete" id={item.id} />
             </div>
         </td>
     </tr>
@@ -138,7 +140,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: { [key: string]: s
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
                         </button>
-                        <FormModal table="Product" type="create" />
+                        <FormContainer table="Product" type="create" />
                     </div>
                 </div>
             </div>

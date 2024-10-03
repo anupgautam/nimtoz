@@ -1,12 +1,23 @@
 "use client"
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useActionState, useEffect, useState } from "react";
 import ProductForm from "./forms/Productform";
 import UserForm from "./forms/UserForm";
 import CategoryForm from "./forms/CategoryForm";
 import BlogForm from "./forms/BlogForm";
 import VenueForm from "./forms/VenueForm";
+import { useFormState } from "react-dom";
+import { deleteCategory, deleteVenue } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { FormContainerProps } from "./FormContainer";
+
+const deleteActionMap: any = {
+    Venue: deleteVenue,
+    Category:deleteCategory,
+
+}
 // const ProductForm = dynamic(() => import("./forms/Productform"), {
 //     loading: () => <h1>Loading...</h1>
 // })
@@ -17,34 +28,90 @@ import VenueForm from "./forms/VenueForm";
 //     loading: () => <h1>Loading...</h1>
 // })
 
-const forms: { [key: string]: (type: "create" | "update", data?: any) => JSX.Element; } = {
-    Product: (type, data) => <ProductForm type={type} data={data} />,
-    User: (type, data) => <UserForm type={type} data={data} />,
-    Category: (type, data) => <CategoryForm type={type} data={data} />,
-    Blog: (type, data) => <BlogForm type={type} data={data} />,
-    Venue: (type, data) => <VenueForm type={type} data={data} />
+const forms: {
+    [key: string]: (
+        setOpen: Dispatch<SetStateAction<boolean>>,
+        type: "create" | "update",
+        data?: any,
+        relatedData?: any
+    ) => JSX.Element;
+} = {
+
+    Product: (setOpen, type, data, relatedData) =>
+        <ProductForm
+            type={type}
+            data={data}
+            setOpen={setOpen}
+            relatedData={relatedData} />,
+    // User: (setOpen, type, data, relatedData) =>
+    //     <UserForm
+    //         type={type}
+    //         data={data}
+    //         setOpen={setOpen}
+    //         relatedData={relatedData} />,
+    Category: (setOpen, type, data) =>
+        <CategoryForm
+            type={type}
+            data={data}
+            setOpen={setOpen}
+        />,
+    Blog: (setOpen, type, data) =>
+        <BlogForm
+            type={type}
+            data={data}
+            setOpen={setOpen}
+        />,
+    Venue: (setOpen, type, data) =>
+        <VenueForm
+            type={type}
+            data={data}
+            setOpen={setOpen}
+        />
 }
 
-const FormModal = ({ table, type, data, id }: {
-    table: "Product" | "Category" | "User" | "Venue" | "Blog" | "Booking";
-    type: "create" | "update" | "delete"
-    data?: any
-    id?: number
-}) => {
-
+const FormModal = ({
+    table,
+    type,
+    data,
+    id,
+    relatedData
+}: FormContainerProps & { relatedData?: any }) => {
     const size = type === "create" ? "w-24 h-12" : "w-8 h-8"
-    const bgColor = type === "create" ? "bg-red-300" : type === "update" ? "text-blue-500" : "text-red-600"
+    const bgColor =
+        type === "create"
+            ? "bg-red-400"
+            : type === "update"
+                ? "text-blue-500"
+                : "text-red-600"
 
     const [open, setOpen] = useState(false)
 
     const Form = () => {
+        const [state, formAction] = useFormState(deleteActionMap[table], { success: false, error: false })
+
+        const router = useRouter()
+
+        useEffect(() => {
+            if (state.success) {
+                toast.success(`${table} deleted!`)
+                setOpen(false)
+                router.refresh();
+            }
+            if (state.error) {
+                console.log(state.error)
+                toast.error('Something went wrong!')
+            }
+        }, [state, router])
+
         return type === "delete" && id ? (
-            <form action="" className="p-4 flex flex-col gap-4">
+            <form action={formAction} className="p-4 flex flex-col gap-4">
+                <input type="text | number" name="id" value={id} hidden />
                 <span className="text-center font-medium">Are you sure you want to delete this {table}?</span>
                 <button className="bg-red-700 text-white py-2 px-4 rounded:md border-none w-max self-center">Delete</button>
-            </form>) : type === "create" || type === "update" ? (
-                forms[table](type, data)
-            ) : "Form Not Found!"
+            </form>
+        ) : type === "create" || type === "update" ? (
+            forms[table](setOpen, type, data, relatedData)
+        ) : ("Form Not Found!")
     }
 
     return (

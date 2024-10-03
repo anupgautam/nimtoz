@@ -4,6 +4,7 @@ import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import Link from "next/link"
 import FormModal from "@/components/Lama/FormModal"
+import FormContainer from "@/components/Lama/FormContainer"
 import { Prisma, Venue } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
@@ -55,10 +56,10 @@ const renderRow = (item: VenueList) => (
         {/*//! Actions  */}
         <td>
             <div className="flex items-center gap-2">
-                <Link href={`/users/${item.id}`}>
-                    <FormModal table="Venue" type="update" />
-                </Link>
-                <FormModal table="Venue" type="delete" id={item.id} />
+                {/* <Link href={`/dashboard/venue/${item.id}`}> */}
+                <FormContainer table="Venue" type="update" data={item} id={item.id} />
+                {/* </Link> */}
+                <FormContainer table="Venue" type="delete" id={item.id} />
             </div>
         </td>
     </tr>
@@ -123,7 +124,7 @@ const VenueTable = async ({ searchParams }: { searchParams: { [key: string]: str
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
                         </button>
-                        <FormModal table="Venue" type="create" />
+                        <FormContainer table="Venue" type="create" />
                     </div>
                 </div>
             </div>
