@@ -10,7 +10,8 @@ import { useRouter } from "next/navigation";
 
 const VenueNavbar = () => {
 
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
+    console.log(session)
     const router = useRouter();
     const [sideMenu, setSideMenu] = useState(false);
     const [toggle, setToggle] = useState(false);
@@ -81,7 +82,7 @@ const VenueNavbar = () => {
                             <div ref={menuRef}>
                                 <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded={toggle} onClick={() => setToggle((prev) => !prev)}>
                                     <span className="sr-only">Open user menu</span>
-                                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+                                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" height={40} width={40}/>
                                 </button>
                             </div>
                             {toggle && (
@@ -104,7 +105,7 @@ const VenueNavbar = () => {
                                             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
                                         </li>
                                         <li>
-                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => signOut()}>Sign out</a>
+                                            <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => signOut()}>Sign out</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -114,7 +115,7 @@ const VenueNavbar = () => {
                         <button
                             type="button"
                             onClick={() => signIn()}
-                            className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out"
+                            className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out"
                         >
                             Sign In
                         </button>

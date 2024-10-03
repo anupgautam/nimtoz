@@ -6,17 +6,18 @@ import { NextResponse } from "next/server"
 export default withAuth(
     function middleware(request: NextRequestWithAuth) {
 
-        if (request.nextUrl.pathname.startsWith("/extra")
+        // if (request.nextUrl.pathname.startsWith("/dashboard/:path*")
+        if (request.nextUrl.pathname.startsWith("/dashboard")
             && request.nextauth.token?.role !== "Admin") {
             return NextResponse.rewrite(
-                new URL("/login", request.url)
+                new URL("/denied", request.url)
             )
         }
 
         if (request.nextUrl.pathname.startsWith('/registervenue')
             && request.nextauth.token?.role !== 'User') {
             return NextResponse.rewrite(
-                new URL("/login", request.url)
+                new URL("/denied", request.url)
             )
         }
 

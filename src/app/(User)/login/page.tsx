@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface User {
     email: string;
@@ -76,13 +77,13 @@ const LoginPage = () => {
             <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign in</h2>
+                        <h2 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Sign in</h2>
                         <p className="mt-2 text-sm text-gray-600">
                             Don&apos;t have an account?{' '}
                             <Link
                                 href="/register"
                                 title=""
-                                className="font-semibold text-black transition-all duration-200 hover:underline"
+                                className="font-semibold text-red-600 transition-all duration-200 hover:underline"
                             >
                                 Create a free account
                             </Link>
@@ -114,7 +115,7 @@ const LoginPage = () => {
                                         <Link
                                             href="forgot-password"
                                             title=""
-                                            className="text-sm font-semibold text-black hover:underline"
+                                            className="text-sm font-semibold text-red-600 hover:underline"
                                         >
                                             {' '}
                                             Forgot password?{' '}
@@ -135,7 +136,7 @@ const LoginPage = () => {
                                     <button
                                         type="submit"
                                         disabled={!formik.isValid || !formik.dirty} // Disable button if form is invalid or untouched
-                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-black hover:bg-black/80' : 'bg-gray-300 cursor-not-allowed'}`}
+                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300 cursor-not-allowed'}`}
                                     >
                                         Get started <ArrowRight className="ml-2" size={16} />
                                     </button>
@@ -146,10 +147,12 @@ const LoginPage = () => {
                 </div>
                 {/* Hide image on smaller screens */}
                 <div className="hidden lg:block h-full w-full">
-                    <img
+                    <Image
                         className="mx-auto h-full w-full rounded-md object-cover"
-                        src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+                        src="/login.svg"
                         alt="Login page illustration"
+                        height={200}
+                        width={200}
                     />
                 </div>
             </div>
