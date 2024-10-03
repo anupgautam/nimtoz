@@ -6,11 +6,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { role, teachersData } from "@/lib/data";
 import FormModal from "@/components/Lama/FormModal"
-import { Prisma, User } from "@prisma/client"
+import { EventType, Prisma } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
+import FormContainer from "@/components/Lama/FormContainer"
 
-type UserList = User
+type EventTypeList = EventType
 
 
 const columns = [
@@ -19,62 +20,40 @@ const columns = [
         accessor: "info",
     },
     {
-        header: "Role",
-        accessor: "role",
-        className: "hidden md:table-cell",
-    },
-    {
-        header: "Phone Number",
-        accessor: "phone_number",
-        className: "hidden md:table-cell",
-    },
-    {
         header: "Actions",
         accessor: "action",
     },
 ];
 
-const renderRow = (item: UserList) => (
+const renderRow = (item: EventTypeList) => (
     <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
-        <td className="flex items-center gap-4 p-4">
-            {/* <Image src={item.photo} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
-            <div className="flex flex-col">
-                <h3 className="font-semibold">{`${item.firstname} ${item.lastname}`}</h3>
-                <p className="text-xs text-gray-500">{item?.email}</p>
-            </div>
-        </td>
-        <td className="hidden md:table-cell">{item.role}</td>
-        <td className="hidden md:table-cell">{item.phone_number}</td>
+        <td className="font-semibold p-4">{item.title}</td>
         <td>
             <div className="flex items-center gap-2">
-                <Link href={`/dashboard/users/${item.id}`}>
-                    <FormModal type="update" table="User" />
-                </Link>
-                <FormModal table="User" type="delete" id={item.id} />
+                <FormContainer table="EventType" type="update" data={item} />
+                <FormContainer table="EventType" type="delete" id={item.id} />
             </div>
         </td>
     </tr>
 )
 
-const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
+const EventTypePage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
 
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
     //! URL Params Condition
-    const query: Prisma.UserWhereInput = {};
+    const query: Prisma.EventTypeWhereInput = {};
     if (queryParams) {
-        const searchConditions: Prisma.UserWhereInput[] = [];
+        const searchConditions: Prisma.EventTypeWhereInput[] = [];
 
         for (const [key, value] of Object.entries(queryParams)) {
             if (value !== undefined) {
                 switch (key) {
                     case "search":
                         searchConditions.push(
-                            { firstname: { contains: value.toLowerCase() } },
-                            { lastname: { contains: value.toLowerCase() } },
-                            { email: { contains: value.toLowerCase() } },
-                            { phone_number: { contains: value.toLowerCase() } },
+                            { title: { contains: value.toLowerCase() } },
+
                         );
                         break;
                     default:
@@ -91,12 +70,15 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
 
     //! Multiple request in prisma
     const [data, count] = await prisma.$transaction([
-        prisma.user.findMany({
+        prisma.eventType.findMany({
             where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
+            orderBy: {
+                updatedAt: "desc"
+            }
         }),
-        prisma.user.count({ where: query })
+        prisma.eventType.count({ where: query })
     ])
 
     return (
@@ -104,7 +86,7 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
 
             {/*//* Top  */}
             <div className="flex items-center justify-between">
-                <div className="hidden md:block text-lg font-semibold">Users {count}</div>
+                <div className="hidden md:block text-lg font-semibold">Event Types {count}</div>
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch />
                     <div className="flex items-center gap-4 self-end">
@@ -117,7 +99,8 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
                         {/* <button className="w-24 h-12 flex items-center justify-center rounded-md bg-red-300 ">
                             <Plus /> Add
                         </button> */}
-                        <FormModal table="User" type="create" />
+                        {/* <FormModal table="User" type="create" /> */}
+                        <FormContainer table="EventType" type="create" />
                     </div>
                 </div>
             </div>
@@ -130,4 +113,4 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
         </div>
     )
 }
-export default UsersPage
+export default EventTypePage

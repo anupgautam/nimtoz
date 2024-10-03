@@ -169,6 +169,9 @@ const BookingsPage = async ({ searchParams }: { searchParams: { [key: string]: s
             where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
+            orderBy: {
+                updatedAt: "desc"
+            }
         }),
         prisma.event.count({ where: query })
     ])

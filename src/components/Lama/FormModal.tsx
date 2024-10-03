@@ -8,14 +8,16 @@ import CategoryForm from "./forms/CategoryForm";
 import BlogForm from "./forms/BlogForm";
 import VenueForm from "./forms/VenueForm";
 import { useFormState } from "react-dom";
-import { deleteCategory, deleteVenue } from "@/lib/actions";
+import { deleteBlog, deleteCategory, deleteProduct, deleteVenue } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 
 const deleteActionMap: any = {
     Venue: deleteVenue,
-    Category:deleteCategory,
+    Category: deleteCategory,
+    Product: deleteProduct,
+    Blog: deleteBlog
 
 }
 // const ProductForm = dynamic(() => import("./forms/Productform"), {

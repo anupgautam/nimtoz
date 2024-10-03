@@ -12,7 +12,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
 import { Upload } from 'lucide-react'
 
-const BlogForm = ({
+const CategoryForm = ({
     type,
     data,
     setOpen
@@ -32,7 +32,7 @@ const BlogForm = ({
         criteriaMode: "all",
     })
 
-    const [img, setImg] = useState<any>(data?.image || null);
+    const [img, setImg] = useState<any>(data?.category_icon || null);
     const [state, formAction] = useFormState(type === "create" ? createCategory : updateCategory, {
         success: false,
         error: false
@@ -67,21 +67,27 @@ const BlogForm = ({
             </div>
             <form className='overflow-y-auto' onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-12 gap-2 sm:gap-6">
-                    <CldUploadWidget uploadPreset="NextJS_Nimtoz" onSuccess={(result, { widget }) => {
-                        setImg(result.info)
-                        widget.close()
-                    }}>
+                    <CldUploadWidget
+                        uploadPreset="NextJS_Nimtoz"
+                        options={{
+                            clientAllowedFormats: ['image'], // Restrict to image formats only
+                            maxFiles: 1                      // Allow only one file to be uploaded
+                        }}
+                        onSuccess={(result, { widget }) => {
+                            setImg(result.info)
+                            widget.close()
+                        }}>
                         {({ open }) => {
                             return (
                                 <>
                                     <div className="sm:col-span-3">
                                         <label className="inline-block text-sm text-gray-800 mt-2.5 ">
-                                            Blog Image
+                                            Category Icon
                                         </label>
                                     </div>
                                     <div className="sm:col-span-9">
                                         <div className="flex items-center gap-5">
-                                            {(img || data?.image) && (
+                                            {(img || data?.category_icon) && (
                                                 <div
                                                     style={{
                                                         width: '100px',
@@ -92,9 +98,9 @@ const BlogForm = ({
                                                 >
                                                     <Image
                                                         src={
-                                                            img?.secure_url || data?.image
+                                                            img?.secure_url || data?.category_icon
                                                         } // Use uploaded image or existing image in edit mode
-                                                        alt="Uploaded Image"
+                                                        alt={data?.category_name ? data.category_name : "Category Icon"}
                                                         width={100}
                                                         height={100}
                                                         objectFit="cover"
@@ -153,4 +159,4 @@ const BlogForm = ({
         </>
     )
 }
-export default BlogForm
+export default CategoryForm

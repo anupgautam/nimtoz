@@ -35,16 +35,14 @@ const VenueSidebar = ({ isHovered, setIsHovered }: { isHovered: boolean, setIsHo
                             key={item.id}
                             className={`group relative flex items-center py-1 gap-x-3 w-full ${isActive ? "text-red-600" : ""}`}
                         >
-                            <Link href={item.path} passHref>
-                                <div className="flex items-center w-full h-full hover:text-black gap-x-3 hover:translate-x-1 duration-500 hover:font-[450] font-[350]">
-                                    <h1 className="text-[1.6rem]">{item.icons}</h1>
-                                    <h2
-                                        className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
-                                    >
-                                        {item.title}
-                                    </h2>
-                                </div>
-                            </Link>
+                            <div className="flex items-center w-full h-full hover:text-black gap-x-3 hover:translate-x-1 duration-500 hover:font-[450] font-[350]">
+                                <h1 className="text-[1.6rem]">{item.icons}</h1>
+                                <h2
+                                    className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+                                >
+                                    {item.title}
+                                </h2>
+                            </div>
                         </div>
                     );
                 })}

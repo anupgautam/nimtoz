@@ -19,7 +19,7 @@ function CardWithCarousel({ key }: { key: number }) {
     };
 
     return (
-        <div key={key} className="w-full max-w-screen-sm bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+        <div key={key} className="w-full max-w-screen-sm bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
             {/* Carousel Image with navigation */}
             <div className="relative h-80">
                 <img className="w-full h-full object-cover" src={images[currentImage]} alt="venue image" />

@@ -93,10 +93,16 @@ const BlogForm = ({
                         </div>
                     </div> */}
 
-                    <CldUploadWidget uploadPreset="NextJS_Nimtoz" onSuccess={(result, { widget }) => {
-                        setImg(result.info)
-                        widget.close()
-                    }}>
+                    <CldUploadWidget
+                        uploadPreset="NextJS_Nimtoz"
+                        options={{
+                            clientAllowedFormats: ['image'],
+                            maxFiles: 1
+                        }}
+                        onSuccess={(result, { widget }) => {
+                            setImg(result.info)
+                            widget.close()
+                        }}>
                         {({ open }) => {
                             return (
                                 <>
@@ -120,7 +126,7 @@ const BlogForm = ({
                                                         src={
                                                             img?.secure_url || data?.image
                                                         } // Use uploaded image or existing image in edit mode
-                                                        alt="Uploaded Image"
+                                                        alt={data?.image ? data.image : "Blog Image"}
                                                         width={100}
                                                         height={100}
                                                         objectFit="cover"

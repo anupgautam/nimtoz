@@ -7,6 +7,7 @@ import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar";
 import VenueSidebar from "@/components/Navbar/sidebar/VenueSidebar/VenueSidebar";
 import ProductCardPage from "@/components/Cards/ProductCardPage";
 import { useState } from 'react'
+import MainContent from "@/components/Cards/ProductCardPage";
 
 export default function Home() {
 
@@ -26,6 +27,7 @@ export default function Home() {
       <main className="flex-grow -ml-16 md:ml-20 lg:ml-24 px-4 py-4">
         <h1 className='font-semibold text-[2rem] text-red-600 text-center -mb-1 z-100'>VENUE</h1>
         <ProductCardPage />
+        {/* <MainContent /> */}
       </main>
       <footer className="h-20">
         <Footer />

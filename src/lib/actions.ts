@@ -80,15 +80,21 @@ export const createProduct = async (CurrentState: CurrentState, data: ProductSch
                 price: data.price,
                 description: data.description,
                 address: data.address,
-                short_description: data.title,
-                // amenities: data.amenities,
-                // product_image: data.product_image,
-                // rules: data.rules,
-                // halls: data.halls,
-                // category: {
-                //     connect: data.category.map(categoryId => ({ id: categoryId }))
-                // }
-            }
+                short_description: data.short_description,
+                category_id: parseInt(data.category),
+                product_image: {
+                    create: data.product_image.map((url) => ({ url })), // Save each URL as a product image
+                },
+                halls: {
+                    create: data.halls, // Assuming halls is an array of Hall objects
+                },
+                amenities: {
+                    create: data.amenities, // Assuming amenities is an array of Amenity objects
+                },
+                rules: {
+                    create: data.rules, // Assuming rules is an array of Rule objects
+                },
+            },
         });
         return { success: true, error: false }
     }
@@ -103,22 +109,45 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
     try {
         await prisma.product.update({
             where: {
-                id: data.id,
+                id: Number(data.id),
             },
             data: {
                 title: data.title,
                 price: data.price,
                 description: data.description,
                 address: data.address,
-                short_description: data.title,
-                // amenities: data.amenities,
-                // product_image: data.product_image,
-                // rules: data.rules,
-                // halls: data.halls,
-                // category: {
-                //     set: data.category.map((categoryId) => ({ id: categoryId }))
-                // }
-            }
+                short_description: data.short_description,
+                category_id: parseInt(data.category),
+                product_image: {
+                    deleteMany: {},
+                    create: data.product_image.map((url) => ({ url })),
+                },
+
+                // Update Halls
+                halls: {
+                    deleteMany: {}, // Remove existing halls
+                    create: data.halls.map(hall => ({
+                        hall_name: hall.hall_name,
+                        hall_capacity: hall.hall_capacity,
+                    })),
+                },
+
+                // Update Amenities
+                amenities: {
+                    deleteMany: {}, // Remove existing amenities
+                    create: data.amenities.map(amenity => ({
+                        amenity_name: amenity.amenity_name,
+                    })),
+                },
+
+                // Update Rules
+                rules: {
+                    deleteMany: {}, // Remove existing rules
+                    create: data.rules.map(rule => ({
+                        description: rule.description,
+                    })),
+                },
+            },
         });
         return { success: true, error: false }
     }
@@ -128,6 +157,24 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
     }
 }
 
+//! Delete Products
+export const deleteProduct = async (CurrentState: CurrentState, data: FormData) => {
+    const id = data.get("id") as string
+    console.log(id)
+    try {
+        await prisma.product.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
 
 //! Create Blog
 export const createBlog = async (CurrentState: CurrentState, data: BlogSchema) => {

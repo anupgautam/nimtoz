@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '../InputField';
-import { venueSchema, VenueSchema } from '@/lib/formValidationSchemas';
+import { userSchema, UserSchema } from '@/lib/formValidationSchemas';
 import { createVenue, updateVenues } from '@/lib/actions';
 import { useFormState } from 'react-dom';
 import { Dispatch, SetStateAction, useEffect } from 'react';
@@ -15,15 +15,15 @@ const UserForm = ({ type, data, setOpen }: { type: "create" | "update"; data?: a
         register,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<VenueSchema>({
-        resolver: zodResolver(venueSchema),
+    } = useForm<UserSchema>({
+        resolver: zodResolver(userSchema),
         mode: "onChange",
         criteriaMode: "all",
     })
 
     //! After React 19 useActionState 
 
-    const [state, formAction] = useFormState(type === "create" ? createVenue : updateVenues, {
+    const [state, formAction] = useFormState(updateVenues, {
         success: false,
         error: false
     })
@@ -37,7 +37,7 @@ const UserForm = ({ type, data, setOpen }: { type: "create" | "update"; data?: a
 
     useEffect(() => {
         if (state.success) {
-            toast(`Venue ${type === "create" ? "created" : "updated"}`)
+            toast("User updated")
             setOpen(false)
             router.refresh();
         }
@@ -56,25 +56,6 @@ const UserForm = ({ type, data, setOpen }: { type: "create" | "update"; data?: a
             </div>
             <form className='overflow-y-auto' onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-12 gap-3 sm:gap-6">
-
-                    {/* <div className="sm:col-span-3">
-                        <label className="inline-block text-sm text-gray-800 mt-2.5 ">
-                            Blog Image
-                        </label>
-                    </div>
-
-                    <div className="sm:col-span-9">
-                        <div className="flex items-center gap-5">
-                            <img className="inline-block size-16 rounded-full ring-2 ring-white " src="https://preline.co/assets/img/160x160/img1.jpg" alt="Avatar" />
-                            <div className="flex gap-x-2">
-                                <div>
-                                    <button type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 ">
-                                        <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                     <InputField
                         name="venue_name"
                         label='Venue Name'
