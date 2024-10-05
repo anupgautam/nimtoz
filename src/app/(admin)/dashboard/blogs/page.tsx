@@ -2,7 +2,6 @@ import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
-import Link from "next/link"
 import FormContainer from "@/components/Lama/FormContainer"
 import { Blog, Prisma, User } from "@prisma/client"
 import prisma from "@/lib/db"

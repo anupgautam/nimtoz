@@ -6,7 +6,7 @@ const Blog = () => {
     return (
         <>
             {/* <header className="z-50"> */}
-            <VenueNavbar />
+                <VenueNavbar />
             {/* </header> */}
             <main className="pt-10">
                 <BlogPage />

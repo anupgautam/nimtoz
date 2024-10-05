@@ -95,8 +95,9 @@ export const blogSchema = z.object({
         .string()
         .min(50, { message: "Description must be at least 50 characters long!" })
         .max(200, { message: "Description cannot be more than 200 characters long!" }),
-    image: z.string().optional(),
-    authorId: z.number().optional()
+    image: z.string(),
+    authorId: z.number().optional(),
+    is_approved: z.boolean(),
 });
 
 export type BlogSchema = z.infer<typeof blogSchema>
@@ -107,9 +108,27 @@ export const categorySchema = z.object({
     category_name: z
         .string()
         .min(3, { message: "Category name must be at least 3 characters long!" }),
-    category_icon: z.string().optional()
+    category_icon: z.string()
 });
 
 export type CategorySchema = z.infer<typeof categorySchema>
+
+//! Add Booking Schema
+export const bookingSchema = z.object({
+    id: z.coerce.number().optional(),
+    start_date: z.string().optional().refine((val) => !val || !isNaN(Date.parse(val)), { message: "Invalid start_date" }),
+    end_date: z.string().optional().refine((val) => !val || !isNaN(Date.parse(val)), { message: "Invalid end_date" }),
+    Hall: z
+        .array(z.object({
+            hall_name: z.string().min(1, { message: "Hall name is required." }),
+            hall_capacity: z.number().min(1, { message: "Hall capacity must be at least 1." }),
+        })).optional(),
+    authorId: z.number().optional(),
+    is_approved: z.boolean().optional(),
+    approved_by_id: z.number().optional(),
+    productId: z.number(),
+});
+
+export type BookingSchema = z.infer<typeof bookingSchema>
 
 

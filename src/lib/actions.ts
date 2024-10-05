@@ -1,8 +1,7 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
 import prisma from "./db";
-import { BlogSchema, CategorySchema, ProductSchema, VenueSchema } from "./formValidationSchemas"
+import { BlogSchema, BookingSchema, CategorySchema, ProductSchema, VenueSchema } from "./formValidationSchemas"
 
 type CurrentState = { success: boolean; error: boolean }
 
@@ -83,7 +82,7 @@ export const createProduct = async (CurrentState: CurrentState, data: ProductSch
                 short_description: data.short_description,
                 category_id: parseInt(data.category),
                 product_image: {
-                    create: data.product_image.map((url) => ({ url })), // Save each URL as a product image
+                    create: data?.product_image && data.product_image.map((url) => ({ url })), // Save each URL as a product image
                 },
                 halls: {
                     create: data.halls, // Assuming halls is an array of Hall objects
@@ -120,13 +119,13 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
                 category_id: parseInt(data.category),
                 product_image: {
                     deleteMany: {},
-                    create: data.product_image.map((url) => ({ url })),
+                    create: data?.product_image && data.product_image.map((url) => ({ url })),
                 },
 
                 // Update Halls
                 halls: {
                     deleteMany: {}, // Remove existing halls
-                    create: data.halls.map(hall => ({
+                    create: data.halls && data.halls.map(hall => ({
                         hall_name: hall.hall_name,
                         hall_capacity: hall.hall_capacity,
                     })),
@@ -135,7 +134,7 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
                 // Update Amenities
                 amenities: {
                     deleteMany: {}, // Remove existing amenities
-                    create: data.amenities.map(amenity => ({
+                    create: data?.amenities && data.amenities.map(amenity => ({
                         amenity_name: amenity.amenity_name,
                     })),
                 },
@@ -143,7 +142,7 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
                 // Update Rules
                 rules: {
                     deleteMany: {}, // Remove existing rules
-                    create: data.rules.map(rule => ({
+                    create: data?.rules && data.rules.map(rule => ({
                         description: rule.description,
                     })),
                 },
@@ -183,8 +182,10 @@ export const createBlog = async (CurrentState: CurrentState, data: BlogSchema) =
             data: {
                 title: data.title,
                 image: data.image,
+                short_description: data.title,
                 description: data.description,
-                authorId: data.authorId
+                authorId: data.authorId,
+                is_approved: data.is_approved
             }
         });
         // revalidatePath('/dashboard/venue')
@@ -208,7 +209,8 @@ export const updateBlog = async (CurrentState: CurrentState, data: BlogSchema) =
                 image: data.image,
                 short_description: data.title,
                 description: data.description,
-                authorId: data.authorId
+                authorId: data.authorId,
+                is_approved: data.is_approved
             }
         });
         // revalidatePath('/dashboard/venue')
@@ -256,7 +258,7 @@ export const createCategory = async (CurrentState: CurrentState, data: CategoryS
     }
 }
 
-//! Update Blog 
+//! Update Category 
 export const updateCategory = async (CurrentState: CurrentState, data: CategorySchema) => {
     try {
         await prisma.category.update({
@@ -277,11 +279,49 @@ export const updateCategory = async (CurrentState: CurrentState, data: CategoryS
     }
 }
 
-//! Delete Blog
+//! Delete Category
 export const deleteCategory = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
     try {
         await prisma.category.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
+
+//! Update Booking 
+export const updateBooking = async (CurrentState: CurrentState, data: BookingSchema) => {
+    try {
+        await prisma.event.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                is_approved: data.is_approved
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
+
+//! Delete Blog
+export const deleteBooking = async (CurrentState: CurrentState, data: FormData) => {
+    const id = data.get("id") as string
+    try {
+        await prisma.event.delete({
             where: {
                 id: parseInt(id)
             }

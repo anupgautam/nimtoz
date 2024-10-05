@@ -9,24 +9,15 @@ import { useState } from "react";
 
 const MainContent = async () => {
 
-    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <>
-            {/*//! Sidebar  */}
-            <VenueSidebar isHovered={isHovered} setIsHovered={setIsHovered} />
-
-            {/*//! Search  */}
-
-
             {/*//! Main content  */}
             <div className="flex-shrink md:ml-20 lg:ml-24 px-4">
                 <div className="mx-auto grid w-full max-w-7xl items-center space-y-4 px-2 py-10 sm:grid-cols-1 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-3">
-                    {/* {Array.from({ length: 8 }).map((_, i) => (
-                    // <CardWithCarousel key={i} />
-                    // <ProductCard key={i} />
-                    <VenueCard data={products} />
-                    ))} */}
+                    {/* <CardWithCarousel key={i} /> */}
+                    {/* <ProductCard key={i} /> */}
+                    {/* <VenueCard data={products} /> */}
                     <h1>Hello There</h1>
                 </div>
             </div>

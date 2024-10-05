@@ -297,7 +297,6 @@ const ProductForm = ({
                     </div>
 
                     <div className="sm:col-span-9">
-
                         <select
                             {...register("category")}
                             className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0
@@ -316,6 +315,7 @@ const ProductForm = ({
                             <p className="text-xs text-red-600">{errors?.category.message.toString()}</p>
                         )}
                     </div>
+                    
                     {/*//! Multiple Halls  */}
                     {halls.map((hall, index) => (
                         <div key={index} className="sm:col-span-12 flex items-center gap-1">

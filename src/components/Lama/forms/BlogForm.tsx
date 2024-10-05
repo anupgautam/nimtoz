@@ -30,6 +30,7 @@ const BlogForm = ({
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors, isValid },
     } = useForm<BlogSchema>({
         resolver: zodResolver(blogSchema),
@@ -44,6 +45,7 @@ const BlogForm = ({
     })
 
     const onSubmit = handleSubmit((formData) => {
+        console.log(formData)
         formAction({
             ...formData,
             image: img?.secure_url || img, // Use uploaded image or existing one
@@ -60,6 +62,11 @@ const BlogForm = ({
             router.refresh()
         }
     }, [state])
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue('is_approved', event.target.checked);
+    };
+
 
     return (
         <>
@@ -143,10 +150,22 @@ const BlogForm = ({
                         }}
                     </CldUploadWidget>
 
+                    {session?.user.role === "Admin" &&
+                        <InputField
+                            name="is_approved"
+                            label='Is Approved'
+                            type="checkbox"
+                            defaultValue={data?.is_approved}
+                            register={register}
+                            error={errors?.is_approved}
+                            placeholder='Title of the Blog'
+                            onChange={handleCheckboxChange}
+                        />
+                    }
                     <InputField
                         name="title"
                         label='Title'
-                        type="string"
+                        type="boolean"
                         defaultValue={data?.title}
                         register={register}
                         error={errors?.title}

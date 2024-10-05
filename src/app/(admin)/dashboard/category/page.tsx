@@ -33,7 +33,7 @@ const renderRow = (item: CategoryList) => (
 
         {/* <td className="font-semibold gap-4 p-4">{item.category_icon}</td> */}
         <td className="flex items-center gap-4 p-4">
-            <Image src={item.category_icon} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" />
+            <Image src={item.category_icon} alt="" width={40} height={40} className="xl:block w-10 h-10 rounded-full object-cover" />
             <div className="flex flex-col">
                 {/* <h3 className="font-semibold">{item.title}</h3> */}
             </div>

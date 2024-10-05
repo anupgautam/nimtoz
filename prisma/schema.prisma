@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client-js"
@@ -20,23 +16,25 @@ enum Role {
 
 //! User 
 model User {
-  id                       Int        @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
   firstname                String
   lastname                 String
-  email                    String     @unique
+  email                    String    @unique
   password                 String
-  phone_number             String     @unique
+  phone_number             String    @unique
   role                     Role
   avatar                   String?
   resetPasswordToken       String?
   resetPasswordTokenExpiry DateTime?
-  createdAt                DateTime   @default(now()) @map("created_at")
-  updatedAt                DateTime   @updatedAt @map("updated_at")
-  Wishlist                 Wishlist[]
-  events_approved          Event[]    @relation("Approved Events")
-  events_booked            Event[]    @relation("Booked Events")
-  blogs_approved           Blog[]     @relation("ApprovedBlogs")
-  blogs_author             Blog[]     @relation("BlogAuthor")
+  createdAt                DateTime  @default(now()) @map("created_at")
+  updatedAt                DateTime  @updatedAt @map("updated_at")
+
+  Wishlist Wishlist[]
+
+  // Correct relation for events_booked
+  events_booked  Event[]
+  blogs_approved Blog[]  @relation("ApprovedBlogs")
+  blogs_author   Blog[]  @relation("BlogAuthor")
 }
 
 //! Category Table
@@ -59,7 +57,7 @@ model Wishlist {
   updatedAt DateTime  @updatedAt @map("updated_at")
 }
 
-//! Ameneties
+//! Amenities
 model Amenities {
   id           Int    @id @default(autoincrement())
   amenity_name String
@@ -94,7 +92,6 @@ model Product {
 }
 
 //! Hall
-
 model Hall {
   id            Int      @id @default(autoincrement())
   hall_name     String
@@ -125,7 +122,7 @@ model ProductImage {
   id  Int    @id @default(autoincrement())
   url String
 
-  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -161,23 +158,25 @@ model Venue {
 
 //! Event Table
 model Event {
-  id         Int      @id @default(autoincrement())
-  start_date DateTime
-  end_date   DateTime
-  start_time DateTime
-  end_time   DateTime
-
-  events         EventType[]
-  is_approved    Boolean
-  approved_by    User?       @relation("Approved Events", fields: [approved_by_id], references: [id])
-  approved_by_id Int?
-  User           User        @relation("Booked Events", fields: [userId], references: [id])
+  id             Int       @id @default(autoincrement())
+  start_date     DateTime
+  end_date       DateTime
+  start_time     DateTime?
+  end_time       DateTime?
+  is_approved    Boolean   @default(false)
+  is_rejected    Boolean   @default(false)
   userId         Int
-  product        Product     @relation(fields: [productId], references: [id])
-  productId      Int         @unique
-  Hall           Hall[]
-  createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime    @updatedAt @map("updated_at")
+  productId      Int
+  approved_by_id Int? // Added field for relation with User
+
+  // Relations
+  // Remove the unique constraint from productId
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  Product   Product     @relation(fields: [productId], references: [id])
+  Hall      Hall[]
+  EventType EventType[]
+  User      User        @relation(fields: [userId], references: [id])
 }
 
 model EventType {

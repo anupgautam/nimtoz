@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 const VenueNavbar = () => {
 
     const { data: session } = useSession();
-    console.log(session)
     const router = useRouter();
     const [sideMenu, setSideMenu] = useState(false);
     const [toggle, setToggle] = useState(false);
@@ -46,11 +45,16 @@ const VenueNavbar = () => {
     //     return null;
     // }
 
+
     const firstNav = [
         { id: 1, title: "Venue", path: "/" },
         { id: 2, title: "Blog", path: "/blogs" },
         { id: 3, title: "About Us", path: "/aboutus" },
     ];
+
+    useEffect(() => {
+        // console.log("Current session:", session);
+    }, [session]);
 
 
     return (
@@ -82,7 +86,7 @@ const VenueNavbar = () => {
                             <div ref={menuRef}>
                                 <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded={toggle} onClick={() => setToggle((prev) => !prev)}>
                                     <span className="sr-only">Open user menu</span>
-                                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" height={40} width={40}/>
+                                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" height={40} width={40} />
                                 </button>
                             </div>
                             {toggle && (
@@ -105,7 +109,11 @@ const VenueNavbar = () => {
                                             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
                                         </li>
                                         <li>
-                                            <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => signOut()}>Sign out</Link>
+                                            <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start" onClick={(e) => {
+                                                e.preventDefault();
+                                                signOut({ callbackUrl: '/' });
+                                                console.log("Logged Out", session)
+                                            }}>Sign out</button>
                                         </li>
                                     </ul>
                                 </div>
