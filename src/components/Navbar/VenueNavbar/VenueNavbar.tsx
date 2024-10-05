@@ -31,24 +31,9 @@ const VenueNavbar = () => {
     }, []);
     const currentPath = usePathname();
 
-    // useEffect(() => {
-    //     if (status === "unauthenticated") {
-    //         router.push('/login');
-    //     }
-    // }, [status, router]);
-
-    // if (status === "loading") {
-    //     return null; 
-    // }
-
-    // if (!session?.user) {
-    //     return null;
-    // }
-
-
     const firstNav = [
         { id: 1, title: "Venue", path: "/" },
-        { id: 2, title: "Blog", path: "/blogs" },
+        { id: 2, title: "Blogs", path: "/blogs" },
         { id: 3, title: "About Us", path: "/aboutus" },
     ];
 
@@ -61,11 +46,11 @@ const VenueNavbar = () => {
         <div className="fixed w-full border-b border-gray-300 bg-white font-poppins z-50" style={{ height: '80px' }}> {/* Adjust the height here */}
             <div className="flex justify-between items-center h-full container mx-auto relative">
                 <h1>LOGO</h1>
-                <div className="hidden lg:flex gap-x-4 ml-[4.6rem] items-center">
+                <div className="hidden lg:flex gap-x-16 ml-[4.6rem] items-center text-lg">
                     {firstNav.map((item) => {
                         const isActive = currentPath === item.path;
                         return (
-                            <div key={item.id} className="font-[500]">
+                            <div key={item.id} className="font-[700]">
                                 <Link href={item.path}>
                                     <h1 className={` ${isActive ? "text-red-600 ease-in" : " text-stone-400"}`}>
                                         {item.title}

@@ -6,18 +6,20 @@ import CategoryForm from "./forms/CategoryForm";
 import BlogForm from "./forms/BlogForm";
 import VenueForm from "./forms/VenueForm";
 import { useFormState } from "react-dom";
-import { deleteBlog, deleteBooking, deleteCategory, deleteProduct, deleteVenue } from "@/lib/actions";
+import { deleteBlog, deleteBooking, deleteCategory, deleteEventType, deleteProduct, deleteVenue } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 import BookingForm from "./forms/BookingForm";
+import EventTypeForm from "./forms/EventTypeForm";
 
 const deleteActionMap: any = {
     Venue: deleteVenue,
     Category: deleteCategory,
     Product: deleteProduct,
     Blog: deleteBlog,
-    Booking: deleteBooking
+    Booking: deleteBooking,
+    EventType: deleteEventType
 
 }
 // const ProductForm = dynamic(() => import("./forms/Productform"), {
@@ -71,6 +73,12 @@ const forms: {
         />,
     Booking: (setOpen, type, data) =>
         <BookingForm
+            type={type}
+            data={data}
+            setOpen={setOpen}
+        />,
+    EventType: (setOpen, type, data) =>
+        <EventTypeForm
             type={type}
             data={data}
             setOpen={setOpen}

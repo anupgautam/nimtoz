@@ -25,6 +25,16 @@ export const venueSchema = z.object({
 
 export type VenueSchema = z.infer<typeof venueSchema>
 
+//! Venue Form Validation Schema
+export const eventTypeSchema = z.object({
+    id: z.coerce.number().optional(),
+    title: z
+        .string()
+        .min(3, { message: "Event Type must be at least 3 characters long!" }),
+});
+
+export type EventTypeSchema = z.infer<typeof eventTypeSchema>
+
 //! User Form Validation Schema
 export const userSchema = z.object({
     id: z.coerce.number().optional(),
@@ -95,9 +105,9 @@ export const blogSchema = z.object({
         .string()
         .min(50, { message: "Description must be at least 50 characters long!" })
         .max(200, { message: "Description cannot be more than 200 characters long!" }),
-    image: z.string(),
+    image: z.string().optional(),
     authorId: z.number().optional(),
-    is_approved: z.boolean(),
+    is_approved: z.boolean().optional(),
 });
 
 export type BlogSchema = z.infer<typeof blogSchema>
@@ -108,7 +118,7 @@ export const categorySchema = z.object({
     category_name: z
         .string()
         .min(3, { message: "Category name must be at least 3 characters long!" }),
-    category_icon: z.string()
+    category_icon: z.string().optional()
 });
 
 export type CategorySchema = z.infer<typeof categorySchema>

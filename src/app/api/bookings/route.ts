@@ -32,19 +32,16 @@ export async function POST(req: Request) {
         const startDate = new Date(start_date);
         const endDate = new Date(end_date);
 
-        // Check for overlapping bookings
         const overlappingBooking = await prisma.event.findFirst({
             where: {
                 productId: productId,
-                AND: [
+                OR: [
                     {
                         start_date: {
-                            lte: endDate
+                            lt: endDate,
                         },
-                    },
-                    {
                         end_date: {
-                            gte: startDate,
+                            gt: startDate,
                         },
                     },
                 ],
@@ -52,7 +49,6 @@ export async function POST(req: Request) {
         });
 
         if (overlappingBooking) {
-            // Format dates for readability
             const startDateFormatted = new Date(start_date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',

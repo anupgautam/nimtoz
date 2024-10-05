@@ -1,7 +1,7 @@
 "use server"
 
 import prisma from "./db";
-import { BlogSchema, BookingSchema, CategorySchema, ProductSchema, VenueSchema } from "./formValidationSchemas"
+import { BlogSchema, BookingSchema, CategorySchema, EventTypeSchema, ProductSchema, VenueSchema } from "./formValidationSchemas"
 
 type CurrentState = { success: boolean; error: boolean }
 
@@ -317,11 +317,67 @@ export const updateBooking = async (CurrentState: CurrentState, data: BookingSch
     }
 }
 
-//! Delete Blog
+//! Delete Booking
 export const deleteBooking = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
     try {
         await prisma.event.delete({
+            where: {
+                id: parseInt(id)
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
+
+//! Create Event Type 
+export const createEventType = async (CurrentState: CurrentState, data: EventTypeSchema) => {
+    try {
+        await prisma.eventType.create({
+            data: {
+                title: data.title
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
+
+//! Update Event Type 
+export const updateEventType = async (CurrentState: CurrentState, data: EventTypeSchema) => {
+    try {
+        await prisma.eventType.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                title: data.title
+            }
+        });
+        // revalidatePath('/dashboard/venue')
+        return { success: true, error: false }
+    }
+    catch (err) {
+        console.log(err)
+        return { success: false, error: true }
+    }
+}
+
+//! Delete EventType
+export const deleteEventType = async (CurrentState: CurrentState, data: FormData) => {
+    const id = data.get("id") as string
+    console.log(id)
+    try {
+        await prisma.eventType.delete({
             where: {
                 id: parseInt(id)
             }

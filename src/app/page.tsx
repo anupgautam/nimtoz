@@ -66,17 +66,11 @@ const HomePage: React.FC = () => {
         <VenueNavbar />
       </header>
       <div className="flex">
-        {/* <Sidebar
-          filters={{ categories, onCategoryChange: handleCategoryChange }}
-        /> */}
-
         <div className="flex-grow p-4">
           <div className=' flex justify-center items-center mb-4'>
             <SearchBar onSearch={handleSearch} />
           </div>
           <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} />
-          {/* <ProductList products={products} /> */}
-          {/* <VenueCard data={products} /> */}
           <ChatCard data={products} />
         </div>
       </div>
