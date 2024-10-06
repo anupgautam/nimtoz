@@ -41,10 +41,8 @@ export default function RootLayout({
         className={`${poppins.className} antialiased`}
       >
         <Provider>
-          <main>
-            {children}
-            <ToastContainer position="bottom-right" />
-          </main>
+          {children}
+          <ToastContainer position="bottom-right" />
         </Provider>
       </body>
     </html>

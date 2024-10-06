@@ -79,8 +79,8 @@ const CategoryTable = async ({ searchParams }: { searchParams: { [key: string]: 
             where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
-            orderBy:{
-                updatedAt:"desc"
+            orderBy: {
+                updatedAt: "desc"
             }
         }),
         prisma.category.count({ where: query })

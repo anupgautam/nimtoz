@@ -38,14 +38,8 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
 
     return (
         <>
-            {/* <ImageCarousel /> */}
-
-            <header className="z-50">
-                <VenueNavbar />
-            </header>
-
             {/* //! Images wala section */}
-            <div className="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+            <div className="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto mt-20">
                 <div className="flex flex-col lg:flex-row mt-10">
                     {/* Main Image */}
                     <div className="lg:w-1/2">
@@ -53,22 +47,25 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
                             <Image
                                 className="rounded-xl w-full h-[26rem] object-cover"
                                 src={product.product_image[0]?.url}
-                                height={30}
-                                width={40}
+                                height={60}
+                                width={100}
                                 alt="Product Image"
+                                sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
                             />
                         )}
                     </div>
 
-                    {/* Smaller Images */}
                     <div className="lg:w-1/2 lg:pl-10 flex flex-col lg:flex-row lg:justify-between">
                         <div className="grid grid-cols-2 gap-6 mt-5 lg:mt-0">
                             {product?.product_image?.slice(1).map((image: { url: string }, index: number) => (
-                                <img
+                                <Image
                                     key={index}
                                     className="w-full h-48 object-cover rounded-lg"
                                     src={image.url}
                                     alt={`Smaller Image ${index + 1}`}
+                                    height={60}
+                                    width={40}
+                                    sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
                                 />
                             ))}
                         </div>
@@ -77,16 +74,34 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
             </div>
 
             {/* //! Description section */}
-            {/*//! Booking Section  */}
-            <div className="max-w-[85rem] px-4 py-1 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+            <div className="max-w-[85rem] px-4 py-1 sm:px-6 lg:px-8 lg:py-6 mx-auto">
                 <div className="grid md:grid-cols-2 items-center gap-12">
+                    {/*//! Description  */}
                     <div className="sm:mt-10 lg:mt-0">
-                        <div className="space-y-6 sm:space-y-8">
-                            <div className="space-y-2 md:space-y-4">
+                        <div className="space-y-4 sm:space-y-6">
+                            <div className="space-y-1 md:space-y-2">
                                 <h2 className="font-bold text-1xl lg:text-2xl text-gray-800 ">
-                                    {product && product.title}
+                                    {product && product.title} <span className="inline text-sm font-normal">
+                                        <Users className="ml-2 inline text-sm font-normal" />
+                                        {product && product.halls.length > 0
+                                            ? ` ${product.halls.reduce((sum: any, hall: any) => sum + hall.hall_capacity, 0)}`
+                                            : ' (No halls available)'}
+
+                                    </span>
                                 </h2>
-                                <p className="text-gray-500 ">
+                                <p className="text-gray-500 font-thin text-sm">
+                                    {product && product.address}
+                                </p>
+                                <h4 className="text-gray-500 font-bold text-sm">
+                                    Starting from Rs.{product && product.price}
+                                </h4>
+                            </div>
+                            <hr />
+                            <div className="space-y-1 md:space-y-2">
+                                <h3 className="font-normals text-1xl lg:text-xl text-gray-800 ">
+                                    About {product && product.title}
+                                </h3>
+                                <p className="text-gray-500 font-thin text-sm">
                                     {product && product.description}
                                 </p>
                             </div>
@@ -131,7 +146,6 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
                                             ? ` (${product.halls.reduce((sum: any, hall: any) => sum + hall.hall_capacity, 0)})`
                                             : ' (No halls available)'}
                                     </span>
-                                    <Users className="ml-2" /> {/* Add margin to the left for spacing */}
                                 </h2>
                                 {product && product.halls.map((hall: any, id: number) => (
                                     <li key={id} className="flex gap-x-3">
@@ -150,12 +164,11 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
 
                         </div>
                     </div>
+
                     <BookingForm product={product} halls={halls} />
                 </div>
             </div>
 
-            {/* //! Footer section */}
-            <Footer />
         </>
     )
 }

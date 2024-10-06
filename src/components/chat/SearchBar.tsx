@@ -15,15 +15,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full md:w-auto flex items-center gap-2 text-xs rounded-md ring-[1.5px] ring-gray-300 px-2 mt-8">
-            <Search />
+        <form onSubmit={handleSubmit} className="w-1/2 md:w-1/2 flex gap-2 text-xs rounded-md ring-[1.5px] ring-red-300 active:ring-red-500 px-4 relative h-10 mb-12 z-40 mt-24 mx-auto">
+            <Search className='mt-2'/>
             <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for products"
-                // className="w-[250px] p-2 bg-transparent outline-none border-none focus:ring-0"
-                className="w-full p-2 bg-transparent outline-none border-none focus:ring-0"
+                className="ml-8 w-full p-2 bg-transparent outline-none border-none focus:ring-0 absolute"
             />
         </form>
     );

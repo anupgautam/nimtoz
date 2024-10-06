@@ -1,5 +1,4 @@
 
-
 const Table = ({
     columns,
     renderRow,
@@ -26,3 +25,4 @@ const Table = ({
 };
 
 export default Table;
+

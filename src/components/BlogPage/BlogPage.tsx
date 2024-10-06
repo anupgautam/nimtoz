@@ -52,13 +52,11 @@ const BlogPage = () => {
         <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
             <h1 className='font-semibold text-[2rem] text-red-600 text-center -mb-1 z-100 pb-4'>Blogs</h1>
 
-            <div className="flex justify-between">
-                {session?.user &&
-                    <div className="flex justify-end">
-                        <FormModal table="Blog" type="create" />
-                    </div>
-                }
-            </div>
+            {session?.user &&
+                <div className="flex justify-end">
+                    <FormModal table="Blog" type="create" />
+                </div>
+            }
 
 
             <div className="grid lg:grid-cols-2 gap-6">

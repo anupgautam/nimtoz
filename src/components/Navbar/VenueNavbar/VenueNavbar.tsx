@@ -43,19 +43,20 @@ const VenueNavbar = () => {
 
 
     return (
-        <div className="fixed w-full border-b border-gray-300 bg-white font-poppins z-50" style={{ height: '80px' }}> {/* Adjust the height here */}
-            <div className="flex justify-between items-center h-full container mx-auto relative">
+        <header className="fixed w-full border-b border-gray-300 bg-white font-poppins top-0 h-20 z-50" > {/* Adjust the height here */}
+            <div className="flex justify-between items-center h-full container mx-auto">
                 <h1>LOGO</h1>
-                <div className="hidden lg:flex gap-x-16 ml-[4.6rem] items-center text-lg">
+                <div className={`hidden lg:flex gap-x-16 ml-[4.6rem] items-center text-lg `}>
                     {firstNav.map((item) => {
                         const isActive = currentPath === item.path;
                         return (
                             <div key={item.id} className="font-[700]">
                                 <Link href={item.path}>
-                                    <h1 className={` ${isActive ? "text-red-600 ease-in" : " text-stone-400"}`}>
+                                    <h1 className={` ${isActive ? " text-red-600 ease-in" : " text-stone-400"}`}>
                                         {item.title}
                                     </h1>
                                 </Link>
+                                
                             </div>
                         );
                     })}
@@ -77,7 +78,7 @@ const VenueNavbar = () => {
                             {toggle && (
                                 <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
                                     <div className="px-4 py-3">
-                                        <p className="text-sm text-gray-900">{session?.user.firstname}</p>
+                                        <p className="text-sm text-gray-900">{session?.user.firstname + " " + session.user.lastname}</p>
                                         <p className="text-sm font-medium text-gray-900 truncate">{session?.user.email}</p>
                                     </div>
 
@@ -88,15 +89,10 @@ const VenueNavbar = () => {
                                             </li>
                                         }
                                         <li>
-                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>
-                                        </li>
-                                        <li>
                                             <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start" onClick={(e) => {
                                                 e.preventDefault();
-                                                signOut({ callbackUrl: '/' });
+                                                e.stopPropagation();
+                                                signOut({ callbackUrl: '/login' });
                                                 console.log("Logged Out", session)
                                             }}>Sign out</button>
                                         </li>
@@ -135,7 +131,7 @@ const VenueNavbar = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </header>
     );
 };
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Sidebar from '@/components/chat/Sidebar';
 import SearchBar from '@/components/chat/SearchBar';
 import ProductList from '@/components/chat/ProductList';
@@ -62,21 +62,11 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <header className="z-50 h-20">
-        <VenueNavbar />
-      </header>
-      <div className="flex">
-        <div className="flex-grow p-4">
-          <div className=' flex justify-center items-center mb-4'>
-            <SearchBar onSearch={handleSearch} />
-          </div>
-          <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} />
-          <ChatCard data={products} />
-        </div>
-      </div>
-      <footer className="h-20">
-        <Footer />
-      </footer>
+      <SearchBar onSearch={handleSearch} />
+      <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} />
+      <Suspense>
+        <ChatCard data={products} />
+      </Suspense>
     </>
   );
 };
