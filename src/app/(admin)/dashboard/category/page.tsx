@@ -3,10 +3,11 @@ import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import Link from "next/link"
-import FormModal from "@/components/Lama/FormModal"
 import { Category, Prisma, Product } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
+import FormContainer from "@/components/Lama/FormContainer"
+import Image from "next/image"
 
 // type CategoryList = Category & {products:Product[]} & {classes:Class}
 type CategoryList = Category & { products: Product[] }
@@ -30,16 +31,21 @@ const columns = [
 const renderRow = (item: CategoryList) => (
     <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
 
-        <td className="font-semibold gap-4 p-4">{item.category_icon}</td>
-
+        {/* <td className="font-semibold gap-4 p-4">{item.category_icon}</td> */}
+        <td className="flex items-center gap-4 p-4">
+            <Image src={item.category_icon} alt="" width={40} height={40} className="xl:block w-10 h-10 rounded-full object-cover" />
+            <div className="flex flex-col">
+                {/* <h3 className="font-semibold">{item.title}</h3> */}
+            </div>
+        </td>
         <td className="hidden md:table-cell">{item.category_name}</td>
 
         <td>
             <div className="flex items-center gap-2">
-                <Link href={`/dashboard/category/${item.id}`}>
-                    <FormModal table="Category" type="update" />
-                </Link>
-                <FormModal table="Category" type="delete" id={item.id} />
+                {/* <Link href={`/dashboard/category/${item.id}`}> */}
+                <FormContainer table="Category" type="update" data={item} />
+                {/* </Link> */}
+                <FormContainer table="Category" type="delete" id={item.id} />
             </div>
         </td>
     </tr>
@@ -73,6 +79,9 @@ const CategoryTable = async ({ searchParams }: { searchParams: { [key: string]: 
             where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
+            orderBy: {
+                updatedAt: "desc"
+            }
         }),
         prisma.category.count({ where: query })
     ])
@@ -92,7 +101,7 @@ const CategoryTable = async ({ searchParams }: { searchParams: { [key: string]: 
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
                         </button>
-                        <FormModal table="Category" type="create" />
+                        <FormContainer table="Category" type="create" />
                     </div>
                 </div>
             </div>

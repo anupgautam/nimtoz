@@ -1,11 +1,6 @@
 'use client'
 import { useState } from 'react';
 
-const images = [
-    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2F274bfac8-9a91-482b-b582-dc09e1fd84a9.jpg&w=1080&q=75",
-    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2Fcee945a7-23fc-4d4d-9ac2-354b612cd86d.jpg&w=1080&q=75",
-    "https://bookvenuenepal.com/_next/image?url=https%3A%2F%2Fapi.bookvenuenepal.com%2Fmedia%2Fvenue_images%2Fb6913a32-d647-4124-8cec-24173f39ab35.jpg&w=1080&q=75"
-];
 
 function CardWithCarousel({ key }: { key: number }) {
     const [currentImage, setCurrentImage] = useState(0);
@@ -19,7 +14,7 @@ function CardWithCarousel({ key }: { key: number }) {
     };
 
     return (
-        <div key={key} className="w-full max-w-screen-sm bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+        <div key={key} className="w-full max-w-screen-sm bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
             {/* Carousel Image with navigation */}
             <div className="relative h-80">
                 <img className="w-full h-full object-cover" src={images[currentImage]} alt="venue image" />

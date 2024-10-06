@@ -1,8 +1,12 @@
+'use client'
+import BookingForm from "../BookingForm/BookingForm"
 import ImageCarousel from "../Carousel/ImageCarousel"
 import Footer from "../Footer/Footer"
 import VenueNavbar from "../Navbar/VenueNavbar/VenueNavbar"
 
-const ProductDetailPage = () => {
+const ProductDetailPage = ({ params }: { params: { id: string } }) => {
+    // const id = params;
+    console.log(params)
     return (
         <>
             {/* <ImageCarousel /> */}
@@ -56,6 +60,7 @@ const ProductDetailPage = () => {
                 <div className="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
                     <div className="mt-5 sm:mt-10 lg:mt-0">
                         <div className="space-y-6 sm:space-y-8">
+
                             <div className="space-y-2 md:space-y-4">
                                 <h2 className="font-bold text-1xl lg:text-2xl text-gray-800 ">
                                     Park Village Resort
@@ -99,6 +104,7 @@ const ProductDetailPage = () => {
                                     </div>
                                 </li>
                             </ul>
+
                         </div>
                     </div>
                 </div>
@@ -252,10 +258,10 @@ const ProductDetailPage = () => {
                             </ul>
                         </div>
                     </div>
-                    <div className="relative">
+                    {/* <div className="relative">
                         <div className="flex flex-col border rounded-xl p-4 sm:p-6 lg:p-10 ">
                             <h2 className="text-xl font-semibold text-gray-800 ">
-                                Fill in the form
+                                Book Now
                             </h2>
 
                             <form>
@@ -315,7 +321,8 @@ const ProductDetailPage = () => {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                    <BookingForm />
                 </div>
             </div>
 

@@ -1,45 +1,72 @@
 'use client'
 import { useForm } from 'react-hook-form';
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import InputField from '../InputField';
 import TextField from '../TextField';
+import { blogSchema, BlogSchema } from '@/lib/formValidationSchemas';
+import { useFormState } from 'react-dom';
+import { createBlog, updateBlog } from '@/lib/actions';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { CldUploadWidget } from 'next-cloudinary';
+import Image from 'next/image';
+import { Upload } from 'lucide-react'
 
-//! Validation 
-const schema = z.object({
-    title: z
-        .string()
-        .min(3, { message: "Blog Title must be at least 3 characters long!" }),
-    description: z
-        .string()
-        .min(50, { message: "Description must be at least 50 characters long!" })
-        .max(200, { message: "Description cannot be more than 200 characters long!" }),
-    image: z
-        .instanceof(File, { message: "Product Image is required" }),
-    // authorId: session?.user.id
-});
-
-type Inputs = z.infer<typeof schema>
-
-const BlogForm = ({ type, data }: { type: "create" | "update"; data?: any; }) => {
+const BlogForm = ({
+    type,
+    data,
+    setOpen
+}: {
+    type: "create" | "update";
+    data?: any;
+    setOpen: Dispatch<SetStateAction<boolean>>
+}) => {
 
     const { data: session } = useSession()
-    console.log(session)
+    const author_id = session?.user?.id ? parseInt(session.user.id) : null;
 
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors, isValid },
-    } = useForm<Inputs>({
-        resolver: zodResolver(schema),
+    } = useForm<BlogSchema>({
+        resolver: zodResolver(blogSchema),
         mode: "onChange",
         criteriaMode: "all",
     })
 
-    const onSubmit = handleSubmit(data => {
-        console.log(data)
+    const [img, setImg] = useState<any>(data?.image || null);
+    const [state, formAction] = useFormState(type === "create" ? createBlog : updateBlog, {
+        success: false,
+        error: false
     })
+
+    const onSubmit = handleSubmit((formData) => {
+        console.log(formData)
+        formAction({
+            ...formData,
+            image: img?.secure_url || img, // Use uploaded image or existing one
+            authorId: author_id ?? undefined,
+        });
+    });
+
+    const router = useRouter()
+
+    useEffect(() => {
+        if (state.success) {
+            toast.success(`Blog ${type === "create" ? "created" : "updated"}`)
+            setOpen(false)
+            router.refresh()
+        }
+    }, [state])
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue('is_approved', event.target.checked);
+    };
+
 
     return (
         <>
@@ -53,8 +80,8 @@ const BlogForm = ({ type, data }: { type: "create" | "update"; data?: any; }) =>
             </div>
             <form className='overflow-y-auto' onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-12 gap-2 sm:gap-6">
-                    
-                    <div className="sm:col-span-3">
+
+                    {/* <div className="sm:col-span-3">
                         <label className="inline-block text-sm text-gray-800 mt-2.5 ">
                             Blog Image
                         </label>
@@ -71,33 +98,91 @@ const BlogForm = ({ type, data }: { type: "create" | "update"; data?: any; }) =>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
+                    <CldUploadWidget
+                        uploadPreset="NextJS_Nimtoz"
+                        options={{
+                            clientAllowedFormats: ['image'],
+                            maxFiles: 1
+                        }}
+                        onSuccess={(result, { widget }) => {
+                            setImg(result.info)
+                            widget.close()
+                        }}>
+                        {({ open }) => {
+                            return (
+                                <>
+                                    <div className="sm:col-span-3">
+                                        <label className="inline-block text-sm text-gray-800 mt-2.5 ">
+                                            Blog Image
+                                        </label>
+                                    </div>
+                                    <div className="sm:col-span-9">
+                                        <div className="flex items-center gap-5">
+                                            {(img || data?.image) && (
+                                                <div
+                                                    style={{
+                                                        width: '100px',
+                                                        height: '100px',
+                                                        borderRadius: '50%',
+                                                        overflow: 'hidden',
+                                                    }}
+                                                >
+                                                    <Image
+                                                        src={
+                                                            img?.secure_url || data?.image
+                                                        } // Use uploaded image or existing image in edit mode
+                                                        alt={data?.image ? data.image : "Blog Image"}
+                                                        width={100}
+                                                        height={100}
+                                                        objectFit="cover"
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="flex gap-x-2 cursor-pointer" onClick={() => open()}>
+                                                <Upload width={25} height={25} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        }}
+                    </CldUploadWidget>
+
+                    {session?.user.role === "Admin" &&
+                        <InputField
+                            name="is_approved"
+                            label='Is Approved'
+                            type="checkbox"
+                            defaultValue={data?.is_approved}
+                            register={register}
+                            error={errors?.is_approved}
+                            placeholder='Title of the Blog'
+                            onChange={handleCheckboxChange}
+                        />
+                    }
                     <InputField
                         name="title"
                         label='Title'
-                        type="string"
+                        type="boolean"
                         defaultValue={data?.title}
                         register={register}
                         error={errors?.title}
                         placeholder='Title of the Blog'
                     />
-
-                    {/* <div className="sm:col-span-3">
-                        <label htmlFor="af-account-bio" className="inline-block text-sm text-gray-800 mt-2.5 ">
-                            Description
-                        </label>
-                    </div>
-
-                    <div className="sm:col-span-9">
-                        <textarea
-                            id="af-account-bio description"
-                            className="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none  "
-                            rows={6}
-                            placeholder="Type your message..."
-                            {...register("description")}
-                        ></textarea>
-                    </div> */}
+                    {data && (
+                        <InputField
+                            name="id"
+                            label='Product Name'
+                            // type="string"
+                            defaultValue={data?.id}
+                            register={register}
+                            error={errors?.id}
+                            // placeholder='My Product'
+                            hidden
+                        />
+                    )}
 
                     <TextField
                         name="description"
@@ -110,6 +195,7 @@ const BlogForm = ({ type, data }: { type: "create" | "update"; data?: any; }) =>
                     />
                 </div>
 
+                {state.error && <span className="text-red-600">Something went wrong!</span>}
                 <div className="mt-5 flex justify-end gap-x-2">
                     <button
                         type="button"
@@ -119,7 +205,8 @@ const BlogForm = ({ type, data }: { type: "create" | "update"; data?: any; }) =>
                     <button
                         type="submit"
                         disabled={!isValid}
-                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-blue-600 text-white"
+                        // className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-blue-600 text-white"
+                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
                             }`}
                     >
                         {type === "create" ? "Add" : "Update"}

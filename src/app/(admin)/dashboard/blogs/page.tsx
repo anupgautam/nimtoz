@@ -2,11 +2,11 @@ import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
 import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
-import Link from "next/link"
-import FormModal from "@/components/Lama/FormModal"
+import FormContainer from "@/components/Lama/FormContainer"
 import { Blog, Prisma, User } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
+import Image from "next/image"
 
 type BlogList = Blog & { author: User }
 
@@ -40,7 +40,7 @@ const renderRow = (item: BlogList) => (
     <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
 
         <td className="flex items-center gap-4 p-4">
-            {/* <Image src={item.photo} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
+            <Image src={item.image} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" />
             <div className="flex flex-col">
                 <h3 className="font-semibold">{item.title}</h3>
             </div>
@@ -48,7 +48,6 @@ const renderRow = (item: BlogList) => (
         {/*//! Initial list  */}
         <td className="hidden md:table-cell">{item.author.email}</td>
 
-        {/* Format the createdAt date */}
         <td className="hidden md:table-cell">
             {new Date(item.createdAt).toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -62,10 +61,10 @@ const renderRow = (item: BlogList) => (
         {/*//! Actions  */}
         <td>
             <div className="flex items-center gap-2">
-                <Link href={`/users/${item.id}`}>
-                    <FormModal table="Venue" type="update" />
-                </Link>
-                <FormModal table="Venue" type="delete" id={item.id} />
+                {/* <Link href={`/dashboard/blogs/${item.id}`}> */}
+                <FormContainer table="Blog" type="update" data={item} />
+                {/* </Link> */}
+                <FormContainer table="Blog" type="delete" id={item.id} />
             </div>
         </td>
     </tr>
@@ -112,6 +111,9 @@ const BlogsTable = async ({ searchParams }: { searchParams: { [key: string]: str
             where: query,
             take: ITEM_PER_PAGE,
             skip: ITEM_PER_PAGE * (p - 1),
+            orderBy: {
+                updatedAt: "desc"
+            }
         }),
         prisma.blog.count({ where: query })
     ])
@@ -131,7 +133,7 @@ const BlogsTable = async ({ searchParams }: { searchParams: { [key: string]: str
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
                         </button>
-                        <FormModal table="Blog" type="create" />
+                        <FormContainer table="Blog" type="create" />
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import AttendanceChart from "@/components/Lama/AttendanceChart";
 import CountChart from "@/components/Lama/CountChart";
 import FinanceChart from "@/components/Lama/FinanceChart";
 import UserCard from "@/components/Lama/UserCard";
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth";
 
 const Dashboard = async () => {
     const session = await getServerSession(options)

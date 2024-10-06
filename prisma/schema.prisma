@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client-js"
@@ -20,48 +16,56 @@ enum Role {
 
 //! User 
 model User {
-  id                       Int        @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
   firstname                String
   lastname                 String
-  email                    String     @unique
+  email                    String    @unique
   password                 String
-  phone_number             String     @unique
+  phone_number             String    @unique
   role                     Role
   avatar                   String?
   resetPasswordToken       String?
   resetPasswordTokenExpiry DateTime?
-  createdAt                DateTime   @default(now()) @map("created_at")
-  updatedAt                DateTime   @updatedAt @map("updated_at")
-  Wishlist                 Wishlist[]
-  events_approved          Event[]    @relation("Approved Events")
-  events_booked            Event[]    @relation("Booked Events")
-  blogs_approved           Blog[]     @relation("ApprovedBlogs")
-  blogs_author             Blog[]     @relation("BlogAuthor")
+  createdAt                DateTime  @default(now()) @map("created_at")
+  updatedAt                DateTime  @updatedAt @map("updated_at")
+
+  Wishlist Wishlist[]
+
+  // Correct relation for events_booked
+  events_booked  Event[]
+  blogs_approved Blog[]  @relation("ApprovedBlogs")
+  blogs_author   Blog[]  @relation("BlogAuthor")
 }
 
 //! Category Table
 model Category {
   id            Int       @id @default(autoincrement())
-  category_name String
+  category_name String    @unique
   category_icon String
   products      Product[]
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 }
 
 //! Wishlist
 model Wishlist {
-  id      Int       @id @default(autoincrement())
-  userId  User?     @relation(fields: [user_id], references: [id])
-  user_id Int?      @unique
-  product Product[]
+  id        Int       @id @default(autoincrement())
+  userId    User?     @relation(fields: [user_id], references: [id])
+  user_id   Int?      @unique
+  product   Product[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 }
 
-//! Ameneties
+//! Amenities
 model Amenities {
   id           Int    @id @default(autoincrement())
   amenity_name String
 
   Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 //! Product 
@@ -72,7 +76,7 @@ model Product {
   description       String
   address           String
   short_description String?
-  category          Category       @relation(fields: [category_id], references: [id])
+  category          Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
   category_id       Int
   amenities         Amenities[]
   product_image     ProductImage[]
@@ -82,11 +86,12 @@ model Product {
   Wishlist   Wishlist? @relation(fields: [wishlistId], references: [id])
   wishlistId Int?
 
-  event Event[]
+  event     Event[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 //! Hall
-
 model Hall {
   id            Int      @id @default(autoincrement())
   hall_name     String
@@ -97,6 +102,8 @@ model Hall {
   productId Int?
   event     Event?   @relation(fields: [eventId], references: [id])
   eventId   Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 //! Rules
@@ -106,6 +113,8 @@ model Rules {
 
   Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 //! Product Image
@@ -113,8 +122,10 @@ model ProductImage {
   id  Int    @id @default(autoincrement())
   url String
 
-  Product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId Int?
+  Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 //! Blogs
@@ -125,12 +136,12 @@ model Blog {
   image             String
   description       String
   is_approved       Boolean?
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
   author            User?    @relation("BlogAuthor", fields: [authorId], references: [id])
   authorId          Int
   approved_by       User?    @relation("ApprovedBlogs", fields: [approved_by_id], references: [id])
   approved_by_id    Int?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 }
 
 //! Venue Table
@@ -142,31 +153,37 @@ model Venue {
   phone_number   String
   email          String
   createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 }
 
 //! Event Table
 model Event {
-  id         Int      @id @default(autoincrement())
-  start_date DateTime
-  end_date   DateTime
-  start_time DateTime
-  end_time   DateTime
-
-  createdAt      DateTime    @default(now()) @map("created_at")
-  events         EventType[]
-  is_approved    Boolean
-  approved_by    User?       @relation("Approved Events", fields: [approved_by_id], references: [id])
-  approved_by_id Int?
-  User           User        @relation("Booked Events", fields: [userId], references: [id])
+  id             Int       @id @default(autoincrement())
+  start_date     DateTime
+  end_date       DateTime
+  start_time     DateTime?
+  end_time       DateTime?
+  is_approved    Boolean   @default(false)
+  is_rejected    Boolean   @default(false)
   userId         Int
-  product        Product     @relation(fields: [productId], references: [id])
-  productId      Int         @unique
-  Hall           Hall[]
+  productId      Int
+  approved_by_id Int? // Added field for relation with User
+
+  // Relations
+  // Remove the unique constraint from productId
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  Product   Product     @relation(fields: [productId], references: [id])
+  Hall      Hall[]
+  EventType EventType[]
+  User      User        @relation(fields: [userId], references: [id])
 }
 
 model EventType {
-  id      Int    @id @default(autoincrement())
-  title   String
-  Event   Event? @relation(fields: [eventId], references: [id])
-  eventId Int?
+  id        Int      @id @default(autoincrement())
+  title     String
+  Event     Event?   @relation(fields: [eventId], references: [id])
+  eventId   Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }

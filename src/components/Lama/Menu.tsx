@@ -14,11 +14,11 @@ const menuItems = [
         path: '/dashboard/users',
         icon: <UsersRound />
     },
-    {
-        title: "Users Copy",
-        path: '/dashboard/userscopy',
-        icon: <Network />
-    },
+    // {
+    //     title: "Users Copy",
+    //     path: '/dashboard/userscopy',
+    //     icon: <Network />
+    // },
     {
         title: "Categories",
         path: '/dashboard/category',
@@ -42,6 +42,11 @@ const menuItems = [
     {
         title: "Blogs",
         path: '/dashboard/blogs',
+        icon: <SquarePen />
+    },
+    {
+        title: "Event Type",
+        path: '/dashboard/eventtype',
         icon: <SquarePen />
     },
 ]
