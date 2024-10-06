@@ -39,7 +39,7 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
     };
 
     return (
-        <div className='bg-white shadow-lg rounded-lg overflow-hidden mt-10 pl-20' key={product.id}>
+        <div className='bg-white shadow-lg rounded-lg overflow-hidden mt-10' key={product.id}>
             <div className="relative h-64 w-full mb-2">
                 {/* Carousel Image */}
                 <Image

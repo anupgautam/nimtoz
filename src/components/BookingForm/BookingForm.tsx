@@ -6,6 +6,10 @@ import { array, date, number, object, string } from 'yup'
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
+import NepaliDate from 'nepali-date'
+import Select, { MultiValue } from 'react-select'
+// import DatePicker from 'react-datepicker';
+// import 'react-datepicker/dist/react-datepicker.css';
 
 //! Types
 interface Booking {
@@ -19,12 +23,25 @@ interface Booking {
     Hall: string[];
 }
 
-
 const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
 
     const { data: session, status } = useSession();
     const router = useRouter();
     const [eventTypes, setEventTypes] = useState([])
+
+    const [nepaliStartDate, setNepaliStartDate] = useState('');
+    const [nepaliEndDate, setNepaliEndDate] = useState('');
+
+    interface HallOption {
+        value: string;
+        label: string;
+    }
+
+    //! Hall options
+    const hallOptions: HallOption[] = halls.map(hall => ({
+        value: hall.id,
+        label: `${hall.hall_name} (Capacity: ${hall.hall_capacity})`
+    }));
 
     const fetchEventTypes = async () => {
         try {
@@ -100,6 +117,40 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
         validateOnMount: true,
     });
 
+    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        formik.handleChange(e); // Update formik value
+        const [year, month, day] = e.target.value.split('-').map(Number);
+        const nepaliDateObj = new NepaliDate(new Date(year, month - 1, day));
+        const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+        setNepaliStartDate(nepaliFormatted);
+    };
+
+    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        formik.handleChange(e); // Update formik value
+        const [year, month, day] = e.target.value.split('-').map(Number);
+        const nepaliDateObj = new NepaliDate(new Date(year, month - 1, day));
+        const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+        setNepaliEndDate(nepaliFormatted);
+    };
+
+    // const handleStartDateChange = (date: Date | null) => {
+    //     if (date) {
+    //         setStartDate(date);
+    //         const nepaliDateObj = new NepaliDate(date);
+    //         const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+    //         setNepaliStartDate(nepaliFormatted);
+    //     }
+    // };
+
+    // const handleEndDateChange = (date: Date | null) => {
+    //     if (date) {
+    //         setEndDate(date);
+    //         const nepaliDateObj = new NepaliDate(date);
+    //         const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+    //         setNepaliEndDate(nepaliFormatted);
+    //     }
+    // };
+
     const { errors, getFieldProps, touched, isValid } = formik
 
     useEffect(() => {
@@ -126,7 +177,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
             });
             console.log(response)
             // if (response.ok) {
-            toast.success("Booking created successfully!");
+            toast.success("Event request sent!");
             resetForm();
             router.push('/'); // Navigate to confirmation page or anywhere
             // }
@@ -145,118 +196,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
         }
     };
 
-
     return (
-        // <>
-        //     {session?.user ? <div className="bg-white border border-gray-200 rounded-xl shadow-sm ">
-        //         <div className="p-4 sm:p-7">
-        //             <div className="text-center">
-        //                 <h1 className="block text-2xl font-bold text-gray-800 ">Book Now</h1>
-        //             </div>
-
-        //             <div className="mt-5">
-        //                 <form className='sticky' onSubmit={formik.handleSubmit}>
-        //                     <div className="grid gap-y-4">
-        //                         <div className='flex justify-between items-center '>
-        //                             <div>
-        //                                 <label htmlFor="start-date" className="block text-sm mb-2 ">Start Date</label>
-        //                                 <input
-        //                                     type="date"
-        //                                     id="start_date"
-        //                                     {...formik.getFieldProps('start_date')}
-        //                                     className={`py-2 px-3 border ${errors.start_date && touched.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-        //                                 />
-        //                                 {errors.start_date && touched.start_date && <div className="text-red-500 text-sm">{errors.start_date}</div>}
-        //                             </div>
-        //                             <div>
-        //                                 <label htmlFor="end-date" className="block text-sm mb-2 ">End Date</label>
-        //                                 <input
-        //                                     type="date"
-        //                                     id="end_date"
-        //                                     {...formik.getFieldProps('end_date')}
-        //                                     className={`py-2 px-3 border ${errors.end_date && touched.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-        //                                 />
-        //                                 {errors.end_date && touched.end_date && <div className="text-red-500 text-sm">{errors.end_date}</div>}
-        //                             </div>
-        //                         </div>
-
-        //                         {/*//! Halls Select */}
-        //                         <div>
-        //                             <label htmlFor="hall" className="inline-block text-sm text-gray-800 mt-2.5">
-        //                                 Select Halls
-        //                             </label>
-        //                             <select
-        //                                 id="Hall"
-        //                                 multiple
-        //                                 onChange={formik.handleChange}
-        //                                 className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0 text-sm relative rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-        //                             >
-        //                                 <option value="">Select a hall</option>
-        //                                 {halls && halls.length > 0 ? (
-        //                                     halls.map((hall: { id: string; hall_name: string; hall_capacity: number }) => (
-        //                                         <option key={hall.id} value={hall.id}>
-        //                                             {hall.hall_name} (Capacity: {hall.hall_capacity})
-        //                                         </option>
-        //                                     ))
-        //                                 ) : (
-        //                                     <option disabled>No halls available</option>
-        //                                 )}
-        //                             </select>
-        //                             {errors.Hall && <div className="text-red-500 text-sm">{errors.Hall}</div>}
-        //                         </div>
-
-        //                         {/*//! Event Select */}
-        //                         <div>
-        //                             <label htmlFor="hall" className="inline-block text-sm text-gray-800 mt-2.5">
-        //                                 Select Event
-        //                             </label>
-        //                             <select
-        //                                 id="events[0].id"
-        //                                 onChange={(e) => {
-        //                                     const selectedEventId = e.target.value;
-        //                                     formik.setFieldValue('events', [{ id: selectedEventId }]); // Set selected event
-        //                                 }}
-        //                                 className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0 text-sm relative rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-        //                             >
-        //                                 <option value="">Select an Event</option>
-        //                                 {eventTypes && eventTypes.length > 0 ? (
-        //                                     eventTypes.map((event: { id: string; title: string }) => (
-        //                                         <option key={event.id} value={event.id}>
-        //                                             {event.title}
-        //                                         </option>
-        //                                     ))
-        //                                 ) : (
-        //                                     <option disabled>No Events available</option>
-        //                                 )}
-        //                             </select>
-        //                             {Array.isArray(errors.events) ? (
-        //                                 errors.events.length > 0 &&
-        //                                 typeof errors.events[0] === 'object' &&
-        //                                 'id' in errors.events[0] && (
-        //                                     <div className="text-red-500 text-sm">{(errors.events[0] as FormikErrors<{ id: string }>).id}</div>
-        //                                 )
-        //                             ) : (
-        //                                 typeof errors.events === 'string' && (
-        //                                     <div className="text-red-500 text-sm">{errors.events}</div>
-        //                                 )
-        //                             )}
-        //                         </div>
-
-        //                         <button
-        //                             type="submit"
-        //                             disabled={!isValid}
-        //                             className={`w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white focus:outline-none ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
-        //                                 }`}
-        //                         >
-        //                             Check Availability
-        //                         </button>
-        //                     </div>
-        //                 </form>
-        //             </div>
-        //         </div>
-        //     </div> : <>Login to Book the form</>}
-        // </>
-
         <div className="relative bg-white border border-gray-200 rounded-xl shadow-sm">
             {session?.user ? (
                 <div className="p-4 sm:p-7">
@@ -266,50 +206,61 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                     <div className="mt-5">
                         <form className="sticky" onSubmit={formik.handleSubmit}>
                             <div className="grid gap-y-4">
-                                <div className='flex justify-between items-center'>
-                                    <div>
-                                        <label htmlFor="start_date" className="block text-sm mb-2">Start Date</label>
-                                        <input
-                                            type="date"
-                                            id="start_date"
-                                            {...formik.getFieldProps('start_date')}
-                                            className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.start_date && formik.errors.start_date && <div className="text-red-500 text-sm">{formik.errors.start_date}</div>}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="end_date" className="block text-sm mb-2">End Date</label>
-                                        <input
-                                            type="date"
-                                            id="end_date"
-                                            {...formik.getFieldProps('end_date')}
-                                            className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.end_date && formik.errors.end_date && <div className="text-red-500 text-sm">{formik.errors.end_date}</div>}
-                                    </div>
-                                </div>
+                                <label htmlFor="start_date" className="block text-sm ">Start Date</label>
+                                <input
+                                    type="date"
+                                    id="start_date"
+                                    {...formik.getFieldProps('start_date')}
+                                    onChange={handleStartDateChange}
+                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                />
+                                {/* <DatePicker
+                                    selected={new Date(formik.values.start_date)}
+                                    onChange={(date: Date) => {
+                                        formik.setFieldValue('start_date', date.toISOString().split('T')[0]);
+                                        handleStartDateChange({
+                                            target: { value: date.toISOString().split('T')[0] },
+                                        } as React.ChangeEvent<HTMLInputElement>);
+                                    }}
+                                    dateFormat="yyyy-MM-dd"
+                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded custom-date-input`}
+                                /> */}
+                                {formik.touched.start_date && formik.errors.start_date && <div className="text-red-500 text-sm">{formik.errors.start_date}</div>}
+                                {nepaliStartDate && (
+                                    <div className="mt-1 text-sm text-gray-700">BS: {nepaliStartDate}</div>
+                                )}
 
-                                {/* Select Halls */}
+                                <label htmlFor="end_date" className="block text-sm ">End Date</label>
+                                <input
+                                    type="date"
+                                    id="end_date"
+                                    {...formik.getFieldProps('end_date')}
+                                    onChange={handleEndDateChange}
+                                    className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                />
+                                {formik.touched.end_date && formik.errors.end_date && <div className="text-red-500 text-sm">{formik.errors.end_date}</div>}
+                                {nepaliEndDate && (
+                                    <div className="mt-1 text-sm text-gray-700">BS: {nepaliEndDate}</div>
+                                )}
+
+                                {/*//! React Select  */}
                                 <div>
                                     <label htmlFor="Hall" className="inline-block text-sm text-gray-800 mt-2.5">Select Halls</label>
-                                    <select
+                                    <Select
                                         id="Hall"
-                                        multiple
-                                        onChange={formik.handleChange}
-                                        className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0 text-sm relative rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-                                    >
-                                        <option value="">Select a hall</option>
-                                        {halls && halls.length > 0 ? (
-                                            halls.map((hall) => (
-                                                <option key={hall.id} value={hall.id}>
-                                                    {hall.hall_name} (Capacity: {hall.hall_capacity})
-                                                </option>
-                                            ))
-                                        ) : (
-                                            <option disabled>No halls available</option>
-                                        )}
-                                    </select>
-                                    {formik.errors.Hall && <div className="text-red-500 text-sm">{formik.errors.Hall}</div>}
+                                        isMulti // Enable multiple selection
+                                        name="Hall"
+                                        options={hallOptions} // Options to display in the dropdown
+                                        classNamePrefix="react-select" // For styling purposes
+                                        value={hallOptions.filter(option => formik.values.Hall.includes(option.value))} // Display selected values
+                                        onChange={(selectedOptions: MultiValue<HallOption> | null) => {
+                                            const selectedHalls = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                                            formik.setFieldValue('Hall', selectedHalls); // Update formik value
+                                        }}
+                                    />
+                                    {formik.errors.Hall && (
+                                        <div className="text-red-500 text-sm">{formik.errors.Hall}</div>
+                                    )}
                                 </div>
 
                                 {/* Select Event */}
