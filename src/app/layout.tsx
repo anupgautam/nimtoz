@@ -14,11 +14,11 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   // metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL)
   metadataBase: new URL("https://nimtoz.com/"),
-  // title: "Nimtoz - Venue Bookings for all",
-  title: {
-    default: "Nimtoz - Venue Bookings for all",
-    template: "%s | Nimtoz - Venue Bookings"
-  },
+  title: "Nimtoz - Venue Bookings for all",
+  // title: {
+  //   default: "Nimtoz - Venue Bookings for all",
+  //   template: "%s | Nimtoz - Venue Bookings"
+  // },
   description: "Fast and Easy Venue Bookings for all kinds of events ",
   openGraph: {
     title: "Nimtoz - Venue Bookings for all",

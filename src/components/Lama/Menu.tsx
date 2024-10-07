@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link"
-import { LayoutDashboard, Castle, UsersRound, Network, Theater, SquarePen, HousePlus } from 'lucide-react'
+import { LayoutDashboard, Castle, UsersRound, Network, Theater, SquarePen, HousePlus, PartyPopper } from 'lucide-react'
 import { usePathname } from "next/navigation"
 
 const menuItems = [
@@ -42,7 +42,7 @@ const menuItems = [
     {
         title: "Event Type",
         path: '/dashboard/eventtype',
-        icon: <SquarePen />
+        icon: <PartyPopper />
     },
 ]
 

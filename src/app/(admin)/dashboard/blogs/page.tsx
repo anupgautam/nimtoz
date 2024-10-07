@@ -127,12 +127,12 @@ const BlogsTable = async ({ searchParams }: { searchParams: { [key: string]: str
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch />
                     <div className="flex items-center gap-4 self-end">
-                        <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
+                        {/* <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <SlidersHorizontal />
                         </button>
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
-                        </button>
+                        </button> */}
                         <FormContainer table="Blog" type="create" />
                     </div>
                 </div>

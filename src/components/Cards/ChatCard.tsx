@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
+import ChatCardSkeleton from './CardSkeleton';
 
 interface Products {
     id: number;
@@ -15,9 +16,14 @@ interface Products {
 
 interface VenueCardProps {
     data: Products[];
+    loading: boolean;
 }
 
-const ChatCard: React.FC<VenueCardProps> = ({ data }) => {
+const ChatCard: React.FC<VenueCardProps> = ({ data, loading }) => {
+    if (loading) {
+        return <ChatCardSkeleton />;
+    }
+
     return (
         <div className='mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
             {data.map((item) => (
@@ -40,8 +46,7 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
 
     return (
         <div className='bg-white rounded-xl overflow-hidden' key={product.id}>
-            <div className="relative w-full h-[260px] mb-2 group"> {/* Fixed height for the image */}
-                {/* Carousel Image */}
+            <div className="relative w-full h-[260px] mb-2 group">
                 <Image
                     src={product.product_image[currentImage].url}
                     alt={product.title}
@@ -49,32 +54,27 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
                     width={60}
                     height={60}
                     sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
-                    style={{ objectFit: 'cover' }} // Ensure image covers the area without distorting
+                    style={{ objectFit: 'cover' }}
                 />
 
-                {/* Left Button - Smaller Rounded */}
                 <button
                     onClick={handlePrevImage}
                     className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 bg-white bg-opacity-75 rounded-full hover:bg-gray-200 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
-                    {/* Smaller SVG icon */}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
                         <path d="M15 18l-6-6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
 
-                {/* Right Button - Smaller Rounded */}
                 <button
                     onClick={handleNextImage}
                     className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 bg-white bg-opacity-75 rounded-full hover:bg-gray-200 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
-                    {/* Smaller SVG icon */}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
                         <path d="M9 18l6-6-6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
 
-                {/* Image Dots Indicator */}
                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
                     {product.product_image.map((_, index) => (
                         <span
@@ -85,7 +85,6 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
                 </div>
             </div>
 
-            {/* Venue Info */}
             <div className="p-2">
                 <h1 className='text-md font-semibold'>{product.title}</h1>
                 <h2 className='text-stone-500 font-[400] text-[14px]'>{product.address}</h2>

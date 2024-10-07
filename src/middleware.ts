@@ -33,7 +33,6 @@ export default withAuth(
 
 export const config = {
     matcher: [
-        '/extra',
         '/registervenue',
         '/dashboard/:path*'
     ]

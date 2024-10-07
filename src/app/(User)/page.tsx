@@ -1,14 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react';
-import Sidebar from '@/components/chat/Sidebar';
+import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/chat/SearchBar';
-import ProductList from '@/components/chat/ProductList';
-import VenueNavbar from '@/components/Navbar/VenueNavbar/VenueNavbar';
-import Footer from '@/components/Footer/Footer';
 import VenueSidebar from '@/components/Navbar/sidebar/VenueSidebar/VenueSidebar';
-import VenueCard from '@/components/Cards/VenueCard';
-import { productSchema } from '@/lib/formValidationSchemas';
 import ChatCard from '@/components/Cards/ChatCard';
 import { toast } from 'react-toastify';
 
@@ -16,39 +10,48 @@ const HomePage: React.FC = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [loading, setLoading] = useState(true);
 
-  // Fetch categories from backend
   const fetchCategories = async () => {
-    const response = await fetch('/api/category');
-    if (response.ok) {
-
-      const data = await response.json();
-      setCategories(data);
-    }
-    else {
-      toast.error("Error fetching categories")
-
+    try {
+      const response = await fetch('/api/category');
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else {
+        toast.error("Error fetching categories");
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      toast.error("An error occurred while fetching categories");
     }
   };
 
-  // Fetch products based on search query and category
   const fetchProducts = async (search = '', category = '') => {
-    const query = new URLSearchParams({
-      search: search || '',
-      category: category === 'All' ? '' : category,
-    });
-    const response = await fetch(`/api/products?${query.toString()}`);
-    if (response.ok) {
-      const data = await response.json();
-      setProducts(data);
-    } else {
-      console.error('Error fetching products:', response.status);
+    try {
+      setLoading(true)
+      const query = new URLSearchParams({
+        search: search || '',
+        category: category === 'All' ? '' : category,
+      });
+      const response = await fetch(`/api/products?${query.toString()}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      } else {
+        toast.error("Error Fetching Products")
+        console.error('Error fetching products:', response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false); // End loading when fetching is complete
     }
   };
 
   useEffect(() => {
-    fetchCategories(); // Fetch categories on mount
-    fetchProducts('', selectedCategory); // Fetch products when selectedCategory changes
+    fetchCategories();
+    fetchProducts('', selectedCategory);
   }, [selectedCategory]);
 
   const handleSearch = (query: string) => {
@@ -56,7 +59,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category); // Update selected category
+    setSelectedCategory(category);
   };
   const [isHovered, setIsHovered] = useState(false);
 
@@ -64,9 +67,7 @@ const HomePage: React.FC = () => {
     <>
       <SearchBar onSearch={handleSearch} />
       <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} />
-      <Suspense>
-        <ChatCard data={products} />
-      </Suspense>
+      <ChatCard data={products} loading={loading} />
     </>
   );
 };

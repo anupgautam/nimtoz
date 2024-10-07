@@ -1,9 +1,5 @@
 import BlogPage from "@/components/BlogPage/BlogPage"
-import Footer from "@/components/Footer/Footer"
-import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 import { Metadata } from "next"
-import { Suspense } from "react"
-import BlogsLoading from "./loading"
 
 export const metadata: Metadata = {
     title: "Blogs",
@@ -16,13 +12,9 @@ export const metadata: Metadata = {
 const Blog = () => {
     return (
         <>
-            {/* <VenueNavbar /> */}
-            <Suspense fallback={<BlogsLoading/>}>
-                <main className="pt-8">
-                    <BlogPage />
-                </main >
-            </Suspense>
-            {/* <Footer /> */}
+            <main className="pt-8">
+                <BlogPage />
+            </main >
         </>
     )
 }
