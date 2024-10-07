@@ -1,6 +1,4 @@
 'use client'
-import Footer from "@/components/Footer/Footer"
-import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";

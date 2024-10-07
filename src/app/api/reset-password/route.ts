@@ -1,6 +1,5 @@
 import { hash } from 'bcryptjs'; // For password hashing
 import prisma from '@/lib/db'; // Ensure this points to your Prisma client
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {

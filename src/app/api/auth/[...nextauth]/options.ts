@@ -1,5 +1,4 @@
-import type { NextAuthOptions, User } from "next-auth";
-import GitHubProvider from 'next-auth/providers/github'
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/db";
 import bcrypt from "bcryptjs";

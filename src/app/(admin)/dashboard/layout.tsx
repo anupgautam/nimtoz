@@ -18,14 +18,6 @@ export default function RootLayout({
 }) {
     return (
         <>
-            {/* <Navbar />
-            <div className="h-screen flex">
-                <Sidebar />
-                <div className="flex-1 mt-12 p-4 sm:ml-64">
-                    {children}
-                </div>
-            </div> */}
-
             {/* //! LamaDev */}
             <div className="h-screen flex">
 
