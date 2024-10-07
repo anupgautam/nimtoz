@@ -27,59 +27,6 @@ const ChatCard: React.FC<VenueCardProps> = ({ data }) => {
     );
 };
 
-// const VenueCardWithCarousel = ({ product }: { product: Products }) => {
-//     const [currentImage, setCurrentImage] = useState(0);
-
-//     const handlePrevImage = () => {
-//         setCurrentImage((prev) => (prev === 0 ? product.product_image.length - 1 : prev - 1));
-//     };
-
-//     const handleNextImage = () => {
-//         setCurrentImage((prev) => (prev === product.product_image.length - 1 ? 0 : prev + 1));
-//     };
-
-//     return (
-//         <div className='bg-white shadow-lg rounded-lg overflow-hidden' key={product.id}>
-//             <div className="relative w-full mb-2">
-//                 <Image
-//                     src={product.product_image[currentImage].url}
-//                     alt={product.title}
-//                     className='w-full h-full object-cover rounded-t-lg'
-//                     width={60}
-//                     height={60}
-//                     sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
-//                 />
-//                 <button
-//                     onClick={handlePrevImage}
-//                     className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 bg-white bg-opacity-75 rounded-full hover:bg-gray-200 focus:outline-none"
-//                 >
-//                     &#8249;
-//                 </button>
-//                 <button
-//                     onClick={handleNextImage}
-//                     className="absolute top-1/2 right-2 transform -translate-y-1/2 p-2 bg-white bg-opacity-75 rounded-full hover:bg-gray-200 focus:outline-none"
-//                 >
-//                     &#8250;
-//                 </button>
-//             </div>
-//             <div className="p-3">
-//                 <h1 className='text-lg font-semibold'>{product.title}</h1>
-//                 <h2 className='text-stone-500 font-[400] text-[14px]'>{product.address}</h2>
-//                 <section className='flex justify-between items-center text-[15px] mt-2'>
-//                     <p className='text-black font-medium'>Starting from Rs. {product.price}</p>
-//                     <Link href={`/${product.id}`}>
-//                         <button className='px-3 py-1 ring-2 ring-red-600 rounded-2xl text-red-600 font-light hover:bg-red-600 hover:text-white transition'>
-//                             Book Now
-//                         </button>
-//                     </Link>
-//                 </section>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default ChatCard;
-
 const VenueCardWithCarousel = ({ product }: { product: Products }) => {
     const [currentImage, setCurrentImage] = useState(0);
 

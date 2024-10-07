@@ -1,13 +1,11 @@
 'use client'
 
-import ProductsPage from "@/app/(admin)/dashboard/products/page"
 import BookingForm from "@/components/BookingForm/BookingForm"
-import Footer from "@/components/Footer/Footer"
-import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { ShieldAlert, House, Users } from 'lucide-react'
+import Head from "next/head"
 
 const ProductDetailPage = ({ params }: { params: { id: string } }) => {
     const id = params.id;
@@ -38,6 +36,18 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
 
     return (
         <>
+            <Head>
+                <title>{product ? `${product.title} - Venue Details` : 'Venue Details'}</title>
+                <meta name="description" content={product ? product.short_description : 'Find the best venue details here.'} />
+                <meta property="og:title" content={product ? product.title : 'Venue Details'} />
+                <meta property="og:description" content={product ? product.short_description : 'Find the best venue details here.'} />
+                <meta property="og:image" content={product ? product.product_image[0]?.url : '/default-image.jpg'} />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={product ? product.title : 'Venue Details'} />
+                <meta name="twitter:description" content={product ? product.short_description : 'Find the best venue details here.'} />
+                <meta name="twitter:image" content={product ? product.product_image[0]?.url : '/default-image.jpg'} />
+            </Head>
             {/* //! Images wala section */}
             <div className="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto mt-20">
                 <div className="flex flex-col lg:flex-row mt-10">

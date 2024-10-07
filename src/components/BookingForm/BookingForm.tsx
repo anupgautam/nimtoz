@@ -73,18 +73,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
     });
 
     const bookingSchema = object({
-        start_date: date()
-            .required("Start date is required")
-            .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past"),
-        end_date: date()
-            .required("End date is required")
-            .min(new Date(), "End date cannot be in the past")
-            .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
-                const { start_date } = this.parent;
-                return !start_date || value === null || new Date(value) >= new Date(start_date);
-            }),
-
-
+        //! Dont' book of today
         // start_date: date()
         //     .required("Start date is required")
         //     .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past"),
@@ -92,16 +81,33 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
         //     .required("End date is required")
         //     .min(new Date(), "End date cannot be in the past")
         //     .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
-        //         const { start_date } = this.parent;
+        //         const { start_date } = this.parent; // Access the start_date value from the parent object
         //         return !start_date || value === null || new Date(value) >= new Date(start_date);
         //     }),
-        // start_time: date().nullable().optional()
-        //     .min(new Date(new Date().setHours(new Date().getHours(), new Date().getMinutes())), "Start time must be greater than now"),
-        // end_time: date().nullable().optional()
-        //     .test('is-greater', 'End time must be greater than start time', function (value) {
-        //         const { start_time } = this.parent;
-        //         return !start_time || value === null || new Date(value) > new Date(start_time);
-        //     }),
+
+        //! Allow booking of today 
+        start_date: date()
+            .required("Start date is required")
+            .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past") // Allows today as valid
+            .test('is-today-or-future', 'Start date cannot be in the past', function (value) {
+                const today = new Date().setHours(0, 0, 0, 0);
+                return value === null || new Date(value).setHours(0, 0, 0, 0) >= today;
+            }),
+
+        end_date: date()
+            .required("End date is required")
+            .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
+                const { start_date } = this.parent; // Access the start_date from parent object
+                const startDate = new Date(start_date).setHours(0, 0, 0, 0);
+                const endDate = new Date(value).setHours(0, 0, 0, 0);
+                const today = new Date().setHours(0, 0, 0, 0);
+
+                // Allow if both dates are today, or if end date is today or later and equal/greater than start date
+                return !start_date || (endDate >= startDate && endDate >= today);
+            }),
+        start_time: date().nullable().optional(),  // Allow null values
+        end_time: date().nullable().optional(),    // Allow null values
+        // eventtype: array().of(eventTypeSchema).required('At least one event type is required'),
         Hall: array().min(1, "At least one hall must be selected").required("Hall selection is required"),
         events: array().of(object({ id: string().required('Event ID is required') })).required('At least one event is required'),
     });
@@ -109,11 +115,11 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
     const formik = useFormik({
         validationSchema: bookingSchema,
         initialValues: {
-            start_date: new Date().toISOString().split('T')[0], // Start date as ISO string
-            end_date: new Date().toISOString().split('T')[0],   // End date as ISO string
-            // start_time: "",  
-            // end_time: "",    
-            userId: session?.user?.id || 0, // Use optional chaining for safety
+            start_date: new Date().toISOString().split('T')[0],
+            end_date: new Date().toISOString().split('T')[0],
+            start_time: '',
+            end_time: '',
+            userId: session && session?.user?.id || 0,
             productId: product?.id || 0,
             events: [{ id: '' }],
             Hall: [],
@@ -123,24 +129,11 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                 ...data,
                 start_date: new Date(data.start_date),
                 end_date: new Date(data.end_date),
-                // start_time: data.start_time ? new Date(data.start_time) : null,
-                // end_time: data.end_time ? new Date(data.end_time) : null,
-                userId: Number(data.userId), // Ensure userId is a number
-                productId: Number(data.productId), // Ensure productId is a number
+                start_time: data.start_time ? new Date(data.start_time) : null,
+                end_time: data.end_time ? new Date(data.end_time) : null,
+                userId: Number(data.userId),
+                productId: Number(data.productId),
             };
-            // const startDateTime = new Date(`${data.start_date}T${data.start_time}`);
-            // const endDateTime = new Date(`${data.end_date}T${data.end_time}`);
-
-            // const formattedData = {
-            //     ...data,
-            //     start_date: startDateTime,
-            //     end_date: endDateTime,
-            //     start_time: data.start_time ? startDateTime : null,
-            //     end_time: data.end_time ? endDateTime : null,
-            //     userId: Number(data.userId),
-            //     productId: Number(data.productId),
-            // };
-
             bookingApiCall(formattedData, resetForm);
         },
         validateOnMount: true,
@@ -161,6 +154,24 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
         const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
         setNepaliEndDate(nepaliFormatted);
     };
+
+    // const handleStartDateChange = (date: Date | null) => {
+    //     if (date) {
+    //         setStartDate(date);
+    //         const nepaliDateObj = new NepaliDate(date);
+    //         const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+    //         setNepaliStartDate(nepaliFormatted);
+    //     }
+    // };
+
+    // const handleEndDateChange = (date: Date | null) => {
+    //     if (date) {
+    //         setEndDate(date);
+    //         const nepaliDateObj = new NepaliDate(date);
+    //         const nepaliFormatted = `${nepaliDateObj.getYear()}-${nepaliDateObj.getMonth() + 1}-${nepaliDateObj.getDate() + 1}`;
+    //         setNepaliEndDate(nepaliFormatted);
+    //     }
+    // };
 
     const { errors, getFieldProps, touched, isValid } = formik
 
@@ -208,7 +219,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
     };
 
     return (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm sticky">
+        <div className="relative bg-white border border-gray-200 rounded-xl shadow-sm">
             {session?.user ? (
                 <div className="p-4 sm:p-7">
                     <div className="text-center">
@@ -217,76 +228,56 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                     <div className="mt-5">
                         <form className="sticky" onSubmit={formik.handleSubmit}>
                             <div className="grid gap-y-4">
-                                {/* //! Date Select */}
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <label htmlFor="start_date" className="block text-sm ">Start Date</label>
-                                        <input
-                                            type="date"
-                                            id="start_date"
-                                            {...formik.getFieldProps('start_date')}
-                                            onChange={handleStartDateChange}
-                                            className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.start_date && formik.errors.start_date && <div className="text-red-500 text-sm">{formik.errors.start_date}</div>}
-                                        {nepaliStartDate && (
-                                            <div className="mt-1 text-sm text-gray-700"><i>({nepaliStartDate})</i></div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label htmlFor="end_date" className="block text-sm ">End Date</label>
-                                        <input
-                                            type="date"
-                                            id="end_date"
-                                            {...formik.getFieldProps('end_date')}
-                                            onChange={handleEndDateChange}
-                                            className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.end_date && formik.errors.end_date && <div className="text-red-500 text-sm">{formik.errors.end_date}</div>}
-                                        {nepaliEndDate && (
-                                            <div className="mt-1 text-sm text-gray-700"><i>({nepaliEndDate})</i></div>
-                                        )}
-                                    </div>
-                                </div>
+                                <label htmlFor="start_date" className="block text-sm ">Start Date</label>
+                                <input
+                                    type="date"
+                                    id="start_date"
+                                    {...formik.getFieldProps('start_date')}
+                                    onChange={handleStartDateChange}
+                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                />
+                                {/* <DatePicker
+                                    selected={new Date(formik.values.start_date)}
+                                    onChange={(date: Date) => {
+                                        formik.setFieldValue('start_date', date.toISOString().split('T')[0]);
+                                        handleStartDateChange({
+                                            target: { value: date.toISOString().split('T')[0] },
+                                        } as React.ChangeEvent<HTMLInputElement>);
+                                    }}
+                                    dateFormat="yyyy-MM-dd"
+                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded custom-date-input`}
+                                /> */}
+                                {formik.touched.start_date && formik.errors.start_date && <div className="text-red-500 text-sm">{formik.errors.start_date}</div>}
+                                {nepaliStartDate && (
+                                    <div className="mt-1 text-sm text-gray-700">BS: {nepaliStartDate}</div>
+                                )}
 
-                                {/* //! Time Select */}
-                                {/* <div className='flex justify-between'>
-                                    <div>
-                                        <label htmlFor="start_time" className="block text-sm ">Start Time</label>
-                                        <input
-                                            type="time"
-                                            onChange={(e) => formik.setFieldValue('start_time', e.target.value)}
-                                            {...formik.getFieldProps('start_time')}
-                                            className={`py-2 px-3 border ${formik.touched.start_time && formik.errors.start_time ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.start_time && formik.errors.start_time && <div className="text-red-500 text-sm">{formik.errors.start_time}</div>}
-
-                                    </div>
-                                    <div>
-                                        <label htmlFor="end_time" className="block text-sm ">End Time</label>
-                                        <input
-                                            type="time"
-                                            onChange={(e) => formik.setFieldValue('end_time', e.target.value)}
-                                            {...formik.getFieldProps('end_time')}
-                                            className={`py-2 px-3 border ${formik.touched.end_time && formik.errors.end_time ? 'border-red-500' : 'border-gray-200'} rounded`}
-                                        />
-                                        {formik.touched.end_time && formik.errors.end_time && <div className="text-red-500 text-sm">{formik.errors.end_time}</div>}
-                                    </div>
-                                </div> */}
+                                <label htmlFor="end_date" className="block text-sm ">End Date</label>
+                                <input
+                                    type="date"
+                                    id="end_date"
+                                    {...formik.getFieldProps('end_date')}
+                                    onChange={handleEndDateChange}
+                                    className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                />
+                                {formik.touched.end_date && formik.errors.end_date && <div className="text-red-500 text-sm">{formik.errors.end_date}</div>}
+                                {nepaliEndDate && (
+                                    <div className="mt-1 text-sm text-gray-700">BS: {nepaliEndDate}</div>
+                                )}
 
                                 {/*//! React Select  */}
                                 <div>
                                     <label htmlFor="Hall" className="inline-block text-sm text-gray-800 mt-2.5">Select Halls</label>
                                     <Select
                                         id="Hall"
-                                        isMulti
+                                        isMulti // Enable multiple selection
                                         name="Hall"
-                                        options={hallOptions}
-                                        classNamePrefix="react-select"
+                                        options={hallOptions} // Options to display in the dropdown
+                                        classNamePrefix="react-select" // For styling purposes
                                         value={hallOptions.filter(option => formik.values.Hall.includes(option.value))} // Display selected values
                                         onChange={(selectedOptions: MultiValue<HallOption> | null) => {
                                             const selectedHalls = selectedOptions ? selectedOptions.map(option => option.value) : [];
-                                            formik.setFieldValue('Hall', selectedHalls);
+                                            formik.setFieldValue('Hall', selectedHalls); // Update formik value
                                         }}
                                     />
                                     {formik.errors.Hall && (

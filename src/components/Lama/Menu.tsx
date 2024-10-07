@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link"
-import { LayoutDashboard, Castle, UsersRound, Network, Wrench, Theater, SquarePen, HousePlus } from 'lucide-react'
+import { LayoutDashboard, Castle, UsersRound, Network, Theater, SquarePen, HousePlus } from 'lucide-react'
 import { usePathname } from "next/navigation"
 
 const menuItems = [
@@ -14,11 +14,6 @@ const menuItems = [
         path: '/dashboard/users',
         icon: <UsersRound />
     },
-    // {
-    //     title: "Users Copy",
-    //     path: '/dashboard/userscopy',
-    //     icon: <Network />
-    // },
     {
         title: "Categories",
         path: '/dashboard/category',
@@ -61,7 +56,7 @@ const Menu = () => {
                 return (
                     <div className="" key={links.title}>
                         <Link href={links.path}
-                            className={`flex items-center rounded-lg group justify-center lg:justify-start gap-4 py-2 ${isActive ? 'text-blue-600 bg-gray-200' : 'text-gray-900 hover:bg-gray-100'}`}>
+                            className={`flex items-center rounded-lg group justify-center lg:justify-start gap-4 py-2 ${isActive ? 'text-red-600 bg-gray-200' : 'text-gray-900 hover:bg-gray-100'}`}>
                             {links.icon}
                             <span className="hidden lg:block">{links.title}</span>
                         </Link>

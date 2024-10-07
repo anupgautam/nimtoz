@@ -15,9 +15,9 @@ const Dashboard = async () => {
                 {/* USER CARDS */}
                 <div className="flex gap-4 justify-between flex-wrap">
                     <UserCard type="student" />
-                    <UserCard type="teacher" />
-                    <UserCard type="parent" />
-                    <UserCard type="staff" />
+                    {/* <UserCard type="teacher" /> */}
+                    {/* <UserCard type="parent" /> */}
+                    {/* <UserCard type="staff" /> */}
                 </div>
                 {/* MIDDLE CHARTS */}
                 <div className="flex gap-4 flex-col lg:flex-row">
