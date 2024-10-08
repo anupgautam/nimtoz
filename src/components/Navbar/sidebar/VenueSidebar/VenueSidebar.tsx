@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { IoInfinite } from "react-icons/io5";
 import Image from "next/image";
+import Skeleton from 'react-loading-skeleton'
 
 interface Category {
     id: string | number;
@@ -17,9 +18,10 @@ interface SidebarProps {
         categories: Category[];
         onCategoryChange: (category: string) => void;
     };
+    loading: boolean;
 }
 
-const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters }) => {
+const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters, loading }) => {
 
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
@@ -51,28 +53,48 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
                     </h2>
                 </div>
 
-                {filters.categories.map((category) => (
-                    <div
-                        key={category.id}
-                        className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === category.category_name ? 'border-r-4 border-red-500' : ''}`}
-                        onClick={() => handleCategoryChange(category.category_name)}
-                    >
-                        <Image
-                            src={category.category_icon}
-                            alt={category.category_name}
-                            className="w-8 h-8 object-cover"
-                            width={10}
-                            height={10}
-                            priority
-                        />
-                        <h2
-                            className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
-                                } ${selectedCategory === category.category_name ? 'text-red-500' : 'text-neutral-600'}`}
+                {/* Skeleton loading logic */}
+                {loading ? (
+                    // Render skeletons when loading
+                    <>
+                        <div className="flex items-center py-1 gap-x-3 w-full">
+                            <Skeleton circle width={32} height={32} />
+                            <Skeleton width={100} height={20} />
+                        </div>
+                        <div className="flex items-center py-1 gap-x-3 w-full">
+                            <Skeleton circle width={32} height={32} />
+                            <Skeleton width={100} height={20} />
+                        </div>
+                        <div className="flex items-center py-1 gap-x-3 w-full">
+                            <Skeleton circle width={32} height={32} />
+                            <Skeleton width={100} height={20} />
+                        </div>
+                    </>
+                ) : (
+                    // Render categories when not loading
+                    filters.categories.map((category) => (
+                        <div
+                            key={category.id}
+                            className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === category.category_name ? 'border-r-4 border-red-500' : ''}`}
+                            onClick={() => handleCategoryChange(category.category_name)}
                         >
-                            {category.category_name}
-                        </h2>
-                    </div>
-                ))}
+                            <Image
+                                src={category.category_icon}
+                                alt={category.category_name}
+                                className="w-8 h-8 object-cover"
+                                width={10}
+                                height={10}
+                                priority
+                            />
+                            <h2
+                                className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
+                                    } ${selectedCategory === category.category_name ? 'text-red-500' : 'text-neutral-600'}`}
+                            >
+                                {category.category_name}
+                            </h2>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

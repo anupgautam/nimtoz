@@ -56,7 +56,7 @@ const VenueNavbar = () => {
                                         {item.title}
                                     </h1>
                                 </Link>
-                                
+
                             </div>
                         );
                     })}
@@ -84,14 +84,12 @@ const VenueNavbar = () => {
 
                                     <ul className="py-1">
                                         {session?.user.role === "Admin" &&
-                                            <li>
+                                            (<li>
                                                 <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
                                             </li>
-                                        }
+                                            )}
                                         <li>
                                             <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start" onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
                                                 signOut({ callbackUrl: '/login' });
                                                 console.log("Logged Out", session)
                                             }}>Sign out</button>

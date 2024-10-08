@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from '@next/font/google'
 import "./globals.css";
-import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar";
-import Footer from "@/components/Footer/Footer";
 import Provider from "@/components/Provider";
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,11 +12,11 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   // metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL)
   metadataBase: new URL("https://nimtoz.com/"),
-  // title: "Nimtoz - Venue Bookings for all",
-  title: {
-    default: "Nimtoz - Venue Bookings for all",
-    template: "%s | Nimtoz - Venue Bookings"
-  },
+  title: "Nimtoz - Venue Bookings for all",
+  // title: {
+  //   default: "Nimtoz - Venue Bookings for all",
+  //   template: "%s | Nimtoz - Venue Bookings"
+  // },
   description: "Fast and Easy Venue Bookings for all kinds of events ",
   openGraph: {
     title: "Nimtoz - Venue Bookings for all",
@@ -36,15 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${poppins.className} antialiased`}
-      >
-        <Provider>
+    <Provider>
+      <html lang="en">
+        <body
+          className={`${poppins.className} antialiased`}
+        >
           {children}
           <ToastContainer position="bottom-right" />
-        </Provider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </Provider>
   );
 }

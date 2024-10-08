@@ -193,26 +193,6 @@ const ProductForm = ({
                                     <>
                                         <div className="sm:col-span-9">
                                             <div className="flex items-center gap-5">
-                                                {/* {(selectedImages || data?.product_image) && (
-                                                    <div
-                                                        style={{
-                                                            width: '100px',
-                                                            height: '100px',
-                                                            borderRadius: '50%',
-                                                            overflow: 'hidden',
-                                                        }}
-                                                    >
-                                                        <Image
-                                                            src={
-                                                                selectedImages?.secure_url || data?.product_image
-                                                            } // Use uploaded image or existing image in edit mode
-                                                            alt={data?.category_name ? data.category_name : "Category Icon"}
-                                                            width={100}
-                                                            height={100}
-                                                            objectFit="cover"
-                                                        />
-                                                    </div>
-                                                )} */}
                                                 <div className="flex gap-x-2 cursor-pointer" onClick={() => open()}>
                                                     <Picture width={25} height={25} />
                                                 </div>

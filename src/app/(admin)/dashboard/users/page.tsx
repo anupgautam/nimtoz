@@ -1,7 +1,7 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow, CircleUserRound } from 'lucide-react'
+// import { SlidersHorizontal, ArrowDownWideNarrow, CircleUserRound } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { role, teachersData } from "@/lib/data";
@@ -37,7 +37,6 @@ const columns = [
 const renderRow = (item: UserList) => (
     <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
         <td className="flex items-center gap-4 p-4">
-            {/* <Image src={item.photo} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
             <div className="flex flex-col">
                 <h3 className="font-semibold">{`${item.firstname} ${item.lastname}`}</h3>
                 <p className="text-xs text-gray-500">{item?.email}</p>
@@ -45,12 +44,6 @@ const renderRow = (item: UserList) => (
         </td>
         <td className="hidden md:table-cell">{item.role}</td>
         <td className="hidden md:table-cell">{item.phone_number}</td>
-        {/* <td>
-            <div className="flex items-center gap-2">
-                    <FormModal type="update" table="User" />
-                <FormModal table="User" type="delete" id={item.id} />
-            </div>
-        </td> */}
     </tr>
 )
 
@@ -109,12 +102,12 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch />
                     <div className="flex items-center gap-4 self-end">
-                        <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
+                        {/* <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <SlidersHorizontal />
                         </button>
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
-                        </button>
+                        </button> */}
                         {/* <button className="w-24 h-12 flex items-center justify-center rounded-md bg-red-300 ">
                             <Plus /> Add
                         </button> */}

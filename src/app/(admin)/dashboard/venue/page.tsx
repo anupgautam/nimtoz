@@ -1,9 +1,7 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
-import Link from "next/link"
-import FormModal from "@/components/Lama/FormModal"
+// import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import FormContainer from "@/components/Lama/FormContainer"
 import { Prisma, Venue } from "@prisma/client"
 import prisma from "@/lib/db"
@@ -56,9 +54,7 @@ const renderRow = (item: VenueList) => (
         {/*//! Actions  */}
         <td>
             <div className="flex items-center gap-2">
-                {/* <Link href={`/dashboard/venue/${item.id}`}> */}
                 <FormContainer table="Venue" type="update" data={item} id={item.id} />
-                {/* </Link> */}
                 <FormContainer table="Venue" type="delete" id={item.id} />
             </div>
         </td>
@@ -121,12 +117,12 @@ const VenueTable = async ({ searchParams }: { searchParams: { [key: string]: str
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch />
                     <div className="flex items-center gap-4 self-end">
-                        <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
+                        {/* <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <SlidersHorizontal />
                         </button>
                         <button className="w-8 h-8 flex items-center justify-center rounded-md bg-red-300 ">
                             <ArrowDownWideNarrow />
-                        </button>
+                        </button> */}
                         <FormContainer table="Venue" type="create" />
                     </div>
                 </div>

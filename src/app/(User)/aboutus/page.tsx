@@ -1,14 +1,9 @@
-import Footer from "@/components/Footer/Footer"
-import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 import Image from "next/image"
 import RegisterPassword from '../../../../public/register.svg'
-import { Suspense } from "react"
-import AboutUsLoading from "./loading"
 
 const About = () => {
   return (
     <>
-      <Suspense fallback={<AboutUsLoading/>}>
         <div className="pt-20" >
           <div className="max-w-3xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
             <div className="max-w-2xl">
@@ -167,7 +162,6 @@ const About = () => {
             </div>
           </div>
         </div>
-      </Suspense>
     </>
   )
 }
