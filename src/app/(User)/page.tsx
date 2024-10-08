@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <SearchBar onSearch={handleSearch} />
-      <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} />
+      <VenueSidebar filters={{ categories, onCategoryChange: handleCategoryChange }} isHovered={isHovered} setIsHovered={setIsHovered} loading={loading} />
       <ChatCard data={products} loading={loading} />
     </>
   );
