@@ -57,18 +57,14 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
                 {loading ? (
                     // Render skeletons when loading
                     <>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
+                        {[...Array(6)].map((_, idx) => (
+                            <div key={idx} className="flex items-center py-1 gap-x-3 w-full">
+                                {/* Circle skeleton */}
+                                <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+                                {/* Text skeleton */}
+                                <div className="w-24 h-4 bg-gray-300 rounded-md animate-pulse"></div>
+                            </div>
+                        ))}
                     </>
                 ) : (
                     // Render categories when not loading

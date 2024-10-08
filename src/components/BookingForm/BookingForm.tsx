@@ -72,105 +72,116 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
         name: string().required('EventType name is required'),
     });
 
-    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    const today = new Date();
+    const threeDaysFromNow = new Date(today.setDate(today.getDate() + 2));
+    // const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     const bookingSchema = object({
-        //! Dont' book of today
-        // start_date: date()
-        //     .required("Start date is required")
-        //     .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past"),
-        // end_date: date()
-        //     .required("End date is required")
-        //     .min(new Date(), "End date cannot be in the past")
-        //     .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
-        //         const { start_date } = this.parent; // Access the start_date value from the parent object
-        //         return !start_date || value === null || new Date(value) >= new Date(start_date);
-        //     }),
-
-        //! Allow booking of today 
+        //! Only allow booking 3 days from now
         start_date: date()
             .required("Start date is required")
-            .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past") // Allows today as valid
-            .test('is-today-or-future', 'Start date cannot be in the past', function (value) {
-                const today = new Date().setHours(0, 0, 0, 0);
-                return value === null || new Date(value).setHours(0, 0, 0, 0) >= today;
-            }),
-
+            .min(threeDaysFromNow, "Start date must be at least 3 days from today")
+            .test(
+                'is-not-in-past',
+                'Start date cannot be in the past',
+                (value) => value && new Date(value).setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0)
+            ),
         end_date: date()
             .required("End date is required")
-            .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
-                const { start_date } = this.parent;
-                const startDate = new Date(start_date).setHours(0, 0, 0, 0);
-                const endDate = new Date(value).setHours(0, 0, 0, 0);
-                const today = new Date().setHours(0, 0, 0, 0);
-
-                return !start_date || (endDate >= startDate && endDate >= today);
-            }),
-        start_time: string()
-            .matches(timeRegex, 'Start time must be in HH:MM format')
-            .required('Start time is required')
-            .test('is-future-time', 'Start time cannot be in the past', function (value) {
-                const { start_date } = this.parent;
-
-                if (!value) return true;
-
-                const [startHour, startMinute] = value.split(':').map(Number);
-                const currentDate = new Date();
-
-                // Check if the selected start date is today
-                if (new Date(start_date).toDateString() === currentDate.toDateString()) {
-                    const currentHour = currentDate.getHours();
-                    const currentMinute = currentDate.getMinutes();
-
-                    // Convert both times to minutes for easier comparison
-                    const currentTimeInMinutes = currentHour * 60 + currentMinute;
-                    const startTimeInMinutes = startHour * 60 + startMinute;
-
-                    return startTimeInMinutes >= currentTimeInMinutes;
+            .min(new Date(), "End date cannot be in the past")
+            .test(
+                'is-greater-or-equal',
+                'End date must be greater than the start date',
+                function (value) {
+                    const { start_date } = this.parent;
+                    return !start_date || value === null || new Date(value) > new Date(start_date);
                 }
-                return true;
-            }),
+            ),
 
-        //! Atleast 2 hours minimum huna paryo
-        end_time: string()
-            .matches(timeRegex, 'End time must be in HH:MM format')
-            .required('End time is required')
-            .test('is-greater-time', 'End time cannot be earlier than start time', function (value) {
-                const { start_time, start_date, end_date } = this.parent;
+        //! Allow booking of today with time 
+        // start_date: date()
+        //     .required("Start date is required")
+        //     .min(new Date(new Date().setHours(0, 0, 0, 0)), "Start date cannot be in the past") // Allows today as valid
+        //     .test('is-today-or-future', 'Start date cannot be in the past', function (value) {
+        //         const today = new Date().setHours(0, 0, 0, 0);
+        //         return value === null || new Date(value).setHours(0, 0, 0, 0) >= today;
+        //     }),
 
-                if (!start_time || !value) return true;
+        // end_date: date()
+        //     .required("End date is required")
+        //     .test('is-greater-or-equal', 'End date must be greater than or equal to start date', function (value) {
+        //         const { start_date } = this.parent;
+        //         const startDate = new Date(start_date).setHours(0, 0, 0, 0);
+        //         const endDate = new Date(value).setHours(0, 0, 0, 0);
+        //         const today = new Date().setHours(0, 0, 0, 0);
 
-                const [startHour, startMinute] = start_time.split(':').map(Number);
-                const [endHour, endMinute] = value.split(':').map(Number);
+        //         return !start_date || (endDate >= startDate && endDate >= today);
+        //     }),
+        // start_time: string()
+        //     .matches(timeRegex, 'Start time must be in HH:MM format')
+        //     .required('Start time is required')
+        //     .test('is-future-time', 'Start time cannot be in the past', function (value) {
+        //         const { start_date } = this.parent;
 
-                const startTimeInMinutes = startHour * 60 + startMinute;
-                const endTimeInMinutes = endHour * 60 + endMinute;
+        //         if (!value) return true;
 
-                // If start_date and end_date are the same, ensure end_time is after start_time
-                if (new Date(start_date).toDateString() === new Date(end_date).toDateString()) {
-                    return endTimeInMinutes > startTimeInMinutes;
-                }
-                return true; // If dates are different, time comparison is not needed
-            })
-            // New test for minimum 2-hour gap validation
-            .test('is-at-least-2-hours-gap', 'There must be at least a 2-hour gap between start and end times', function (value) {
-                const { start_time, start_date, end_date } = this.parent;
+        //         const [startHour, startMinute] = value.split(':').map(Number);
+        //         const currentDate = new Date();
 
-                if (!start_time || !value) return true;
+        //         // Check if the selected start date is today
+        //         if (new Date(start_date).toDateString() === currentDate.toDateString()) {
+        //             const currentHour = currentDate.getHours();
+        //             const currentMinute = currentDate.getMinutes();
 
-                const [startHour, startMinute] = start_time.split(':').map(Number);
-                const [endHour, endMinute] = value.split(':').map(Number);
+        //             // Convert both times to minutes for easier comparison
+        //             const currentTimeInMinutes = currentHour * 60 + currentMinute;
+        //             const startTimeInMinutes = startHour * 60 + startMinute;
 
-                const startTimeInMinutes = startHour * 60 + startMinute;
-                const endTimeInMinutes = endHour * 60 + endMinute;
+        //             return startTimeInMinutes >= currentTimeInMinutes;
+        //         }
+        //         return true;
+        //     }),
 
-                // If start_date and end_date are the same, check for the 2-hour gap
-                if (new Date(start_date).toDateString() === new Date(end_date).toDateString()) {
-                    const timeDifference = endTimeInMinutes - startTimeInMinutes;
-                    return timeDifference >= 120;
-                }
+        // //! Atleast 2 hours minimum huna paryo
+        // end_time: string()
+        //     .matches(timeRegex, 'End time must be in HH:MM format')
+        //     .required('End time is required')
+        //     .test('is-greater-time', 'End time cannot be earlier than start time', function (value) {
+        //         const { start_time, start_date, end_date } = this.parent;
 
-                return true; // If dates are different, the gap isn't needed (this can be adjusted if necessary)
-            }),
+        //         if (!start_time || !value) return true;
+
+        //         const [startHour, startMinute] = start_time.split(':').map(Number);
+        //         const [endHour, endMinute] = value.split(':').map(Number);
+
+        //         const startTimeInMinutes = startHour * 60 + startMinute;
+        //         const endTimeInMinutes = endHour * 60 + endMinute;
+
+        //         // If start_date and end_date are the same, ensure end_time is after start_time
+        //         if (new Date(start_date).toDateString() === new Date(end_date).toDateString()) {
+        //             return endTimeInMinutes > startTimeInMinutes;
+        //         }
+        //         return true; // If dates are different, time comparison is not needed
+        //     })
+        //     // New test for minimum 2-hour gap validation
+        //     .test('is-at-least-2-hours-gap', 'There must be at least a 2-hour gap between start and end times', function (value) {
+        //         const { start_time, start_date, end_date } = this.parent;
+
+        //         if (!start_time || !value) return true;
+
+        //         const [startHour, startMinute] = start_time.split(':').map(Number);
+        //         const [endHour, endMinute] = value.split(':').map(Number);
+
+        //         const startTimeInMinutes = startHour * 60 + startMinute;
+        //         const endTimeInMinutes = endHour * 60 + endMinute;
+
+        //         // If start_date and end_date are the same, check for the 2-hour gap
+        //         if (new Date(start_date).toDateString() === new Date(end_date).toDateString()) {
+        //             const timeDifference = endTimeInMinutes - startTimeInMinutes;
+        //             return timeDifference >= 120;
+        //         }
+
+        //         return true; // If dates are different, the gap isn't needed (this can be adjusted if necessary)
+        //     }),
 
 
         Hall: array().min(1, "At least one hall must be selected").required("Hall selection is required"),
@@ -180,8 +191,8 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
     const formik = useFormik({
         validationSchema: bookingSchema,
         initialValues: {
-            start_date: new Date().toISOString().split('T')[0],
-            end_date: new Date().toISOString().split('T')[0],
+            start_date: new Date(new Date().setDate(new Date().getDate() + 3)).toISOString().split('T')[0],
+            end_date: new Date(new Date().setDate(new Date().getDate() + 4)).toISOString().split('T')[0],
             start_time: '',
             end_time: '',
             userId: session && session?.user?.id || 0,
@@ -301,7 +312,8 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                     <div className="mt-1 text-sm text-gray-700">BS: {nepaliEndDate}</div>
                                 )}
 
-                                <label htmlFor="start_time" className="block text-sm ">Start Time</label>
+                                {/* //! Time Period wala */}
+                                {/* <label htmlFor="start_time" className="block text-sm ">Start Time</label>
                                 <input
                                     type="time"
                                     id="start_time"
@@ -321,7 +333,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                 />
                                 {formik.errors.end_time && (
                                     <div className="text-red-500 text-sm">{formik.errors.end_time}</div>
-                                )}
+                                )} */}
 
                                 {/*//! React Select  */}
                                 <div>

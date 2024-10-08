@@ -52,48 +52,48 @@ export async function POST(req: Request) {
 
         console.log("Change time", combinedStartTime, combinedEndTime)
 
-        // const overlappingBooking = await prisma.event.findFirst({
-        //     where: {
-        //         productId: productId,
-        //         OR: [
-        //             {
-        //                 start_date: {
-        //                     lt: endDate,
-        //                 },
-        //                 end_date: {
-        //                     gt: startDate,
-        //                 },
-        //             },
-        //         ],
-        //     },
-        // });
-
-        //! With Time
         const overlappingBooking = await prisma.event.findFirst({
             where: {
                 productId: productId,
                 OR: [
-                    // Check if the dates overlap
                     {
-                        AND: [
-                            { start_date: { lt: endDate } },
-                            { end_date: { gt: startDate } },
-                        ],
+                        start_date: {
+                            lt: endDate,
+                        },
+                        end_date: {
+                            gt: startDate,
+                        },
                     },
-                    // Check if the times overlap within the same date range
-                    combinedStartTime && combinedEndTime
-                        ? {
-                            AND: [
-                                { start_date: startDate },
-                                { end_date: endDate },
-                                { start_time: { lt: combinedEndTime } },
-                                { end_time: { gt: combinedStartTime } },
-                            ],
-                        }
-                        : {},
                 ],
             },
         });
+
+        //! With Time
+        // const overlappingBooking = await prisma.event.findFirst({
+        //     where: {
+        //         productId: productId,
+        //         OR: [
+        //             // Check if the dates overlap
+        //             {
+        //                 AND: [
+        //                     { start_date: { lt: endDate } },
+        //                     { end_date: { gt: startDate } },
+        //                 ],
+        //             },
+        //             // Check if the times overlap within the same date range
+        //             combinedStartTime && combinedEndTime
+        //                 ? {
+        //                     AND: [
+        //                         { start_date: startDate },
+        //                         { end_date: endDate },
+        //                         { start_time: { lt: combinedEndTime } },
+        //                         { end_time: { gt: combinedStartTime } },
+        //                     ],
+        //                 }
+        //                 : {},
+        //         ],
+        //     },
+        // });
 
 
         //! Midnight check
