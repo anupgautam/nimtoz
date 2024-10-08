@@ -21,7 +21,7 @@ function combineDateAndTime(dateString: any, timeString: any) {
 
 // Setup Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    host: process.env.NEXT_PUBLIC_BASE_URL,
+    host: 'smtp.gmail.com',
     port: 587, // Usually 587 for TLS
     secure: false, // Set to true for port 465
     auth: {
@@ -44,13 +44,10 @@ export async function POST(req: Request) {
             Hall,
         } = body;
 
-        console.log("Initial data", body)
         const startDate = new Date(start_date);
         const endDate = new Date(end_date);
         const combinedStartTime = combineDateAndTime(start_date, start_time);
         const combinedEndTime = combineDateAndTime(end_date, end_time);
-
-        console.log("Change time", combinedStartTime, combinedEndTime)
 
         const overlappingBooking = await prisma.event.findFirst({
             where: {
@@ -173,15 +170,115 @@ export async function POST(req: Request) {
             },
         });
 
-        // const mailOptions = {
-        //     from: process.env.EMAIL_USER, // Sender address
-        //     to: process.env.EMAIL_USER, // Recipient address (can be dynamic based on user)
-        //     subject: 'Venue Booking Detail',
-        //     text: 'Venue Availability',
-        //     html: `<p>Venue Availability</p>`,
-        // };
+        const product = await prisma.product.findUnique({
+            where: {
+                id: parseInt(productId), // Assuming productId is an integer
+            },
+            select: {
+                title: true, // Assuming the product has a 'title' field
+            },
+        });
 
-        // await transporter.sendMail(mailOptions);
+        // Fetch user name by userId
+        const user = await prisma.user.findUnique({
+            where: {
+                id: parseInt(userId), // Assuming userId is an integer
+            },
+            select: {
+                email: true,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
+            subject: 'New Venue Booking Request',
+            text: 'You have received a new venue booking request.',
+            html: `
+                <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 20px;
+                            background-color: #f4f4f4;
+                        }
+                        .container {
+                            background-color: #fff;
+                            padding: 20px;
+                            border-radius: 5px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            color: #333;
+                        }
+                        .details {
+                            margin-top: 20px;
+                        }
+                        .details th {
+                            text-align: left;
+                            padding: 5px;
+                        }
+                        .details td {
+                            padding: 5px;
+                        }
+                        .footer {
+                            margin-top: 20px;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>New Venue Booking Request</h1>
+                        <p>You have received a new booking request. Here are the details:</p>
+                        <table class="details">
+                            <tr>
+                                <th>Start Date:</th>
+                                <td>${newBooking.start_date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            })}</td>
+                            </tr>
+                            <tr>
+                                <th>End Date:</th>
+                                <td>${newBooking.end_date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            })}</td>
+                            </tr>
+                            <tr>
+                                <th>Start Time:</th>
+                                <td>${newBooking.start_time ? newBooking.start_time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}</td>
+                            </tr>
+                            <tr>
+                                <th>End Time:</th>
+                                <td>${newBooking.end_time ? newBooking.end_time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""} </td>
+                    </tr>
+                    <tr>
+                    <th>User Name: </th>
+                        <td> ${user?.email}</td>
+                            </tr>
+                            <tr>
+                            <th>Product Name: </th>
+                                <td> ${product?.title} </td>
+                                    </tr>
+                                    </table>
+                                    <p> Please review and approve the booking at your earliest convenience.</p>
+                                        <div class="footer">
+                                            <p>Thank you! </p>
+                                                </div>
+                                                </div>
+                                                </body>
+                                                </html>
+                                                    `,
+        };
+
+        await transporter.sendMail(mailOptions);
 
         return NextResponse.json({ booking: newBooking }, { status: 201 });
     } catch (error) {
