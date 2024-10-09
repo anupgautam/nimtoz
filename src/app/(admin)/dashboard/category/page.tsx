@@ -29,7 +29,7 @@ const columns = [
 ];
 
 const renderRow = (item: CategoryList) => (
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
+    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
 
         {/* <td className="font-semibold gap-4 p-4">{item.category_icon}</td> */}
         <td className="flex items-center gap-4 p-4">

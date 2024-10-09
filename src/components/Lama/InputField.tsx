@@ -40,7 +40,7 @@ const InputField = ({
                     <input
                         type="checkbox"
                         {...register(name)}
-                        className={`shrink-0 mt-4 border-red-600 rounded text-red-600 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none`}
+                        className={`shrink-0 mt-4 border-orange-600 rounded text-orange-600 focus:ring-orange-500 disabled:opacity-50 disabled:pointer-events-none`}
                         defaultChecked={Boolean(defaultValue)}
                         onChange={onChange}
                         {...inputProps}

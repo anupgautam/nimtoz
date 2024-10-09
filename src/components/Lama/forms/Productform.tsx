@@ -25,6 +25,10 @@ type Rules = {
     description: string,
 }
 
+type ImageType = {
+    url: string; // You can add other relevant fields if needed
+};
+
 const ProductForm = ({
     type,
     data,
@@ -38,7 +42,7 @@ const ProductForm = ({
 }) => {
 
     const { category, images } = relatedData;
-    const defaultImages = images?.map((image) => image.url)
+    const defaultImages = images?.map((image: ImageType) => image.url)
 
     const [selectedImages, setSelectedImages] = useState<any>(defaultImages || []);
     // const [halls, setHalls] = useState<Hall[]>(
@@ -98,7 +102,7 @@ const ProductForm = ({
     }
 
     const removeImage = (index: number) => {
-        setSelectedImages(selectedImages.filter((_, i) => i !== index));
+        setSelectedImages(selectedImages.filter((_: any, i: number) => i !== index));
     };
 
     const handleAddHall = () => {
@@ -185,7 +189,7 @@ const ProductForm = ({
                                     : null; // Handle the case where result.info might not be an object
 
                                 if (newImage) {
-                                    setSelectedImages((prevImages) => Array.isArray(prevImages) ? [...prevImages, newImage] : [newImage]);
+                                    setSelectedImages((prevImages: any) => Array.isArray(prevImages) ? [...prevImages, newImage] : [newImage]);
                                 }
                             }}>
                             {({ open }) => {
@@ -295,7 +299,7 @@ const ProductForm = ({
                             <p className="text-xs text-red-600">{errors?.category.message.toString()}</p>
                         )}
                     </div>
-                    
+
                     {/*//! Multiple Halls  */}
                     {halls.map((hall, index) => (
                         <div key={index} className="sm:col-span-12 flex items-center gap-1">
@@ -308,7 +312,7 @@ const ProductForm = ({
                                     onClick={handleAddHall}
                                 />
                                 <CircleMinus
-                                    className={`text-red-500 cursor-pointer ${halls.length === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    className={`text-red-500 cursor-pointer ${halls.length === 1 ? "hidden cursor-not-allowed" : ""}`}
                                     onClick={() => handleRemoveHall(index)}
                                     style={{ pointerEvents: halls.length === 1 ? 'none' : 'auto' }}
                                 />
@@ -346,7 +350,7 @@ const ProductForm = ({
                                     onClick={handleAddAmenity}
                                 />
                                 <CircleMinus
-                                    className={`text-red-500 cursor-pointer ${amenities.length === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    className={`text-red-500 cursor-pointer ${amenities.length === 1 ? "hidden cursor-not-allowed" : ""}`}
                                     onClick={() => handleRemoveAmenity(index)}
                                     style={{ pointerEvents: amenities.length === 1 ? 'none' : 'auto' }}
                                 />
@@ -377,7 +381,7 @@ const ProductForm = ({
                                     onClick={handleAddRules}
                                 />
                                 <CircleMinus
-                                    className={`text-red-500 cursor-pointer ${rules.length === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    className={`text-red-500 cursor-pointer ${rules.length === 1 ? "hidden cursor-not-allowed" : ""}`}
                                     onClick={() => handleRemoveRules(index)}
                                     style={{ pointerEvents: rules.length === 1 ? 'none' : 'auto' }}
                                 />
@@ -415,7 +419,7 @@ const ProductForm = ({
                     <button
                         type="submit"
                         disabled={!isValid}
-                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
+                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-orange-600 text-white"
                             }`}
                     >
                         {type === "create" ? "Add" : "Update"}

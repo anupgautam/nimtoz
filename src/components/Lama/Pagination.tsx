@@ -31,7 +31,7 @@ const Pagination = ({ page, count }: { page: number, count: number }) => {
                             const pageIndex = index + 1;
                             return <button
                                 key={pageIndex}
-                                type="button" className={`min-h-[38px] min-w-[38px] flex justify-center items-center  text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${page === pageIndex ? "bg-red-300" : ""}`}
+                                type="button" className={`min-h-[38px] min-w-[38px] flex justify-center items-center  text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${page === pageIndex ? "bg-orange-300" : ""}`}
                                 aria-current="page"
                                 onClick={() => { changePage(pageIndex) }}
                             >

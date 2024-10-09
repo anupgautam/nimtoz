@@ -26,7 +26,7 @@ const columns = [
 ];
 
 const renderRow = (item: EventTypeList) => (
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
+    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
         <td className="font-semibold p-4">{item.title}</td>
         <td>
             <div className="flex items-center gap-2">

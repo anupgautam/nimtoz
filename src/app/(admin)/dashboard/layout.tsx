@@ -23,9 +23,9 @@ export default function RootLayout({
 
                 {/*//* Left  */}
                 <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-2 text-xl">
-                    <Link href="/dashboard" className="flex items-center justify-center lg:justify-start gap-2">
-                        <Image src="https://flowbite.com/docs/images/logo.svg" alt="Logo" width={32} height={32} />
-                        <span className="hidden lg:block">Nimtoz</span>
+                    <Link href="/" className="flex items-center justify-center lg:justify-start gap-2">
+                        <Image src="/nimtoz_logo.png" alt="Logo" width={120} height={100} />
+                        {/* <span className="hidden lg:block">Nimtoz</span> */}
                     </Link>
 
                     <Menu />

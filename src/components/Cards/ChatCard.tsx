@@ -24,6 +24,22 @@ const ChatCard: React.FC<VenueCardProps> = ({ data, loading }) => {
         return <ChatCardSkeleton />;
     }
 
+    if (!data || data.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center">
+                {/* Illustration for "No Data" */}
+                <Image
+                    src="/under_construction.svg" // replace with your illustration
+                    alt="No Data Found"
+                    width={800}
+                    height={800}
+                    className="mb-4"
+                />
+                <p className="text-lg text-gray-600">No venues found. Please try again later!</p>
+            </div>
+        );
+    }
+
     return (
         <div className='mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
             {data.map((item) => (
@@ -79,7 +95,7 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
                     {product.product_image.map((_, index) => (
                         <span
                             key={index}
-                            className={`w-2 h-2 rounded-full ${index === currentImage ? 'bg-red-400' : 'bg-gray-400'} transition-colors duration-300`}
+                            className={`w-2 h-2 rounded-full ${index === currentImage ? 'bg-orange-400' : 'bg-gray-400'} transition-colors duration-300`}
                         />
                     ))}
                 </div>
@@ -91,7 +107,7 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
                 <section className='flex justify-between items-center text-sm mt-2'>
                     <p className='text-black font-medium'>Starting from Rs. {product.price}</p>
                     <Link href={`/${product.id}`}>
-                        <button className='px-3 py-1 ring-2 ring-red-600 rounded-lg text-red-600 font-light hover:bg-red-600 hover:text-white transition'>
+                        <button className='px-3 py-1 ring-2 ring-orange-500 rounded-lg text-orange-500 font-light hover:bg-orange-600 hover:text-white transition'>
                             Book Now
                         </button>
                     </Link>

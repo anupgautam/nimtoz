@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 interface User {
     email: string;
@@ -63,19 +64,22 @@ const LoginPage = () => {
 
             if (response?.error) {
                 console.error('Login failed:', response.error);
+                toast.error("Login Failed")
                 return;
             }
             const res = await fetch('/api/auth/session');
             const session = await res.json();
 
             if (session?.user?.role === 'Admin') {
-                router.push('/dashboard'); // Redirect admin users to the dashboard
+                router.push('/dashboard');
+                toast.success("Redirecting to the dashboard")
             } else {
                 router.push('/'); // Redirect regular users to the homepage
+                toast.success("Redirecting to Homepage")
             }
             resetForm();
         } catch (error) {
-            console.error('Some error occurred', error);
+            toast.error("Backend error")
         }
     }
 
@@ -84,13 +88,13 @@ const LoginPage = () => {
             <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h2 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Sign in</h2>
+                        <h2 className="text-3xl font-bold leading-tight text-orange-500 sm:text-4xl">Sign in</h2>
                         <p className="mt-2 text-sm text-gray-600">
                             Don&apos;t have an account?{' '}
                             <Link
                                 href="/register"
                                 title=""
-                                className="font-semibold text-red-600 transition-all duration-200 hover:underline"
+                                className="font-semibold text-orange-600 transition-all duration-200 hover:underline"
                             >
                                 Create a free account
                             </Link>
@@ -122,7 +126,7 @@ const LoginPage = () => {
                                         <Link
                                             href="forgot-password"
                                             title=""
-                                            className="text-sm font-semibold text-red-600 hover:underline"
+                                            className="text-sm font-semibold text-orange-600 hover:underline"
                                         >
                                             {' '}
                                             Forgot password?{' '}
@@ -164,7 +168,7 @@ const LoginPage = () => {
                                     <button
                                         type="submit"
                                         disabled={!formik.isValid || !formik.dirty} // Disable button if form is invalid or untouched
-                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300 cursor-not-allowed'}`}
+                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gray-300 cursor-not-allowed'}`}
                                     >
                                         Get started <ArrowRight className="ml-2" size={16} />
                                     </button>

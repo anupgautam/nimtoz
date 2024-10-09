@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { ShieldAlert, House, Users, ArrowLeft } from 'lucide-react'
 import Head from "next/head"
+import { useRouter } from 'next/navigation'
 
 const ProductDetailPage = ({ params }: { params: { id: string } }) => {
     const id = params.id;
@@ -13,6 +14,8 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
     const [product, setProduct] = useState<any>(null);
     const [halls, setHalls] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const router = useRouter()
 
     const fetchProduct = async (id: any) => {
 
@@ -102,7 +105,11 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
                 <>
                     {/* //! Images wala section */}
                     <div className="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto mt-20">
-                        <button className="bg:text-gray-400 rounded-md hover:text-gray-500"><ArrowLeft /></button>
+                        <button className="rounded-md bg-orange-500 py-2 px-4 text-white hover:bg-orange-600" onClick={() => router.back()}>
+                            <div className="flex gap-1 text-2xl">
+                                <ArrowLeft className="mt-0.5 mr-1" /> Back
+                            </div>
+                        </button>
                         <div className="flex flex-col lg:flex-row mt-10">
                             {/* Main Image */}
                             <div className="lg:w-1/2">

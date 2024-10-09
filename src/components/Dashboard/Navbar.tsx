@@ -2,6 +2,8 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import NimtozLogo from 'public/nimtoz_logo.png'
+import Image from "next/image";
 
 const Navbar = () => {
     const { data: session } = useSession();
@@ -34,8 +36,9 @@ const Navbar = () => {
                                     <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                                 </svg>
                             </button>
-                            <Link href="/dashboard" className="flex ms-2 md:me-24">
-                                <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
+                            <Link href="/" className="flex ms-2 md:me-24">
+                                {/* <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" /> */}
+                                <Image src="/nimtoz_logo.png" alt="Logo" height="100" width="160" />
                                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">Nimtoz</span>
                             </Link>
                         </div>

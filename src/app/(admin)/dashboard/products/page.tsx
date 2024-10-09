@@ -97,7 +97,7 @@ const columns = [
 ];
 
 const renderRow = (item: ProductList) => (
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
+    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
         <td className="flex items-center gap-4 p-4">
             {/* <Image src={item.photo} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
             <div className="flex flex-col">

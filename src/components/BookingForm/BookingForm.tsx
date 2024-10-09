@@ -259,14 +259,13 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
             // if (response.ok) {
             toast.success("Event request sent!");
             resetForm();
-            router.push('/'); // Navigate to confirmation page or anywhere
+            router.push('/'); 
             // }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                // Check if the error status is 409 (Conflict)
                 console.log(error.response)
                 if (error.response.status === 409) {
-                    toast.error(error.response.data.message); // Show the specific booking error message
+                    toast.error(error.response.data.message);
                 } else {
                     toast.error("Error creating booking");
                 }
@@ -292,7 +291,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                     id="start_date"
                                     {...formik.getFieldProps('start_date')}
                                     onChange={handleStartDateChange}
-                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                    className={`py-2 px-3 border ${formik.touched.start_date && formik.errors.start_date ? 'border-orange-500' : 'border-gray-200'} rounded`}
                                 />
                                 {formik.touched.start_date && formik.errors.start_date && <div className="text-red-500 text-sm">{formik.errors.start_date}</div>}
                                 {nepaliStartDate && (
@@ -305,7 +304,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                     id="end_date"
                                     {...formik.getFieldProps('end_date')}
                                     onChange={handleEndDateChange}
-                                    className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-red-500' : 'border-gray-200'} rounded`}
+                                    className={`py-2 px-3 border ${formik.touched.end_date && formik.errors.end_date ? 'border-orange-500' : 'border-gray-200'} rounded`}
                                 />
                                 {formik.touched.end_date && formik.errors.end_date && <div className="text-red-500 text-sm">{formik.errors.end_date}</div>}
                                 {nepaliEndDate && (
@@ -366,7 +365,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                             const selectedEventId = e.target.value;
                                             formik.setFieldValue('events', [{ id: selectedEventId }]); // Set selected event
                                         }}
-                                        className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0 text-sm relative rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                        className={`py-2 px-3 block w-full border-gray-200 shadow-sm sm:mt-0 text-sm relative rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-orange-500 focus:outline-none`}
                                     >
                                         <option value="">Select an Event</option>
                                         {eventTypes && eventTypes.length > 0 ? (
@@ -395,7 +394,7 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                                 <button
                                     type="submit"
                                     disabled={!formik.isValid}
-                                    className={`w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white focus:outline-none ${!formik.isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"}`}
+                                    className={`w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white focus:outline-none ${!formik.isValid ? "bg-gray-300 text-gray-500" : "bg-orange-600 text-white"}`}
                                 >
                                     Check Availability
                                 </button>

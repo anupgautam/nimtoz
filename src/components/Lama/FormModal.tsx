@@ -95,10 +95,10 @@ const FormModal = ({
     const size = type === "create" ? "w-24 h-12" : "w-8 h-8"
     const bgColor =
         type === "create"
-            ? "bg-red-400"
+            ? "bg-orange-400"
             : type === "update"
                 ? "text-blue-500"
-                : "text-red-600"
+                : "text-orange-600"
 
     const [open, setOpen] = useState(false)
 
@@ -123,7 +123,7 @@ const FormModal = ({
             <form action={formAction} className="p-4 flex flex-col gap-4">
                 <input type="text | number" name="id" value={id} hidden />
                 <span className="text-center font-medium">Are you sure you want to delete this {table}?</span>
-                <button className="bg-red-700 text-white py-2 px-4 rounded:md border-none w-max self-center">Delete</button>
+                <button className="bg-orange-600 text-white py-2 px-4 rounded:md border-none w-max self-center">Delete</button>
             </form>
         ) : type === "create" || type === "update" ? (
             forms[table](setOpen, type, data, relatedData)
