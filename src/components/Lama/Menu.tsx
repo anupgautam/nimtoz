@@ -56,7 +56,7 @@ const Menu = () => {
                 return (
                     <div className="" key={links.title}>
                         <Link href={links.path}
-                            className={`flex items-center rounded-lg group justify-center lg:justify-start gap-4 py-2 ${isActive ? 'text-red-600 bg-gray-200' : 'text-gray-900 hover:bg-gray-100'}`}>
+                            className={`flex items-center rounded-lg group justify-center lg:justify-start gap-4 py-2 ${isActive ? 'text-orange-600 bg-gray-200' : 'text-gray-900 hover:bg-gray-100'}`}>
                             {links.icon}
                             <span className="hidden lg:block">{links.title}</span>
                         </Link>

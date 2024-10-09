@@ -3,22 +3,35 @@ import {
     ResponsiveContainer,
     PieChart,
     Pie, Cell,
+    PieLabelRenderProps
 } from "recharts";
 import { Ellipsis } from 'lucide-react'
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
+interface Category {
+    category_name: string;
+    _count: {
+        products: number;
+    };
+}
+
+interface ChartData {
+    name: string;
+    value: number;
+}
+
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, value }) => {
-    if (value === 0) return null; // Don't render label if value is 0
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, value }: PieLabelRenderProps & { value: number }) => {
+    if (value === 0 || !cx || !cy || !percent) return null; // Don't render label if value is 0
+    const radius = (innerRadius as number) + ((outerRadius as number) - (innerRadius as number)) * 0.5;
+    const x = (cx as number) + radius * Math.cos(-midAngle * RADIAN);
+    const y = (cy as number) + radius * Math.sin(-midAngle * RADIAN);
 
     return (
-        <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        <text x={x} y={y} fill="white" textAnchor={x > (cx as number) ? 'start' : 'end'} dominantBaseline="central">
             {`${(percent * 100).toFixed(0)}%`}
         </text>
     );
@@ -51,18 +64,18 @@ const ChartSkeletonLoader = () => {
 
 const CountChart = () => {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<ChartData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/category/count-category');
-                if (!response.ok) throw new Error('Failed to fetch data');
-                const result = await response.json();
+                if (!response.ok) toast.error("Failed to fetch Count Data")
+                const result: Category[] = await response.json();
 
                 // Transforming the fetched data to the required format
-                const formattedData = result.map(category => ({
+                const formattedData = result.map((category: Category) => ({
                     name: category.category_name,
                     value: category._count.products, // Count of products in the category
                 }));
@@ -115,7 +128,7 @@ const CountChart = () => {
                     <div className="flex flex-col gap-1" key={entry.name}>
                         <div className={`w-5 h-5 ${COLORS[index % COLORS.length]} rounded-full`} />
                         <h1 className="font-bold">{entry.value}</h1>
-                        <h2 className="text-xs text-gray-300">{entry.name} ({((entry.value / data.reduce((sum, item) => sum + item.value, 0)) * 100).toFixed(0)}%)</h2>
+                        <h2 className="text-xs text-gray-300">{entry.name} ({((entry.value / data.reduce((sum, item: any) => sum + item.value, 0)) * 100).toFixed(0)}%)</h2>
                     </div>
                 ))}
             </div>

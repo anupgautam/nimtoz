@@ -38,16 +38,16 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
         >
             <div className="flex flex-col gap-y-10 w-[3rem] lg:w-[4rem] hover:w-[12rem] lg:hover:w-[14rem] duration-500 container">
                 <div
-                    className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === 'All' ? 'border-r-4 border-red-500' : ''}`}
+                    className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === 'All' ? 'border-r-4 border-orange-500' : ''}`}
                     onClick={() => handleCategoryChange('All')}
                 >
                     <IoInfinite
-                        className={`w-8 h-8 shrink-0 ${selectedCategory === 'All' ? 'text-red-500' : 'text-neutral-600'
+                        className={`w-8 h-8 shrink-0 ${selectedCategory === 'All' ? 'text-orange-500' : 'text-neutral-600'
                             }`}
                     />
                     <h2
                         className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
-                            } ${selectedCategory === 'All' ? 'text-red-500' : 'text-neutral-600'}`}
+                            } ${selectedCategory === 'All' ? 'text-orange-500' : 'text-neutral-600'}`}
                     >
                         All
                     </h2>
@@ -57,25 +57,21 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
                 {loading ? (
                     // Render skeletons when loading
                     <>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
-                        <div className="flex items-center py-1 gap-x-3 w-full">
-                            <Skeleton circle width={32} height={32} />
-                            <Skeleton width={100} height={20} />
-                        </div>
+                        {[...Array(6)].map((_, idx) => (
+                            <div key={idx} className="flex items-center py-1 gap-x-3 w-full">
+                                {/* Circle skeleton */}
+                                <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+                                {/* Text skeleton */}
+                                <div className="w-24 h-4 bg-gray-300 rounded-md animate-pulse"></div>
+                            </div>
+                        ))}
                     </>
                 ) : (
                     // Render categories when not loading
                     filters.categories.map((category) => (
                         <div
                             key={category.id}
-                            className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === category.category_name ? 'border-r-4 border-red-500' : ''}`}
+                            className={`group relative flex items-center py-1 gap-x-3 w-full hover:bg-gray-200 p-2 duration-500 cursor-pointer ${selectedCategory === category.category_name ? 'border-r-4 border-orange-500' : ''}`}
                             onClick={() => handleCategoryChange(category.category_name)}
                         >
                             <Image
@@ -88,7 +84,7 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
                             />
                             <h2
                                 className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
-                                    } ${selectedCategory === category.category_name ? 'text-red-500' : 'text-neutral-600'}`}
+                                    } ${selectedCategory === category.category_name ? 'text-orange-500' : 'text-neutral-600'}`}
                             >
                                 {category.category_name}
                             </h2>

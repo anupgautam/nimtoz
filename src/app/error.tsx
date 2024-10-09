@@ -11,7 +11,9 @@ const ErrorPage = () => {
             <div className="max-w-[50rem] flex flex-col mx-auto size-full">
                 <header className="mb-auto flex justify-center z-50 w-full py-2">
                     <nav className="px-4 sm:px-6 lg:px-8">
-                        <a className="flex-none text-xl font-semibold sm:text-3xl " href="#" aria-label="Brand">Nimtoz</a>
+                        <Link className="flex-none text-xl font-semibold sm:text-3xl " href="/" aria-label="Brand">
+                            <Image src="/nimtoz_logo.png" alt="404" height={160} width={160} />
+                        </Link>
                     </nav>
                 </header>
 
@@ -26,7 +28,7 @@ const ErrorPage = () => {
                         </p>
                         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
                             <Link
-                                className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
+                                className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none"
                                 href="/"
                             >
                                 <svg

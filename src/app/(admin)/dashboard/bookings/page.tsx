@@ -1,14 +1,14 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
+// import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import FormModal from "@/components/Lama/FormModal"
 import prisma from "@/lib/db"
 import { Event, EventType, Hall, Prisma, Product, User } from "@prisma/client"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 import FormContainer from "@/components/Lama/FormContainer"
 
-type BookingList = Event & { EventType: EventType[] } & { Product: Product & { halls: Hall[] } } & { User: User }
+type BookingList = Event & { EventType: EventType[] } & { Product: Product } & { User: User } & { Hall: Hall[] }
 
 
 const columns = [
@@ -65,11 +65,11 @@ const columns = [
 ];
 
 const renderRow = (item: BookingList) => {
-    const formattedStartTime = new Date(item.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const formattedEndTime = new Date(item.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // const formattedStartTime = new Date(item.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // const formattedEndTime = new Date(item.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     return (
-        <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
+        <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
             <td className="flex items-center gap-4 p-4">
                 {/* <Image src={item.products?.[0]?.product_image?.[0]?.url} alt="" width={40} height={40} className="md:hidden xl:block w-10 h-10 rounded-full object-cover" /> */}
                 <div className="flex flex-col">
@@ -82,26 +82,34 @@ const renderRow = (item: BookingList) => {
             <td className="hidden md:table-cell">{item.User?.email}</td>
             <td className="hidden md:table-cell">{item.EventType.map(eventtype => eventtype.title)}</td>
             <td className="hidden md:table-cell whitespace-normal max-w-5">
-                {item.Product.halls.map(hall => hall.hall_capacity).join(", ")} {/* Join hall capacities */}
+                {item.Hall.map(hall => hall.hall_capacity).join(", ")} {/* Join hall capacities */}
             </td>
 
             <td className="hidden md:table-cell">
                 {new Date(item.start_date).toLocaleDateString('en-US', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                 })}
             </td>
             <td className="hidden md:table-cell">
                 {new Date(item.end_date).toLocaleDateString('en-US', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                 })}
             </td>
             {/* <td className="hidden md:table-cell">{formattedStartTime}</td> */}
             {/* <td className="hidden md:table-cell">{formattedEndTime}</td> */}
-            <td className="hidden md:table-cell">{item.is_approved ? 'Yes' : 'No'}</td>
+            <td className="hidden md:table-cell">{item.is_approved ? <>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 ml-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+                </svg>
+            </> : <>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 ml-5 text-red-600">
+                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clipRule="evenodd" />
+                </svg>
+            </>}</td>
             {/* <td className="hidden md:table-cell">{item.is_rejected ? 'Yes' : 'No'}</td> */}
 
             {/*//! Actions  */}
@@ -157,13 +165,10 @@ const BookingsPage = async ({ searchParams }: { searchParams: { [key: string]: s
     const [data, count] = await prisma.$transaction([
         prisma.event.findMany({
             include: {
-                Product: {
-                    include: {
-                        halls: true,
-                    }
-                },
+                Hall: true,
                 User: true,
                 EventType: true,
+                Product: true,
             },
             where: query,
             take: ITEM_PER_PAGE,

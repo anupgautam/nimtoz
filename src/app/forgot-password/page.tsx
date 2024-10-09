@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 interface ForgotPassword {
     email: string;
@@ -57,14 +58,14 @@ export default function ForgotPassword() {
 
             const result = await res.json();
             if (result.success) {
-                setMessage('Check your email for a reset link.');
+                toast.success("Check email for reset password link")
                 router.push('/reset-password');
             } else {
-                setMessage('Failed to send email.');
+                toast.error("Failed to send email. Make sure to entery correct email address.")
             }
             resetForm();
         } catch (error) {
-            console.error('Some error occurred', error);
+            toast.error("Backend error")
         }
     };
 
@@ -75,10 +76,10 @@ export default function ForgotPassword() {
             <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h1 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Forgot password?</h1>
+                        <h1 className="text-3xl font-bold leading-tight text-orange-500 sm:text-4xl">Forgot password?</h1>
                         <p className="mt-2 text-sm text-gray-600">
                             Remember your password?{' '}
-                            <Link className="text-red-700 hover:underline focus:outline-none font-" href="/login">
+                            <Link className="text-orange-600 hover:underline focus:outline-none font-" href="/login">
                                 Sign in here
                             </Link>
                         </p>
@@ -92,7 +93,7 @@ export default function ForgotPassword() {
                                             <input
                                                 type="email"
                                                 id="email"
-                                                className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none"
+                                                className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-orange-500 focus:ring-orange-500 disabled:opacity-50 disabled:pointer-events-none"
                                                 aria-describedby="email-error"
                                                 placeholder='Email'
                                                 {...getFieldProps('email')}
@@ -103,7 +104,7 @@ export default function ForgotPassword() {
                                         <button
                                             type="submit"
                                             disabled={!formik.isValid || !formik.dirty} // Disable button if form is invalid or untouched
-                                            className={`inline-flex w-full items-center justify-center rounded-md mt-4 px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-red-600 hover:red-700' : 'bg-gray-300 cursor-not-allowed'}`}
+                                            className={`inline-flex w-full items-center justify-center rounded-md mt-4 px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-orange-500 hover:orange-600' : 'bg-gray-300 cursor-not-allowed'}`}
                                         >
                                             Reset Password
                                         </button>

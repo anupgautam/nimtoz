@@ -25,7 +25,7 @@ const DeniedPage = () => {
                         </p>
                         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
                             <Link
-                                className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
+                                className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none"
                                 href="/"
                             >
                                 <svg

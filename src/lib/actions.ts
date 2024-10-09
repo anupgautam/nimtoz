@@ -2,6 +2,17 @@
 
 import prisma from "./db";
 import { BlogSchema, BookingSchema, CategorySchema, EventTypeSchema, ProductSchema, VenueSchema } from "./formValidationSchemas"
+import nodemailer from 'nodemailer'
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+})
 
 type CurrentState = { success: boolean; error: boolean }
 
@@ -21,14 +32,12 @@ export const createVenue = async (CurrentState: CurrentState, data: VenueSchema)
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
 
 //! Update Venues 
 export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema) => {
-    console.log(data.id)
     try {
         await prisma.venue.update({
             where: {
@@ -46,7 +55,6 @@ export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -54,7 +62,6 @@ export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema
 //! Delete Venues
 export const deleteVenue = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.venue.delete({
             where: {
@@ -65,7 +72,6 @@ export const deleteVenue = async (CurrentState: CurrentState, data: FormData) =>
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -98,7 +104,6 @@ export const createProduct = async (CurrentState: CurrentState, data: ProductSch
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -151,7 +156,6 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -159,7 +163,6 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
 //! Delete Products
 export const deleteProduct = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.product.delete({
             where: {
@@ -170,7 +173,6 @@ export const deleteProduct = async (CurrentState: CurrentState, data: FormData) 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -181,7 +183,7 @@ export const createBlog = async (CurrentState: CurrentState, data: BlogSchema) =
         await prisma.blog.create({
             data: {
                 title: data.title,
-                image: data.image,
+                image: data.image ?? "",
                 short_description: data.title,
                 description: data.description,
                 authorId: data.authorId,
@@ -192,7 +194,6 @@ export const createBlog = async (CurrentState: CurrentState, data: BlogSchema) =
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -217,7 +218,6 @@ export const updateBlog = async (CurrentState: CurrentState, data: BlogSchema) =
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -235,7 +235,6 @@ export const deleteBlog = async (CurrentState: CurrentState, data: FormData) => 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -245,7 +244,7 @@ export const createCategory = async (CurrentState: CurrentState, data: CategoryS
     try {
         await prisma.category.create({
             data: {
-                category_icon: data.category_icon,
+                category_icon: data.category_icon ?? "",
                 category_name: data.category_name
             }
         });
@@ -253,7 +252,6 @@ export const createCategory = async (CurrentState: CurrentState, data: CategoryS
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -274,7 +272,6 @@ export const updateCategory = async (CurrentState: CurrentState, data: CategoryS
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -292,7 +289,6 @@ export const deleteCategory = async (CurrentState: CurrentState, data: FormData)
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -300,19 +296,66 @@ export const deleteCategory = async (CurrentState: CurrentState, data: FormData)
 //! Update Booking 
 export const updateBooking = async (CurrentState: CurrentState, data: BookingSchema) => {
     try {
-        await prisma.event.update({
+        const updatedBooking = await prisma.event.update({
             where: {
                 id: data.id
             },
             data: {
                 is_approved: data.is_approved
-            }
+            },
+            include: {
+                Hall: true,
+                Product: true,
+            },
+
         });
+
+        if (data.is_approved) {
+            // Fetch the user's email using the userId from the booking
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: updatedBooking.userId // Assuming userId is a field in the Event model
+                },
+                select: {
+                    email: true
+                }
+            });
+
+            if (user) {
+                // Prepare the hall names to be displayed in the email
+                const hallNames = updatedBooking.Hall.map(hall => hall.hall_capacity).join(", ");
+
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: user.email,
+                    subject: 'Booking Approved',
+                    html: `
+                        <h1>Your Booking Has Been Approved!</h1>
+                        <p>Your booking for the event has been approved. Here are the details:</p>
+                        <p><strong>Venue Name:</strong> ${updatedBooking.Product.title}</p>
+                        <p><strong>Status:</strong> Approved</p>
+                        <p><strong>Halls Booked:</strong> ${hallNames}</p>
+                        <p><strong>Start Date:</strong> ${updatedBooking.start_date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                    })}</p>
+                        <p><strong>End Date:</strong> ${updatedBooking.end_date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                    })}</p>
+                        <p>Thank you for choosing us!</p>
+                    `,
+                };
+
+                await transporter.sendMail(mailOptions);
+            }
+        }
         // revalidatePath('/dashboard/venue')
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -330,7 +373,6 @@ export const deleteBooking = async (CurrentState: CurrentState, data: FormData) 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -347,7 +389,6 @@ export const createEventType = async (CurrentState: CurrentState, data: EventTyp
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -367,7 +408,6 @@ export const updateEventType = async (CurrentState: CurrentState, data: EventTyp
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -375,7 +415,6 @@ export const updateEventType = async (CurrentState: CurrentState, data: EventTyp
 //! Delete EventType
 export const deleteEventType = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.eventType.delete({
             where: {
@@ -386,7 +425,6 @@ export const deleteEventType = async (CurrentState: CurrentState, data: FormData
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }

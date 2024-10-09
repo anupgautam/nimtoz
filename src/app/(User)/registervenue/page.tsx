@@ -37,7 +37,7 @@ const RegisterVenue = () => {
     }
 
     //! Validation
-    let venueSchema = object({
+    const venueSchema = object({
         // venue_name: string().required('Venue Name is required'),
         venue_name: string().required('Venue Name is required'),
         venue_address: string().required('Venue Address is required'),

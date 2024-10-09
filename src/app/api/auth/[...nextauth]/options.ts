@@ -35,7 +35,8 @@ export const options: NextAuthOptions = {
             async authorize(credentials: any): Promise<any> {
                 //! Validate input types
                 if (!credentials?.email || !credentials?.password) {
-                    return null;
+                    // return null;
+                    throw new Error("Email and password are required")
                 }
                 const existingUser = await prisma.user.findUnique({
                     where: { email: credentials?.email }
@@ -50,7 +51,8 @@ export const options: NextAuthOptions = {
 
                 const passwordMatch = await bcrypt.compare(credentials.password, existingUser.password);
                 if (!passwordMatch) {
-                    return null;
+                    // return null;
+                    throw new Error("Incorrect Password")
                 }
 
                 return {
@@ -69,6 +71,7 @@ export const options: NextAuthOptions = {
     pages: {
 
         signIn: '/login',
+        signOut: '/login',
         // signIn: '/auth/sign-in',
         error: '/error',
     },
@@ -81,7 +84,7 @@ export const options: NextAuthOptions = {
             if (user) {
                 token.id = user.id.toString();
                 token.firstname = user.firstname
-                token.lastname= user.lastname
+                token.lastname = user.lastname
                 token.role = user.role
                 // return {
                 //     ...token,

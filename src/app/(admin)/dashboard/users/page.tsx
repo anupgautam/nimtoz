@@ -2,15 +2,11 @@ import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
 // import { SlidersHorizontal, ArrowDownWideNarrow, CircleUserRound } from 'lucide-react'
-import Image from "next/image"
-import Link from "next/link"
-import { role, teachersData } from "@/lib/data";
-import FormModal from "@/components/Lama/FormModal"
 import { Prisma, User } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"
 
-type UserList = User
+type UserList = User & { events_booked: { id: number }[] }
 
 
 const columns = [
@@ -28,6 +24,11 @@ const columns = [
         accessor: "phone_number",
         className: "hidden md:table-cell",
     },
+    {
+        header: "Events Booked",
+        accessor: "events_booked",
+        className: "hidden md:table-cell",
+    },
     // {
     //     header: "Actions",
     //     accessor: "action",
@@ -35,7 +36,7 @@ const columns = [
 ];
 
 const renderRow = (item: UserList) => (
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-red-50">
+    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
         <td className="flex items-center gap-4 p-4">
             <div className="flex flex-col">
                 <h3 className="font-semibold">{`${item.firstname} ${item.lastname}`}</h3>
@@ -44,6 +45,7 @@ const renderRow = (item: UserList) => (
         </td>
         <td className="hidden md:table-cell">{item.role}</td>
         <td className="hidden md:table-cell">{item.phone_number}</td>
+        <td className="hidden md:table-cell">{item.events_booked.length}</td>
     </tr>
 )
 
@@ -88,6 +90,9 @@ const UsersPage = async ({ searchParams }: { searchParams: { [key: string]: stri
             skip: ITEM_PER_PAGE * (p - 1),
             orderBy: {
                 updatedAt: "desc"
+            },
+            include: {
+                events_booked: true,
             }
         }),
         prisma.user.count({ where: query })

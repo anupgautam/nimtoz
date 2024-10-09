@@ -45,7 +45,6 @@ const BlogForm = ({
     })
 
     const onSubmit = handleSubmit((formData) => {
-        console.log(formData)
         formAction({
             ...formData,
             image: img?.secure_url || img, // Use uploaded image or existing one
@@ -206,7 +205,7 @@ const BlogForm = ({
                         type="submit"
                         disabled={!isValid}
                         // className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-blue-600 text-white"
-                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
+                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-orange-600 text-white"
                             }`}
                     >
                         {type === "create" ? "Add" : "Update"}

@@ -15,7 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-1/2 md:w-1/2 flex gap-2 text-xs rounded-md ring-[1.5px] ring-red-300 active:ring-red-500 px-4 relative h-10 mb-12 z-40 mt-24 mx-auto">
+        <form onSubmit={handleSubmit} className="w-1/2 md:w-1/2 flex gap-2 text-xs rounded-md ring-[1.5px] ring-orange-300 active:ring-orange-500 px-4 relative h-10 mb-12 z-40 mt-24 mx-auto">
             <Search className='mt-2'/>
             <input
                 type="text"

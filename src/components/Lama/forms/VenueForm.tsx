@@ -39,7 +39,6 @@ const VenueForm = ({
 
     const onSubmit = handleSubmit(data => {
         formAction(data)
-        console.log(data)
     })
 
     const router = useRouter()
@@ -135,7 +134,7 @@ const VenueForm = ({
                     <button
                         type="submit"
                         disabled={!isValid}
-                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white"
+                        className={`py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border ${!isValid ? "bg-gray-300 text-gray-500" : "bg-orange-600 text-white"
                             }`}
                     >
                         {type === "create" ? "Add" : "Update"}

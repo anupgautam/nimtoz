@@ -6,29 +6,29 @@ import { RxCross1 } from "react-icons/rx";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { LayoutDashboard, GlobeLock, LogOut } from 'lucide-react'
 
 const VenueNavbar = () => {
 
     const { data: session } = useSession();
-    const router = useRouter();
     const [sideMenu, setSideMenu] = useState(false);
     const [toggle, setToggle] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null); // Explicitly type the ref
 
     // Close the menu when clicking outside of it
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setToggle(false);
-            }
-        };
+    // useEffect(() => {
+    //     const handleClickOutside = (event: MouseEvent) => {
+    //         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    //             setToggle(false);
+    //         }
+    //     };
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, []);
     const currentPath = usePathname();
 
     const firstNav = [
@@ -38,25 +38,25 @@ const VenueNavbar = () => {
     ];
 
     useEffect(() => {
-        // console.log("Current session:", session);
     }, [session]);
 
 
     return (
         <header className="fixed w-full border-b border-gray-300 bg-white font-poppins top-0 h-20 z-50" > {/* Adjust the height here */}
             <div className="flex justify-between items-center h-full container mx-auto">
-                <h1>LOGO</h1>
+                <Link href="/">
+                    <Image src="/nimtoz_logo.png" alt="Nimtoz Logo" height="100" width="160" className="mr-10 p-2" />
+                </Link>
                 <div className={`hidden lg:flex gap-x-16 ml-[4.6rem] items-center text-lg `}>
                     {firstNav.map((item) => {
                         const isActive = currentPath === item.path;
                         return (
                             <div key={item.id} className="font-[700]">
                                 <Link href={item.path}>
-                                    <h1 className={` ${isActive ? " text-red-600 ease-in" : " text-stone-400"}`}>
+                                    <h1 className={` ${isActive ? " text-orange-500 ease-in" : " text-stone-400"}`}>
                                         {item.title}
                                     </h1>
                                 </Link>
-
                             </div>
                         );
                     })}
@@ -74,25 +74,34 @@ const VenueNavbar = () => {
                                     <span className="sr-only">Open user menu</span>
                                     <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" height={40} width={40} />
                                 </button>
+
                             </div>
                             {toggle && (
                                 <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
-                                    <div className="px-4 py-3">
-                                        <p className="text-sm text-gray-900">{session?.user.firstname + " " + session.user.lastname}</p>
+                                    <div className=" px-4 py-3">
+                                        <p className="text-sm text-gray-900">
+                                            {session?.user.firstname + " " + session.user.lastname}</p>
                                         <p className="text-sm font-medium text-gray-900 truncate">{session?.user.email}</p>
                                     </div>
 
                                     <ul className="py-1">
                                         {session?.user.role === "Admin" &&
                                             (<li>
-                                                <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</Link>
+                                                <Link href="/dashboard" passHref className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
+
+                                                    <LayoutDashboard />
+                                                    Dashboard</Link>
                                             </li>
                                             )}
                                         <li>
-                                            <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start" onClick={(e) => {
-                                                signOut({ callbackUrl: '/login' });
-                                                console.log("Logged Out", session)
-                                            }}>Sign out</button>
+                                            <Link href="/privacypolicy" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
+                                                <GlobeLock />
+                                                Privacy policy</Link>
+                                        </li>
+                                        <li>
+                                            <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start gap-4"
+                                                onClick={() => signOut()}><LogOut />
+                                                Sign out</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -102,7 +111,7 @@ const VenueNavbar = () => {
                         <button
                             type="button"
                             onClick={() => signIn()}
-                            className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out"
+                            className="flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out"
                         >
                             Sign In
                         </button>

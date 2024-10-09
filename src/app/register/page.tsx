@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 interface User {
     firstname: string;
@@ -52,7 +53,6 @@ const RegisterPage = () => {
         },
         onSubmit: (data, { resetForm }) => {
             registerApiCall(data, resetForm)
-            console.log(data)
         }
     })
 
@@ -78,16 +78,16 @@ const RegisterPage = () => {
                 },
                 body: JSON.stringify(data),
             });
-            console.log('User Successfully Created', response);
+            toast.success("User Successfully Created");
             if (response.ok) {
                 router.push('/login')
             }
             else {
-                console.log("Registration Failed")
+                toast.error("Registration Failed")
             }
             resetForm();
         } catch (error) {
-            console.error('Some error occured', error);
+            toast.error("Backend Error")
         }
     }
 
@@ -121,13 +121,13 @@ const RegisterPage = () => {
 
                 <div className="flex items-center justify-center px-4 py-5 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h2 className="text-3xl font-bold leading-tight text-red-500 sm:text-4xl">Sign up</h2>
+                        <h2 className="text-3xl font-bold leading-tight text-orange-500 sm:text-4xl">Sign up</h2>
                         <p className="mt-2 text-base text-gray-600">
                             Already have an account?{' '}
                             <Link
                                 href="/login"
                                 title=""
-                                className="font-medium text-red-600 transition-all duration-200 hover:underline"
+                                className="font-medium text-orange-600 transition-all duration-200 hover:underline"
                             >
                                 Sign In
                             </Link>
@@ -234,14 +234,14 @@ const RegisterPage = () => {
 
                                             )}
                                         </button>
-                                        {touched.password && errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
+                                        {touched.password && errors.password && <span className="text-orange-500 text-sm">{errors.password}</span>}
                                     </div>
                                 </div>
                                 <div>
                                     <button
                                         type="submit"
                                         disabled={!formik.isValid || !formik.dirty} // Disable button if form is invalid or untouched
-                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300 cursor-not-allowed'}`}
+                                        className={`inline-flex w-full items-center justify-center rounded-md px-3.5 py-2.5 font-semibold leading-7 text-white ${formik.isValid && formik.dirty ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gray-300 cursor-not-allowed'}`}
                                     >
                                         Get started <ArrowRight className="ml-2" size={16} />
                                     </button>

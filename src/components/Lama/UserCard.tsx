@@ -3,7 +3,9 @@ import { Ellipsis, UsersRound, Castle, PartyPopper, SquarePen } from 'lucide-rea
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const itemsConfig = [
+type ItemKey = 'users' | 'blogs' | 'eventTypes' | 'products';
+
+const itemsConfig: { id: number; type: string; icon: JSX.Element; key: ItemKey }[] = [
     { id: 1, type: 'Users', icon: <UsersRound />, key: 'users' },
     { id: 2, type: 'Blogs', icon: <SquarePen />, key: 'blogs' },
     { id: 3, type: 'Event Types', icon: <PartyPopper />, key: 'eventTypes' },
@@ -61,7 +63,7 @@ const UserCard = () => {
             {itemsConfig.map((item, index) => (
                 <div
                     key={item.id}
-                    className={`rounded-2xl p-4 flex-1 min-w-[130px] ${index % 2 === 0 ? 'bg-red-500' : 'bg-red-200'
+                    className={`rounded-2xl p-4 flex-1 min-w-[130px] ${index % 2 === 0 ? 'bg-orange-500' : 'bg-orange-300'
                         }`}
                 >
                     <div className="flex justify-between items-center">

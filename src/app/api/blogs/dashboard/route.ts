@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
     if (blogs.length === 0) {
         return NextResponse.json({ error: "No blogs to show right now" }, { status: 404 });
     } else {
-        // console.log(blogs);
         return NextResponse.json(blogs);
     }
 
