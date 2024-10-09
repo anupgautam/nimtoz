@@ -234,13 +234,10 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
     const { errors, getFieldProps, touched, isValid } = formik
 
     useEffect(() => {
-        console.log('Errors:', errors);
-        console.log('Is Valid:', isValid);
     }, [errors, isValid])
 
     const bookingApiCall = async (formData: Booking, resetForm: () => void) => {
         try {
-            console.log('Submitting booking data:', formData);
             const response = await axios.post('/api/bookings', {
                 start_date: formData.start_date,
                 end_date: formData.end_date,
@@ -255,7 +252,6 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(response)
             // if (response.ok) {
             toast.success("Event request sent!");
             resetForm();
@@ -263,7 +259,6 @@ const BookingForm = ({ product, halls }: { product: any; halls: any[] }) => {
             // }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                console.log(error.response)
                 if (error.response.status === 409) {
                     toast.error(error.response.data.message);
                 } else {

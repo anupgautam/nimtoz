@@ -53,7 +53,6 @@ const RegisterPage = () => {
         },
         onSubmit: (data, { resetForm }) => {
             registerApiCall(data, resetForm)
-            console.log(data)
         }
     })
 

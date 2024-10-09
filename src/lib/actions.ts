@@ -32,14 +32,12 @@ export const createVenue = async (CurrentState: CurrentState, data: VenueSchema)
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
 
 //! Update Venues 
 export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema) => {
-    console.log(data.id)
     try {
         await prisma.venue.update({
             where: {
@@ -57,7 +55,6 @@ export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -65,7 +62,6 @@ export const updateVenues = async (CurrentState: CurrentState, data: VenueSchema
 //! Delete Venues
 export const deleteVenue = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.venue.delete({
             where: {
@@ -76,7 +72,6 @@ export const deleteVenue = async (CurrentState: CurrentState, data: FormData) =>
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -109,7 +104,6 @@ export const createProduct = async (CurrentState: CurrentState, data: ProductSch
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -162,7 +156,6 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -170,7 +163,6 @@ export const updateProduct = async (CurrentState: CurrentState, data: ProductSch
 //! Delete Products
 export const deleteProduct = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.product.delete({
             where: {
@@ -181,7 +173,6 @@ export const deleteProduct = async (CurrentState: CurrentState, data: FormData) 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -203,7 +194,6 @@ export const createBlog = async (CurrentState: CurrentState, data: BlogSchema) =
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -228,7 +218,6 @@ export const updateBlog = async (CurrentState: CurrentState, data: BlogSchema) =
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -246,7 +235,6 @@ export const deleteBlog = async (CurrentState: CurrentState, data: FormData) => 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -264,7 +252,6 @@ export const createCategory = async (CurrentState: CurrentState, data: CategoryS
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -285,7 +272,6 @@ export const updateCategory = async (CurrentState: CurrentState, data: CategoryS
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -303,7 +289,6 @@ export const deleteCategory = async (CurrentState: CurrentState, data: FormData)
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -371,7 +356,6 @@ export const updateBooking = async (CurrentState: CurrentState, data: BookingSch
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -389,7 +373,6 @@ export const deleteBooking = async (CurrentState: CurrentState, data: FormData) 
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -406,7 +389,6 @@ export const createEventType = async (CurrentState: CurrentState, data: EventTyp
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -426,7 +408,6 @@ export const updateEventType = async (CurrentState: CurrentState, data: EventTyp
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }
@@ -434,7 +415,6 @@ export const updateEventType = async (CurrentState: CurrentState, data: EventTyp
 //! Delete EventType
 export const deleteEventType = async (CurrentState: CurrentState, data: FormData) => {
     const id = data.get("id") as string
-    console.log(id)
     try {
         await prisma.eventType.delete({
             where: {
@@ -445,7 +425,6 @@ export const deleteEventType = async (CurrentState: CurrentState, data: FormData
         return { success: true, error: false }
     }
     catch (err) {
-        console.log(err)
         return { success: false, error: true }
     }
 }

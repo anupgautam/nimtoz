@@ -42,7 +42,6 @@ const BookingForm = ({
     })
 
     const onSubmit = handleSubmit((formData) => {
-        console.log(formData)
         formAction({
             ...formData,
         });
@@ -64,8 +63,6 @@ const BookingForm = ({
 
     // Log the isValid and errors to the console
     useEffect(() => {
-        console.log("Is Valid:", isValid);
-        console.log("Errors:", errors);
     }, [isValid, errors]);
 
     return (

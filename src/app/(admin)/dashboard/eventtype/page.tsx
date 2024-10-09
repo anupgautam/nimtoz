@@ -1,11 +1,11 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow, CircleUserRound } from 'lucide-react'
-import Image from "next/image"
-import Link from "next/link"
-import { role, teachersData } from "@/lib/data";
-import FormModal from "@/components/Lama/FormModal"
+// import { SlidersHorizontal, ArrowDownWideNarrow, CircleUserRound } from 'lucide-react'
+// import Image from "next/image"
+// import Link from "next/link"
+// import { role, teachersData } from "@/lib/data";
+// import FormModal from "@/components/Lama/FormModal"
 import { EventType, Prisma } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"

@@ -1,8 +1,8 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
-import Link from "next/link"
+// import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
+// import Link from "next/link"
 import { Category, Prisma, Product } from "@prisma/client"
 import prisma from "@/lib/db"
 import { ITEM_PER_PAGE } from "@/lib/settings"

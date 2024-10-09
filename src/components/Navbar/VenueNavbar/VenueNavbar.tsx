@@ -38,7 +38,6 @@ const VenueNavbar = () => {
     ];
 
     useEffect(() => {
-        // console.log("Current session:", session);
     }, [session]);
 
 
@@ -88,14 +87,14 @@ const VenueNavbar = () => {
                                     <ul className="py-1">
                                         {session?.user.role === "Admin" &&
                                             (<li>
-                                                <Link href="/dashboard" passHref className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4" onClick={() => console.log("To dashboard")}>
+                                                <Link href="/dashboard" passHref className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
 
                                                     <LayoutDashboard />
                                                     Dashboard</Link>
                                             </li>
                                             )}
                                         <li>
-                                            <Link href="/privacypolicy" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4" onClick={() => console.log("To privacy")}>
+                                            <Link href="/privacypolicy" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
                                                 <GlobeLock />
                                                 Privacy policy</Link>
                                         </li>

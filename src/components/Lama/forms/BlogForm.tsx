@@ -45,7 +45,6 @@ const BlogForm = ({
     })
 
     const onSubmit = handleSubmit((formData) => {
-        console.log(formData)
         formAction({
             ...formData,
             image: img?.secure_url || img, // Use uploaded image or existing one

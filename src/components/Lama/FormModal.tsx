@@ -114,7 +114,6 @@ const FormModal = ({
                 router.refresh();
             }
             if (state.error) {
-                console.log(state.error)
                 toast.error('Something went wrong!')
             }
         }, [state, router])

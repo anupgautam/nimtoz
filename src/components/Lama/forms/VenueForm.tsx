@@ -39,7 +39,6 @@ const VenueForm = ({
 
     const onSubmit = handleSubmit(data => {
         formAction(data)
-        console.log(data)
     })
 
     const router = useRouter()

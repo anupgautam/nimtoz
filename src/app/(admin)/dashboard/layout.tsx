@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Products from "./products/page";
-import Sidebar from "@/components/Dashboard/Sidebar";
 import Link from "next/link";
 import Image from "next/image";
 import Menu from "@/components/Lama/Menu";

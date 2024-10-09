@@ -1,7 +1,7 @@
 import Pagination from "@/components/Lama/Pagination"
 import Table from "@/components/Lama/Table"
 import TableSearch from "@/components/Lama/TableSearch"
-import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
+// import { SlidersHorizontal, ArrowDownWideNarrow } from 'lucide-react'
 import FormModal from "@/components/Lama/FormModal"
 import prisma from "@/lib/db"
 import { Event, EventType, Hall, Prisma, Product, User } from "@prisma/client"
@@ -65,9 +65,8 @@ const columns = [
 ];
 
 const renderRow = (item: BookingList) => {
-    console.log("Product", item)
-    const formattedStartTime = new Date(item.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const formattedEndTime = new Date(item.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // const formattedStartTime = new Date(item.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // const formattedEndTime = new Date(item.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     return (
         <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-orange-50">
