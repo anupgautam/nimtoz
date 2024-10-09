@@ -6,31 +6,29 @@ import { RxCross1 } from "react-icons/rx";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, GlobeLock, LogOut, UserRound } from 'lucide-react'
+import { LayoutDashboard, GlobeLock, LogOut } from 'lucide-react'
 
 const VenueNavbar = () => {
 
     const { data: session } = useSession();
-    const router = useRouter();
     const [sideMenu, setSideMenu] = useState(false);
     const [toggle, setToggle] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null); // Explicitly type the ref
 
     // Close the menu when clicking outside of it
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setToggle(false);
-            }
-        };
+    // useEffect(() => {
+    //     const handleClickOutside = (event: MouseEvent) => {
+    //         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    //             setToggle(false);
+    //         }
+    //     };
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, []);
     const currentPath = usePathname();
 
     const firstNav = [
@@ -77,6 +75,7 @@ const VenueNavbar = () => {
                                     <span className="sr-only">Open user menu</span>
                                     <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" height={40} width={40} />
                                 </button>
+
                             </div>
                             {toggle && (
                                 <div className="absolute right-0 mt-64 w-48 py-2 bg-white divide-y divide-gray-100 rounded shadow-lg z-50">
@@ -89,22 +88,21 @@ const VenueNavbar = () => {
                                     <ul className="py-1">
                                         {session?.user.role === "Admin" &&
                                             (<li>
-                                                <Link href="/dashboard" passHref className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
-                                                
+                                                <Link href="/dashboard" passHref className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4" onClick={() => console.log("To dashboard")}>
+
                                                     <LayoutDashboard />
                                                     Dashboard</Link>
                                             </li>
                                             )}
                                         <li>
-                                            <Link href="/privacypolicy" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4">
+                                            <Link href="/privacypolicy" className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-4" onClick={() => console.log("To privacy")}>
                                                 <GlobeLock />
                                                 Privacy policy</Link>
                                         </li>
                                         <li>
-                                            <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start gap-4" onClick={(e) => {
-                                                signOut({ callbackUrl: '/login' });
-                                                console.log("Logged Out", session)
-                                            }}><LogOut /> Sign out</button>
+                                            <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full flex justify-start gap-4"
+                                                onClick={() => signOut()}><LogOut />
+                                                Sign out</button>
                                         </li>
                                     </ul>
                                 </div>
