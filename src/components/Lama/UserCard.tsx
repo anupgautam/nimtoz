@@ -1,15 +1,16 @@
 'use client'
 import { Ellipsis, UsersRound, Castle, PartyPopper, SquarePen } from 'lucide-react'
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 type ItemKey = 'users' | 'blogs' | 'eventTypes' | 'products';
 
-const itemsConfig: { id: number; type: string; icon: JSX.Element; key: ItemKey }[] = [
-    { id: 1, type: 'Users', icon: <UsersRound />, key: 'users' },
-    { id: 2, type: 'Blogs', icon: <SquarePen />, key: 'blogs' },
-    { id: 3, type: 'Event Types', icon: <PartyPopper />, key: 'eventTypes' },
-    { id: 4, type: 'Products', icon: <Castle />, key: 'products' },
+const itemsConfig: { id: number; type: string; icon: JSX.Element; key: ItemKey; link: string; }[] = [
+    { id: 1, type: 'Users', icon: <UsersRound />, key: 'users', link: "/dashboard/users" },
+    { id: 2, type: 'Blogs', icon: <SquarePen />, key: 'blogs', link: "/dashboard/blogs" },
+    { id: 3, type: 'Event Types', icon: <PartyPopper />, key: 'eventTypes', link: "/dashboard/eventtype" },
+    { id: 4, type: 'Products', icon: <Castle />, key: 'products', link: "/dashboard/products" },
 ];
 
 const SkeletonLoader = () => {
@@ -42,9 +43,11 @@ const UserCard = () => {
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/cards/users');
-                if (!response.ok) throw new Error('Failed to fetch data');
-                const result = await response.json();
-                setCounts(result);
+                if (!response.ok) {
+                    toast.error("Failed to fetch data")
+                    const result = await response.json();
+                    setCounts(result);
+                }
             } catch (error: any) {
                 toast.error(error.message);
             } finally {
@@ -66,24 +69,26 @@ const UserCard = () => {
                     className={`rounded-2xl p-4 flex-1 min-w-[130px] ${index % 2 === 0 ? 'bg-orange-500' : 'bg-orange-300'
                         }`}
                 >
-                    <div className="flex justify-between items-center">
-                        <span className="text-[10px] bg-white px-2 py-1 rounded-full text-green-600">
-                            2024/25
-                        </span>
-                        <Ellipsis />
-                    </div>
-                    <h1
-                        className={`text-2xl font-semibold my-4 ${index % 2 === 0 ? 'text-white' : 'text-black'
-                            }`}
-                    >
-                        {counts[item.key]}
-                    </h1>
-                    <h2 className={`capitalize text-sm font-medium ${index % 2 === 0 ? 'text-gray-100' : 'text-gray-500'
-                        } `}>
+                    <Link href={item.link}>
+                        <div className="flex justify-between items-center">
+                            <span className="text-[10px] bg-white px-2 py-1 rounded-full text-green-600">
+                                2024/25
+                            </span>
+                            <Ellipsis />
+                        </div>
+                        <h1
+                            className={`text-2xl font-semibold my-4 ${index % 2 === 0 ? 'text-white' : 'text-black'
+                                }`}
+                        >
+                            {counts[item.key]}
+                        </h1>
+                        <h2 className={`capitalize text-sm font-medium ${index % 2 === 0 ? 'text-gray-100' : 'text-gray-500'
+                            } `}>
 
-                        {item.icon}
-                        {item.type}
-                    </h2>
+                            {item.icon}
+                            {item.type}
+                        </h2>
+                    </Link>
                 </div>
             ))}
         </>
