@@ -63,7 +63,7 @@ const EventTypeForm = ({
                 </p>
             </div>
             <form className='overflow-y-auto' onSubmit={onSubmit}>
-                <div className="grid sm:grid-cols-12 gap-3 sm:gap-6">
+                <div className="grid sm:grid-cols-12 gap-3 sm:gap-6 mt-2">
 
 
                     <InputField
