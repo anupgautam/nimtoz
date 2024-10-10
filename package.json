@@ -28,6 +28,7 @@
     "next": "14.2.11",
     "next-auth": "^4.24.7",
     "next-cloudinary": "^6.13.0",
+    "nextjs-progressbar": "^0.0.16",
     "preline": "^2.4.1",
     "react": "^18",
     "react-dom": "^18",
