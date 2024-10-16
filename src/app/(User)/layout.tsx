@@ -1,4 +1,5 @@
 'use client'
+import ChatFooter from "@/components/Footer/Chatfooter";
 import Footer from "@/components/Footer/Footer";
 import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar";
 
@@ -14,7 +15,8 @@ export default function UserPage({
                 {children}
             </main>
             <footer>
-                <Footer />
+                {/* <Footer /> */}
+                <ChatFooter/>
             </footer>
         </>
     );

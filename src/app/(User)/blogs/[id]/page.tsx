@@ -112,6 +112,7 @@ const BlogPage = ({ params }: { params: { id: string } }) => {
                                             alt={blog.title}
                                             height={800}  // Set height appropriately
                                             width={800}   // Set width appropriately
+                                            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
                                         />
                                     </figure>
                                 ) : (

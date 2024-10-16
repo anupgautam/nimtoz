@@ -79,7 +79,14 @@ const BlogPage = () => {
                         <div key={id}>
                             <Link className="group sm:flex rounded-xl focus:outline-none" href={`/blogs/${blog.id}`}>
                                 <div className="shrink-0 relative rounded-xl overflow-hidden h-[200px] sm:w-[250px] sm:h-[350px] w-full" key={id}>
-                                    <Image className="size-full absolute top-0 start-0 object-cover" src={blog.image} alt={blog.title} width={40} height={50} />
+                                    <Image
+                                        className="size-full absolute top-0 start-0 object-cover"
+                                        src={blog.image}
+                                        alt={blog.title}
+                                        width={40}
+                                        height={50}
+                                        sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
+                                    />
                                 </div>
                                 <div className="grow">
                                     <div className="p-4 flex flex-col h-full sm:p-6">
