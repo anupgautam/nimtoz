@@ -41,7 +41,8 @@ const ChatCard: React.FC<VenueCardProps> = ({ data, loading }) => {
     }
 
     return (
-        <div className='mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
+        // <div className='mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
+        <div className='ml-32 mr-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
             {data.map((item) => (
                 <VenueCardWithCarousel key={item.id} product={item} />
             ))}
@@ -59,6 +60,24 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
     const handleNextImage = () => {
         setCurrentImage((prev) => (prev === product.product_image.length - 1 ? 0 : prev + 1));
     };
+
+    function formatNepaliCurrency(price:number) {
+        const priceStr = price.toString();
+        const [integerPart, decimalPart] = priceStr.split('.');
+        let formattedInteger;
+
+        if (integerPart.length > 3) {
+            const lastThree = integerPart.slice(-3);
+            const remaining = integerPart.slice(0, -3);
+            formattedInteger = remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree;
+        } else {
+            formattedInteger = integerPart;
+        }
+
+        return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+    }
+
+    const formattedPrice = formatNepaliCurrency(product.price);
 
     return (
         <div className='bg-white rounded-xl overflow-hidden' key={product.id}>
@@ -105,7 +124,7 @@ const VenueCardWithCarousel = ({ product }: { product: Products }) => {
                 <h1 className='text-md font-semibold'>{product.title}</h1>
                 <h2 className='text-stone-500 font-[400] text-[14px]'>{product.address}</h2>
                 <section className='flex justify-between items-center text-sm mt-2'>
-                    <p className='text-black font-medium'>Starting from Rs. {product.price}</p>
+                    <p className='text-black font-medium'>Starting from Rs. {formattedPrice}</p>
                     <Link href={`/${product.id}`}>
                         <button className='px-3 py-1 ring-2 ring-orange-500 rounded-lg text-orange-500 font-light hover:bg-orange-600 hover:text-white transition'>
                             Book Now
