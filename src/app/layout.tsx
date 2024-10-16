@@ -15,10 +15,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://nimtoz.com/"),
   // title: "Nimtoz - Venue Bookings for all",
   title: {
-    default: "Nimtoz - Venue Bookings for all",
-    template: "%s | Nimtoz - Venue Bookings"
+    default: "Nimtoz - Smart Booking, Easy Living",
+    template: "%s | Nimtoz - Smart Booking, Easy Living"
   },
-  description: "Fast and Easy Venue Bookings for all kinds of events ",
+  description: "Smart Booking, Easy Living. Fast and Easy Venue Bookings for all kinds of events ",
   // openGraph: {
   //   title: "Nimtoz - Venue Bookings for all",
   //   description: "Fast and Easy Venue Bookings for all kinds of events ",

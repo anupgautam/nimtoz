@@ -106,7 +106,7 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
                     {/* //! Images wala section */}
                     <div className="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto mt-20">
                         <button className="rounded-md bg-orange-500 py-2 px-4 text-white hover:bg-orange-600" onClick={() => router.back()}>
-                            <div className="flex gap-1 text-2xl">
+                            <div className="flex gap-1 text-lg">
                                 <ArrowLeft className="mt-0.5 mr-1" /> Back
                             </div>
                         </button>

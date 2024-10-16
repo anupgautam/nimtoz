@@ -81,6 +81,7 @@ const VenueSidebar: React.FC<SidebarProps> = ({ isHovered, setIsHovered, filters
                                 width={10}
                                 height={10}
                                 priority
+                                sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
                             />
                             <h2
                                 className={`text-[17px] whitespace-nowrap transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"

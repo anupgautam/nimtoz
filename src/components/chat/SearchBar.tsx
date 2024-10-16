@@ -21,8 +21,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for products"
+                placeholder="Search for venues"
                 className="ml-8 w-full p-2 bg-transparent outline-none border-none focus:ring-0 absolute"
+                
             />
         </form>
     );
