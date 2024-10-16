@@ -41,7 +41,6 @@ const ChatCard: React.FC<VenueCardProps> = ({ data, loading }) => {
     }
 
     return (
-        // <div className='mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
         <div className='ml-32 mr-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1rem] z-0'>
             {data.map((item) => (
                 <VenueCardWithCarousel key={item.id} product={item} />
