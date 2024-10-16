@@ -30,7 +30,6 @@ const MostBookedEvents = () => {
                 const response = await fetch('/api/user/topusers');
                 const data = await response.json();
                 setTopUsers(data);
-                console.log(data)
             } catch (error) {
                 console.error('Error fetching top users:', error);
             }
