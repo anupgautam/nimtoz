@@ -19,13 +19,16 @@ export const metadata: Metadata = {
     template: "%s | Nimtoz - Venue Bookings"
   },
   description: "Fast and Easy Venue Bookings for all kinds of events ",
-  openGraph: {
-    title: "Nimtoz - Venue Bookings for all",
-    description: "Fast and Easy Venue Bookings for all kinds of events ",
-    type: "website",
-    locale: "en_US",
-    url: process.env.NEXT_PUBLIC_BASE_URL,
-    siteName: "Nimtoz"
+  // openGraph: {
+  //   title: "Nimtoz - Venue Bookings for all",
+  //   description: "Fast and Easy Venue Bookings for all kinds of events ",
+  //   type: "website",
+  //   locale: "en_US",
+  //   url: process.env.NEXT_PUBLIC_BASE_URL,
+  //   siteName: "Nimtoz"
+  // },
+  twitter:{
+    card:"summary_large_image"
   }
 };
 

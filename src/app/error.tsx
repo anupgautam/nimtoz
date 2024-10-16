@@ -20,11 +20,11 @@ const ErrorPage = () => {
                 <main id="content">
                     <div className="text-center py-10 px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-center"> {/* Center the image container */}
-                            <Image src="/404.svg" alt="401" height={500} width={500} /> {/* Increased size */}
+                            <Image src="/500.svg" alt="401" height={500} width={500} /> {/* Increased size */}
                         </div>
-                        <p className="mt-3 text-gray-600">Page Not Found!</p>
+                        <p className="mt-3 text-gray-600">Internal Server Error</p>
                         <p className="text-gray-600">
-                            The page your are trying to access doesn't exist.
+                            Server doesn't seem to be working at this moment. Please try again later.
                         </p>
                         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
                             <Link
