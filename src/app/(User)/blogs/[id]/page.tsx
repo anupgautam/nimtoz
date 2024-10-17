@@ -12,6 +12,15 @@ type Blog = {
     createdAt: string;
 };
 
+// export async function generateStaticParams() {
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs`)
+//     const data: Blog[] = await response.json();
+
+//     //! SSG
+//     return data.map((blog) => ({
+//         params: { id: blog.id.toString() },
+//     }));
+// }
 // Generate metadata for the blog post
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
     const id = params.id;

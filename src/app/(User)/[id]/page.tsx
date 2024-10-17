@@ -20,6 +20,15 @@ type ProductDetailPageProps = {
     product: Product | null;
 };
 
+// export async function generateStaticParams() {
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`)
+//     const data: Product[] = await response.json();
+//     //! SSG
+//     return data.map((product) => ({
+//         params: { id: product.id.toString() },
+//     }));
+// }
+
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
     const id = params.id;
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`);
@@ -68,7 +77,6 @@ const formatNepaliCurrency = (price: number) => {
 const ProductDetailPage = async ({ params }: { params: { id: string } }) => {
     const id = params.id;
     const product = await fetchProduct(id);
-    console.log(product)
 
     // If the product is not found, show a 404 page
     if (!product) {
