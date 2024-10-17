@@ -100,6 +100,7 @@ const BlogPage = async ({ params }: { params: { id: string } }) => {
                             height={800}
                             width={800}
                             sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
+                            priority
                         />
                     </figure>
                 </div>

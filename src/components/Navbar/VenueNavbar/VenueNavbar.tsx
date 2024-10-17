@@ -45,7 +45,7 @@ const VenueNavbar = () => {
         <header className="fixed w-full border-b border-gray-300 bg-white font-poppins top-0 h-20 z-50" > {/* Adjust the height here */}
             <div className="flex justify-between items-center h-full container mx-auto">
                 <Link href="/">
-                    <Image src="/nimtoz_logo.png" alt="Nimtoz Logo" height="100" width="160" className="mr-10 p-2" />
+                    <Image src="/nimtoz_logo.png" alt="Nimtoz Logo" height="100" width="160" className="mr-10 p-2" priority/>
                 </Link>
                 <div className={`hidden lg:flex gap-x-16 ml-[4.6rem] items-center text-lg `}>
                     {firstNav.map((item) => {

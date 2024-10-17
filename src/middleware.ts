@@ -20,6 +20,12 @@ export default withAuth(
                 new URL("/denied", request.url)
             )
         }
+        // if (request.nextUrl.pathname.startsWith('/registervenue')
+        //     && request.nextauth.token?.role !== 'Admin') {
+        //     return NextResponse.rewrite(
+        //         new URL("/denied", request.url)
+        //     )
+        // }
 
     },
     {

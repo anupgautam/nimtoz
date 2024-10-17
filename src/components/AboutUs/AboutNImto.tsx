@@ -21,7 +21,7 @@ const AboutNImto = () => {
                         <div className="md:w-1/2 flex justify-center">
                             {/* Illustration for About */}
                             {/* <img src="/aboutus.svg" alt="About Illustration" className="w-64 h-64 object-contain" /> */}
-                            <Image src="/aboutus.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="800" width="800" />
+                            <Image src="/aboutus.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="800" width="800" priority={false}/>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@ const AboutNImto = () => {
                         <div className="md:w-1/2 flex justify-center">
                             {/* Illustration for Mission */}
                             {/* <img src="/path/to/mission-illustration.png" alt="Mission Illustration" className="w-64 h-64 object-contain" /> */}
-                            <Image src="/mission.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="400" width="400" />
+                            <Image src="/mission.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="400" width="400" priority={false}/>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@ const AboutNImto = () => {
                         <div className="md:w-1/2 flex justify-center">
                             {/* Illustration for Vision */}
                             {/* <img src="/path/to/vision-illustration.png" alt="Vision Illustration" className="w-64 h-64 object-contain" /> */}
-                            <Image src="/vision.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="400" width="400" />
+                            <Image src="/vision.svg" alt="About Us Image" className="w-84 h-84 object-contain" height="400" width="400" priority={false}/>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@ const AboutNImto = () => {
                         <div className="md:w-1/2 flex justify-center">
                             {/* Illustration for Goals */}
                             {/* <img src="/path/to/goals-illustration.png" alt="Goals Illustration" className="w-64 h-64 object-contain" /> */}
-                            <Image src="/goals.svg" alt="About Us Image" className="w-128 h-128 object-contain" height="800" width="800" />
+                            <Image src="/goals.svg" alt="About Us Image" className="w-128 h-128 object-contain" height="800" width="800" priority={false}/>
                         </div>
                     </div>
                 </div>
