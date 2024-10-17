@@ -1,17 +1,20 @@
 "use client"
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ProductForm from "./forms/Productform";
-import CategoryForm from "./forms/CategoryForm";
-import BlogForm from "./forms/BlogForm";
-import VenueForm from "./forms/VenueForm";
 import { useFormState } from "react-dom";
 import { deleteBlog, deleteBooking, deleteCategory, deleteEventType, deleteProduct, deleteVenue } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
+import dynamic from "next/dynamic";
+
+import BlogForm from "./forms/BlogForm";
 import BookingForm from "./forms/BookingForm";
+import VenueForm from "./forms/VenueForm";
 import EventTypeForm from "./forms/EventTypeForm";
+import ProductForm from "./forms/Productform";
+import Loading from "@/app/(admin)/dashboard/loading";
+import CategoryForm from "./forms/CategoryForm";
 
 const deleteActionMap: any = {
     Venue: deleteVenue,
@@ -29,7 +32,7 @@ const deleteActionMap: any = {
 //     loading: () => <h1>Loading...</h1>
 // })
 // const CategoryForm = dynamic(() => import("./forms/CategoryForm"), {
-//     loading: () => <h1>Loading...</h1>
+//     loading: () => <Loading/>
 // })
 
 const forms: {

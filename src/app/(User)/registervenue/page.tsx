@@ -7,7 +7,9 @@ import Footer from '@/components/Footer/Footer'
 import VenueNavbar from "@/components/Navbar/VenueNavbar/VenueNavbar"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from 'react-toastify'
 // import { Venue } from '../../../types';
+import Head from 'next/head'
 
 interface Venue {
     venue_name: string;
@@ -69,16 +71,31 @@ const RegisterVenue = () => {
         try {
             const response = await axios.post('/api/venue', data);
             resetForm();
+            if (response.data) {
+                // console.error('Login failed:', response.error);
+                toast.success("Venue Registration Sent")
+                return;
+            }
+            resetForm()
         } catch (error) {
-            console.error('Error registering venue:', error);
+            toast.error('Error registering venue');
         }
     }
 
     return (
         <>
-            <header className="z-50">
-                <VenueNavbar />
-            </header>
+            <Head>
+                <title>Register Venue - Nimtoz</title>
+                <meta name="description" content="Register your venue on Nimtoz and showcase it to a wide audience looking for event spaces." />
+                <meta property="og:title" content="Register Venue - Nimtoz" />
+                <meta property="og:description" content="Join our platform to list your venue for events like weddings, parties, and corporate functions." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={`${process.env.NEXT_PUBLIC_BASE_URL}/registervenue`} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Register Venue - Nimtoz" />
+                <meta name="twitter:description" content="Showcase your venue to clients looking for event spaces." />
+            </Head>
+            
             <div className="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
                 <div className="bg-white mt-20 rounded-xl shadow p-4 sm:p-7 ">
                     <div className="text-center mb-8">
@@ -144,7 +161,8 @@ const RegisterVenue = () => {
                         <div className="mt-5 flex justify-end gap-x-2">
                             <button
                                 type="submit"
-                                className="py-2 px-3 w-full justify-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                                disabled={!formik.isValid || !formik.dirty}
+                                className={`py-2 px-3 w-full justify-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white  focus:outline-none ${formik.isValid && formik.dirty ? 'bg-orange-500 hover:bg-orange-600' : 'bg-gray-300 cursor-not-allowed'}`}
                             >
                                 Register Venue
                             </button>
@@ -153,7 +171,6 @@ const RegisterVenue = () => {
 
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

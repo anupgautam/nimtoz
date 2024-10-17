@@ -13,7 +13,7 @@ const ChatFooter = () => {
                         {/* Left Side */}
                         <div className="flex flex-col items-start justify-start gap-5 lg:ml-20 -mt-10">
                             <Link href="/" className="flex ms-2 md:me-24">
-                                <Image src='/nimtoz_logo.png' alt="Logo" height="120" width="180" />
+                                <Image src='/nimtoz_logo.png' alt="Logo" height="120" width="180" priority/>
                             </Link>
                             <p className="text-[#00002A] text-xl font-medium">Smart Booking, Easy Living</p>
 
