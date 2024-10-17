@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     // title: {
     //     absolute: "Blogs"
     // },
-    description: "Read different stories about our successfull events."
+    description: "Read different stories about our successfull events.",
 }
 
 const Blog = () => {

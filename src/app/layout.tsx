@@ -5,6 +5,7 @@ import Provider from "@/components/Provider";
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import NextTopLoader from 'nextjs-toploader'
+import { Analytics } from "@vercel/analytics/react"
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -52,7 +53,7 @@ export default function RootLayout({
             showSpinner={true}
             easing="ease"
             speed={200}
-            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            shadow="0 0 10px #ff5a1f,0 0 5px #ff5a1f"
             template='<div class="bar" role="bar"><div class="peg"></div></div> 
   <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
             zIndex={1600}
@@ -60,6 +61,7 @@ export default function RootLayout({
           />
           {children}
           <ToastContainer position="bottom-right" />
+          <Analytics />
         </body>
       </html>
     </Provider>
