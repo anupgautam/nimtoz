@@ -1,0 +1,19 @@
+"use strict";(()=>{var e={};e.id=2276,e.ids=[2276],e.modules={53524:e=>{e.exports=require("@prisma/client")},20399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},30517:e=>{e.exports=require("next/dist/compiled/next-server/app-route.runtime.prod.js")},32081:e=>{e.exports=require("child_process")},6113:e=>{e.exports=require("crypto")},9523:e=>{e.exports=require("dns")},82361:e=>{e.exports=require("events")},57147:e=>{e.exports=require("fs")},13685:e=>{e.exports=require("http")},95687:e=>{e.exports=require("https")},41808:e=>{e.exports=require("net")},22037:e=>{e.exports=require("os")},71017:e=>{e.exports=require("path")},12781:e=>{e.exports=require("stream")},24404:e=>{e.exports=require("tls")},57310:e=>{e.exports=require("url")},73837:e=>{e.exports=require("util")},59796:e=>{e.exports=require("zlib")},40188:(e,r,s)=>{s.r(r),s.d(r,{originalPathname:()=>f,patchFetch:()=>m,requestAsyncStorage:()=>h,routeModule:()=>x,serverHooks:()=>g,staticGenerationAsyncStorage:()=>w});var t={};s.r(t),s.d(t,{POST:()=>c});var o=s(49303),a=s(88716),i=s(60670),p=s(6113),n=s.n(p),u=s(75748),d=s(87070),l=s(55245);async function c(e){let{email:r}=await e.json();try{if(!await u.Z.user.findUnique({where:{email:r}}))return d.NextResponse.json({success:!1,message:"User not found"},{status:400});let e=n().randomBytes(32).toString("hex"),s=new Date(Date.now()+36e5);await u.Z.user.update({where:{email:r},data:{resetPasswordToken:e,resetPasswordTokenExpiry:s}});let t=l.createTransport({service:"Gmail",auth:{user:process.env.EMAIL_USER,pass:process.env.EMAIL_PASS}}),o=`http://localhost:3000/reset-password?token=${e}`,a={from:process.env.EMAIL_USER,to:r,subject:"Password Reset",html:`
+        <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; text-align: center;">
+            <div style="max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #333;">Reset Your Password</h2>
+                <p style="font-size: 16px; color: #555;">
+                    You requested to reset your password. Click the button below to create a new password:
+                </p>
+                <a href="${o}" style="display: inline-block; margin: 20px 0; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                    Reset Password
+                </a>
+                <p style="font-size: 14px; color: #777;">
+                    If you did not request a password reset, please ignore this email.
+                </p>
+                <p style="font-size: 14px; color: #777;">
+                    Thank you,<br>Nimtoz
+                </p>
+            </div>
+        </div>
+    `};return await t.sendMail(a),d.NextResponse.json({success:!0},{status:200})}catch(e){return console.error(e),d.NextResponse.json({success:!1,message:"Internal server error"},{status:500})}}let x=new o.AppRouteRouteModule({definition:{kind:a.x.APP_ROUTE,page:"/api/forgot-password/route",pathname:"/api/forgot-password",filename:"route",bundlePath:"app/api/forgot-password/route"},resolvedPagePath:"C:\\Users\\Legion\\OneDrive\\Desktop\\Nimto NextJS\\src\\app\\api\\forgot-password\\route.ts",nextConfigOutput:"",userland:t}),{requestAsyncStorage:h,staticGenerationAsyncStorage:w,serverHooks:g}=x,f="/api/forgot-password/route";function m(){return(0,i.patchFetch)({serverHooks:g,staticGenerationAsyncStorage:w})}},75748:(e,r,s)=>{s.d(r,{Z:()=>o});var t=s(53524);let o=globalThis.prismaGlobal??new t.PrismaClient}};var r=require("../../../webpack-runtime.js");r.C(e);var s=e=>r(r.s=e),t=r.X(0,[8948,5972,5245],()=>s(40188));module.exports=t})();
