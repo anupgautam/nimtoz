@@ -1,8 +1,8 @@
 'use client'
-import { Ellipsis, UsersRound, Castle, PartyPopper, SquarePen } from 'lucide-react'
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Ellipsis, UsersRound, Castle, PartyPopper, SquarePen } from 'lucide-react';
+import Link from 'next/link';
 
 type ItemKey = 'users' | 'blogs' | 'eventTypes' | 'products';
 
@@ -43,10 +43,11 @@ const UserCard = () => {
         const fetchData = async () => {
             try {
                 const response = await fetch('/api/cards/users');
-                if (!response.ok) {
-                    toast.error("Failed to fetch data")
+                if (response.ok) {
                     const result = await response.json();
                     setCounts(result);
+                } else {
+                    toast.error("Failed to fetch data");
                 }
             } catch (error: any) {
                 toast.error(error.message);
@@ -61,6 +62,7 @@ const UserCard = () => {
     if (isLoading) {
         return <SkeletonLoader />;
     }
+
     return (
         <>
             {itemsConfig.map((item, index) => (

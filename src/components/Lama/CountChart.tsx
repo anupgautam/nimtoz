@@ -73,7 +73,6 @@ const CountChart = () => {
                 const response = await fetch('/api/category/count-category');
                 if (!response.ok) toast.error("Failed to fetch Count Data")
                 const result: Category[] = await response.json();
-
                 // Transforming the fetched data to the required format
                 const formattedData = result.map((category: Category) => ({
                     name: category.category_name,
