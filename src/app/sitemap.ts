@@ -23,21 +23,22 @@ type Product = {
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const blogs = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs`)
+    const blogs = await fetch(`${baseUrl}/api/blogs`)
     const blogData: Blog[] = await blogs.json();
 
     const blogEntries: MetadataRoute.Sitemap = blogData.map(({ id }) => ({
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${id}`,
+        url: `${baseUrl}/blogs/${id}`,
         // changeFrequency:""
         // priority:
     }))
 
-    const products = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`)
+    const products = await fetch(`${baseUrl}/api/products`)
     const productData: Product[] = await products.json();
 
     const productEntries: MetadataRoute.Sitemap = productData.map(({ id }) => ({
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
+        url: `${baseUrl}/products/${id}`,
         // changeFrequency:""
         // priority:
     }))
@@ -45,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [
         {
-            url: `${process.env.NEXT_PUBLIC_BASE_URL}/aboutus`
+            url: `${baseUrl}/aboutus`
         },
         ...blogEntries,
         ...productEntries
